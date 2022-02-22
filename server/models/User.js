@@ -22,6 +22,14 @@ const UserSchema = new Schema({
     type: Date,
     required: [true, "Your birth date is required."]
   },
+  left_hand: {
+    type: Boolean,
+    default: false,
+  },
+  use_metric: {
+    type: Boolean,
+    default: false
+  },
 }, {timestamps: true});
 
 
