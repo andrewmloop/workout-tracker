@@ -17,6 +17,11 @@ const ExerciseSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
     required: [true, "This exercise needs a user."],
+  },
+  muscle_group: {
+    type: String,
+    required: true,
+    enum: ["Chest", "Shoulders", "Back", "Biceps", "Triceps", "Legs"]
   }
 }, {timestamps: true});
 
