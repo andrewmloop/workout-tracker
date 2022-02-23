@@ -13,9 +13,9 @@ const WorkoutSchema = new Schema({
     default: Date.now,
     required: true,
   },
-  routine: [{
+  log_list: [{
     type: Schema.Types.ObjectId,
-    ref: "Routine",
+    ref: "Log",
   }],
 }, {timestamps: true});
 

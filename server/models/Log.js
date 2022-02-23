@@ -8,14 +8,19 @@ const LogSchema = new Schema({
     required: true,
     default: Date.now,
   },
-  routine: {
+  exercise: {
     type: Schema.Types.ObjectId,
-    ref: "Routine",
+    ref: "Exercise",
     required: true,
+  },
+  weight: {
+    type: Number,
+    required: [true, "Please record your weight"],
+    min: [1, "Please record your weight."]
   },
   reps: {
     type: Number,
-    required: true,
+    required: [true, "Please record your weight"],
     min: [1, "Please record your reps."],
   },
   form: {

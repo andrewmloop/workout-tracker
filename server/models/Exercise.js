@@ -22,7 +22,9 @@ const ExerciseSchema = new Schema({
     type: String,
     required: true,
     enum: ["Chest", "Shoulders", "Back", "Biceps", "Triceps", "Legs"]
-  }
+  },
+  target_sets: {type: Number},
+  target_reps: {type: String},
 }, {timestamps: true});
 
 export default mongoose.model("Exercise", ExerciseSchema);
