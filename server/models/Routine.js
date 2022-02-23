@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const RoutineSchema = new Schema({
-  excercise: {
+  excercise_list: [{
     type: Schema.Types.ObjectId,
     ref: "Exercise",
     required: true,
-  },
+  }],
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -17,8 +17,6 @@ const RoutineSchema = new Schema({
     type: String,
     required: true,
   },
-  target_sets: {type: Number},
-  target_reps: {type: String},
 }, {timestamps: true});
 
 

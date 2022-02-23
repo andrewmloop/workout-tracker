@@ -1,9 +1,9 @@
-import User from "./User";
-import Exercise from "./Exercise";
-import Routine from "./Routine";
-import Log from "./Log";
-import Workout from "./Workout";
+import User from "./User.js";
+import Exercise from "./Exercise.js";
+import Routine from "./Routine.js";
+import Log from "./Log.js";
+import Workout from "./Workout.js";
 
-const models = [User, Exercise, Routine, Log, Workout];
+const models = { User, Exercise, Routine, Log, Workout };
 
 export default models;
