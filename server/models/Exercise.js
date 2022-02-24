@@ -20,7 +20,7 @@ const ExerciseSchema = new Schema({
   },
   muscle_group: {
     type: String,
-    required: true,
+    required: [true, "Please select a muscle group"],
     enum: ["Chest", "Shoulders", "Back", "Biceps", "Triceps", "Legs"]
   },
   target_sets: {type: Number},
