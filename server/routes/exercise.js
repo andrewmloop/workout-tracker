@@ -5,7 +5,7 @@ const exerciseRoutes = express.Router();
 
 // CREATE
 exerciseRoutes.route("/exercise/add").post( (req, response) => {
-  let routeObj = {
+  const routeObj = {
     name: req.body.name,
     description: req.body.description,
     token: req.body.token,
@@ -42,7 +42,7 @@ exerciseRoutes.route("/exercise/:id").get( (req, response) => {
 
 // UPDATE
 exerciseRoutes.route("/exercise/update/:id").post( (req, response) => {
-  let newValues = {
+  const newValues = {
     $set: {
       name: req.body.name,
       description: req.body.description,
