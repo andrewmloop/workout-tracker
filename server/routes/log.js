@@ -1,10 +1,10 @@
 import express from "express";
-import Log from "../models/Log";
+import Log from "../models/Log.js";
 
 const logRoutes = express.Router();
 
 // CREATE
-logRoutes.route("/log/add").post( (req, response) => {
+logRoutes.route("/add").post( (req, response) => {
   const logObj = {
     date: req.body.date,
     exercise: req.body.exercise,
@@ -21,7 +21,7 @@ logRoutes.route("/log/add").post( (req, response) => {
 
 // READ
 // Get all logs
-logRoutes.route("/logs").get( (req, response) => {
+logRoutes.route("/list").get( (req, response) => {
   Log
     .find({})
     .toArray( (err, result) => {
@@ -31,7 +31,7 @@ logRoutes.route("/logs").get( (req, response) => {
 });
 
 //Get one log
-logRoutes.route("/log/:id").get( (req, response) => {
+logRoutes.route("/:id").get( (req, response) => {
   Log.findById(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);
@@ -39,7 +39,7 @@ logRoutes.route("/log/:id").get( (req, response) => {
 });
 
 // UPDATE
-logRoutes.route("/log/update/:id").post( (req, response) => {
+logRoutes.route("/update/:id").post( (req, response) => {
   const newValues = {
     $set: {
       date: req.body.date,
@@ -57,7 +57,7 @@ logRoutes.route("/log/update/:id").post( (req, response) => {
 });
 
 // DELETE
-logRoutes.route("/log/delete/:id").delete( (req, response) => {
+logRoutes.route("/delete/:id").delete( (req, response) => {
   Log.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);

@@ -1,10 +1,10 @@
 import express from "express";
-import Routine from "../models/Routine";
+import Routine from "../models/Routine.js";
 
 const routineRoutes = express.Router();
 
 // CREATE
-routineRoutes.route("/routine/add").post( (req, response) => {
+routineRoutes.route("/add").post( (req, response) => {
   const routeObj = {
     exercise_list: [],
     user: req.body.user,
@@ -19,7 +19,7 @@ routineRoutes.route("/routine/add").post( (req, response) => {
 
 // READ
 // Get all routines
-routineRoutes.route("/routines").get( (req, response) => {
+routineRoutes.route("/list").get( (req, response) => {
   Routine
     .find({})
     .toArray( (err, result) => {
@@ -29,7 +29,7 @@ routineRoutes.route("/routines").get( (req, response) => {
 });
 
 // Get one routine
-routineRoutes.route("/routine/:id").get( (req, response) => {
+routineRoutes.route("/:id").get( (req, response) => {
   Routine.findById(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);
@@ -38,7 +38,7 @@ routineRoutes.route("/routine/:id").get( (req, response) => {
 
 // UPDATE
 // Update name, user for routine
-routineRoutes.route("/routine/update/:id").post( (req, response) => {
+routineRoutes.route("/update/:id").post( (req, response) => {
   const newValues = {
     $set: {
       user: req.body.user,
@@ -53,7 +53,7 @@ routineRoutes.route("/routine/update/:id").post( (req, response) => {
 });
 
 // Add exercise to list
-routineRoutes.route("/routine/add-exercise/:id").post( (req, response) => {
+routineRoutes.route("/add-exercise/:id").post( (req, response) => {
   const routine = Routine.findById(req.params.id, (err) => {
     if (err) throw err;
   });
@@ -69,7 +69,7 @@ routineRoutes.route("/routine/add-exercise/:id").post( (req, response) => {
 });
 
 // Delete exercise from list
-routineRoutes.route("/routine/del-exercise/:id").post( (req, response) => {
+routineRoutes.route("/del-exercise/:id").post( (req, response) => {
   const routine = Routine.findById(req.params.id, (err) => {
     if (err) throw err;
   });
@@ -85,7 +85,7 @@ routineRoutes.route("/routine/del-exercise/:id").post( (req, response) => {
 });
 
 // DELETE
-routineRoutes.route("/routine/delete/:id").delete( (req, response) => {
+routineRoutes.route("/delete/:id").delete( (req, response) => {
   Routine.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);

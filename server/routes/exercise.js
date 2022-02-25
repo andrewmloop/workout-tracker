@@ -1,10 +1,10 @@
-import Exercise from "../models/Exercise";
+import Exercise from "../models/Exercise.js";
 import express from "express";
 
 const exerciseRoutes = express.Router();
 
 // CREATE
-exerciseRoutes.route("/exercise/add").post( (req, response) => {
+exerciseRoutes.route("/add").post( (req, response) => {
   const routeObj = {
     name: req.body.name,
     description: req.body.description,
@@ -23,7 +23,7 @@ exerciseRoutes.route("/exercise/add").post( (req, response) => {
 
 // READ
 // Get all exercises
-exerciseRoutes.route("/exercises").get( (req, response) => {
+exerciseRoutes.route("/list").get( (req, response) => {
   Exercise
     .find({})
     .toArray( (err, result) => {
@@ -33,7 +33,7 @@ exerciseRoutes.route("/exercises").get( (req, response) => {
 });
 
 // Get one exercise
-exerciseRoutes.route("/exercise/:id").get( (req, response) => {
+exerciseRoutes.route("/:id").get( (req, response) => {
   Exercise.findById(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);
@@ -41,7 +41,7 @@ exerciseRoutes.route("/exercise/:id").get( (req, response) => {
 });
 
 // UPDATE
-exerciseRoutes.route("/exercise/update/:id").post( (req, response) => {
+exerciseRoutes.route("/update/:id").post( (req, response) => {
   const newValues = {
     $set: {
       name: req.body.name,
@@ -61,7 +61,7 @@ exerciseRoutes.route("/exercise/update/:id").post( (req, response) => {
 });
 
 // DELETE
-exerciseRoutes.route("/exercise/delete/:id").delete( (req, response) => {
+exerciseRoutes.route("/delete/:id").delete( (req, response) => {
   Exercise.findByIdAndDelete(req.params.id, {}, (err, result) => {
     if (err) throw err;
     response.json(result);

@@ -3,7 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 
-import models from "./models/index.js";
+import routes from "./routes/index.js";
 
 // ENV variables
 const port = process.env.PORT;
@@ -22,18 +22,23 @@ mongoose.connect(mongoDB, { useNewURLParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error."));
 
+// Set up routing
+app.use("/exercise", routes.exerciseRoutes);
+app.use("/log", routes.logRoutes);
+app.use("/routine", routes.routineRoutes);
+app.use("/user", routes.userRoutes);
+app.use("/workout", routes.workoutRoutes);
+
 // Listening
 app.listen(port, () => {
   console.log("App is listening at port: " + port);
 });
 
-console.log(models.User.find({ email: "email@email.com" }));
-
-models.User.create({
-  email: "email@email.com",
-  password: "password",
-  first_name: "Test",
-  birth_date: "1996-03-29"
-}, (err) => {
-  if (err) console.log(err);
-});
+// models.User.create({
+//   email: "email@email.com",
+//   password: "password",
+//   first_name: "Test",
+//   birth_date: "1996-03-29"
+// }, (err) => {
+//   if (err) console.log(err);
+// });

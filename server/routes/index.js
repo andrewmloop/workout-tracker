@@ -1,8 +1,8 @@
-import exerciseRoutes from "./exercise";
-import logRoutes from "./log";
-import routineRoutes from "./routine";
-import userRoutes from "./user";
-import workoutRoutes from "./workout";
+import exerciseRoutes from "./exercise.js";
+import logRoutes from "./log.js";
+import routineRoutes from "./routine.js";
+import userRoutes from "./user.js";
+import workoutRoutes from "./workout.js";
 
 const routes = {
   exerciseRoutes,

@@ -1,10 +1,10 @@
-import express from "express"
-import User from "../models/User";
+import express from "express";
+import User from "../models/User.js";
 
 const userRoutes = express.Router();
 
 // CREATE
-userRoutes.route("/user/add").post( (req, response) => {
+userRoutes.route("/add").post( (req, response) => {
   const userObj = {
     email: req.body.email,
     password: req.body.email,
@@ -20,7 +20,7 @@ userRoutes.route("/user/add").post( (req, response) => {
 
 // READ
 // Get one user
-userRoutes.route("/user/:id").get( (req, response) => {
+userRoutes.route("/:id").get( (req, response) => {
   User.findById(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);
@@ -28,11 +28,11 @@ userRoutes.route("/user/:id").get( (req, response) => {
 });
 
 // UPDATE
-userRoutes.route("/user/update/:id").post( (req, response) => {
+userRoutes.route("/update/:id").post( (req, response) => {
   const newValues = {
     $set: {
       email: req.body.email,
-      password: req.body.email,
+      password: req.body.password,
       first_name: req.body.first_name,
       birth_date: req.body.birth_date,
       left_hand: req.body.left_hand,
@@ -47,7 +47,7 @@ userRoutes.route("/user/update/:id").post( (req, response) => {
 });
 
 // Delete
-userRoutes.route("/user/delete/:id").delete( (req, response) => {
+userRoutes.route("/delete/:id").delete( (req, response) => {
   User.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);
