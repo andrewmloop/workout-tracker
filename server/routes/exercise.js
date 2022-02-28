@@ -9,7 +9,7 @@ exerciseRoutes.route("/add").post( (req, response) => {
     name: req.body.name,
     description: req.body.description,
     token: req.body.token,
-    user: req.body.user_id,
+    user: req.body.user,
     muscle_group: req.body.muscle_group,
     target_sets: req.body.target_sets,
     target_reps: req.body.target_reps,
@@ -25,8 +25,7 @@ exerciseRoutes.route("/add").post( (req, response) => {
 // Get all exercises
 exerciseRoutes.route("/list").get( (req, response) => {
   Exercise
-    .find({})
-    .toArray( (err, result) => {
+    .find({}, (err, result) => {
       if (err) throw err;
       response.json(result);
     });
@@ -54,10 +53,14 @@ exerciseRoutes.route("/update/:id").post( (req, response) => {
     }
   };
 
-  Exercise.findByIdAndUpdate(req.params.id, newValues, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
+  Exercise.findByIdAndUpdate(
+    req.params.id, 
+    newValues, 
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    });
 });
 
 // DELETE
