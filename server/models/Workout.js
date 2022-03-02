@@ -10,12 +10,13 @@ const WorkoutSchema = new Schema({
   },
   date: {
     type: Date,
-    default: Date.now,
+    default: new Date(),
     required: true,
   },
   log_list: [{
     type: Schema.Types.ObjectId,
     ref: "Log",
+    default: [],
   }],
 }, {timestamps: true});
 

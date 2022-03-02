@@ -20,12 +20,10 @@ workoutRoutes.route("/add").post( (req, response) => {
 // READ
 // Get all workouts
 workoutRoutes.route("/list").get((req, response) => {
-  Workout
-    .find({})
-    .toArray( (err, result) => {
-      if (err) throw err;
-      response.json(result);
-    });
+  Workout.find({}, (err, result) => {
+    if (err) throw err;
+    response.json(result);
+  });
 });
 
 // Get one workout
@@ -46,34 +44,45 @@ workoutRoutes.route("/update/:id").post( (req, response) => {
     }
   };
 
-  Workout.findByIdAndUpdate(req.params.id, newValues, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
+  Workout.findByIdAndUpdate(
+    req.params.id, 
+    newValues, 
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    });
 });
 
 // Add log to log_list
 workoutRoutes.route("/add-log/:id").post( (req, response) => {
-  Workout.findByIdAndUpdate(req.params.id, {
-    $push: {
-      log_list: req.body.log
-    }
-  }, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
+  Workout.findByIdAndUpdate(
+    req.params.id, 
+    {
+      $push: {
+        log_list: req.body.log
+      }
+    }, 
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    });
 });
 
 // Delete log from log_list
 workoutRoutes.route("/del-log/:id").post( (req, response) => {
-  Workout.findByIdAndUpdate(req.params.id, {
-    $pull: {
-      log_list: req.body.log
-    }
-  }, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
+  Workout.findByIdAndUpdate(
+    req.params.id, {
+      $pull: {
+        log_list: req.body.log
+      }
+    }, 
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    });
 });
 
 // DELETE
