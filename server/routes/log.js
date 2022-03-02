@@ -22,12 +22,10 @@ logRoutes.route("/add").post( (req, response) => {
 // READ
 // Get all logs
 logRoutes.route("/list").get( (req, response) => {
-  Log
-    .find({})
-    .toArray( (err, result) => {
-      if (err) throw err;
-      response.json(result);
-    });
+  Log.find({}, (err, result) => {
+    if (err) throw err;
+    response.json(result);
+  });
 });
 
 //Get one log
@@ -50,10 +48,14 @@ logRoutes.route("/update/:id").post( (req, response) => {
     }
   };
 
-  Log.findByIdAndUpdate(req.params.id, newValues, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
+  Log.findByIdAndUpdate(
+    req.params.id, 
+    newValues,
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    });
 });
 
 // DELETE

@@ -25,7 +25,8 @@ const LogSchema = new Schema({
   },
   form: {
     type: String,
-    enum: ["Good", "Okay", "Poor"],
+    enum: ["good", "okay", "poor"],
+    lowercase: true,
   }
 });
 
