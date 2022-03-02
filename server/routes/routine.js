@@ -18,14 +18,12 @@ routineRoutes.route("/add").post( (req, response) => {
 });
 
 // READ
-// Get all routines
-routineRoutes.route("/list").get( (req, response) => {
-  Routine
-    .find({})
-    .toArray( (err, result) => {
-      if (err) throw err;
-      response.json(result);
-    });
+// Get all routines for a user
+routineRoutes.route("/list/:id").get( (req, response) => {
+  Routine.find({ user: req.params.id }, (err, result) => {
+    if (err) throw err;
+    response.json(result);
+  });
 });
 
 // Get one routine
@@ -46,42 +44,46 @@ routineRoutes.route("/update/:id").post( (req, response) => {
     }
   };
 
-  Routine.findByIdAndUpdate(req.params.id, newValues, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
+  Routine.findByIdAndUpdate(
+    req.params.id, 
+    newValues, 
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    });
 });
 
 // Add exercise to list
 routineRoutes.route("/add-exercise/:id").post( (req, response) => {
-  const routine = Routine.findById(req.params.id, (err) => {
-    if (err) throw err;
-  });
-
-  Routine.findByIdAndUpdate(routine._id, {
-    $push: {
-      exercise_list: req.body.exercise,
-    }
-  }, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
+  Routine.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $push: {
+        exercise_list: req.body.exercise,
+      }
+    },
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    });
 });
 
 // Delete exercise from list
 routineRoutes.route("/del-exercise/:id").post( (req, response) => {
-  const routine = Routine.findById(req.params.id, (err) => {
-    if (err) throw err;
-  });
-
-  Routine.findByIdAndUpdate(routine._id, {
-    $pull: {
-      exercise_list: req.body.exercise,
-    }
-  }, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
+  Routine.findByIdAndUpdate(
+    req.params.id, 
+    {
+      $pull: {
+        exercise_list: req.body.exercise,
+      }
+    },
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    });
 });
 
 // DELETE

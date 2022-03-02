@@ -40,10 +40,14 @@ userRoutes.route("/update/:id").post( (req, response) => {
     }
   };
 
-  User.findByIdAndUpdate(req.params.id, newValues, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
+  User.findByIdAndUpdate(
+    req.params.id, 
+    newValues, 
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    });
 });
 
 // Delete
