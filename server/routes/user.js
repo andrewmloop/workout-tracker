@@ -1,20 +1,29 @@
 import express from "express";
+import bcrypt from "bcryptjs";
+
 import User from "../models/User.js";
 
 const userRoutes = express.Router();
 
 // CREATE
 userRoutes.route("/add").post( (req, response) => {
-  const userObj = {
-    email: req.body.email,
-    password: req.body.email,
-    first_name: req.body.first_name,
-    birth_date: req.body.birth_date,
-  };
+  bcrypt.genSalt(10, (saltErr, salt) => {
+    if (saltErr) throw saltErr;
+    bcrypt.hash(req.body.password, salt, (hashErr, hash) => {
+      if (hashErr) throw hashErr;
 
-  User.create(userObj, (err, result) => {
-    if (err) throw err;
-    response.json(result);
+      const userObj = {
+        email: req.body.email,
+        password: hash,
+        first_name: req.body.first_name,
+        birth_date: req.body.birth_date,
+      };
+
+      User.create(userObj, (userErr, result) => {
+        if (userErr) throw userErr;
+        response.json(result);
+      });
+    });
   });
 });
 
