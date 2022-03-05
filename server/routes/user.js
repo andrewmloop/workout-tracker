@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import bcrypt from "bcryptjs";
 
 import User from "../models/User.js";
@@ -59,7 +59,7 @@ userRoutes.route("/update/:id").post( (req, response) => {
     });
 });
 
-// Delete
+// DELETE
 userRoutes.route("/delete/:id").delete( (req, response) => {
   User.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) throw err;
@@ -67,5 +67,18 @@ userRoutes.route("/delete/:id").delete( (req, response) => {
   });
 });
 
+// LOGIN
+userRoutes.route("/login").post( async (req, response) => {
+  const [user] = await User.find({ email: req.body.email }, (findErr, user) => {
+    if (findErr) throw findErr;
+    if (!user) throw new Error("No user found.");
+  }).clone().catch( err => { throw err; });
+
+  bcrypt.compare(req.body.password, user.password, (matchErr, isMatch) => {
+    if (matchErr) throw matchErr;
+    if (!isMatch) throw new Error("Password does not match.");
+    response.send("Password matches.");
+  });
+});
 
 export default userRoutes;
