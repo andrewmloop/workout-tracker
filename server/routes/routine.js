@@ -60,7 +60,11 @@ routineRoutes.route("/add-exercise/:id").post( (req, response) => {
     { _id: req.params.id },
     {
       $push: {
-        exercise_list: req.body.exercise,
+        exercise_list: {
+          exercise: req.body.exercise,
+          target_sets: req.body.target_sets,
+          target_reps: req.body.target_reps,
+        }
       }
     },
     { returnOriginal: false },
@@ -76,14 +80,47 @@ routineRoutes.route("/del-exercise/:id").post( (req, response) => {
     req.params.id, 
     {
       $pull: {
-        exercise_list: req.body.exercise,
+        exercise_list: {
+          _id: req.body.exercise_list_id,
+        }
       }
     },
-    { returnOriginal: false },
+    { 
+      returnOriginal: false, 
+      safe: true,
+      multi: true,
+    },
     (err, result) => {
       if (err) throw err;
       response.json(result);
     });
+});
+
+// Update exercise in list
+routineRoutes.route("/upd-exercise/:id").post( (req, response) => {
+  const newValues = {
+    $set: {
+      "exercise_list.$.exercise": req.body.exercise,
+      "exercise_list.$.target_sets": req.body.target_sets,
+      "exercise_list.$.target_reps": req.body.target_reps,
+    }
+  };
+  
+  Routine.updateOne(
+    {
+      _id: req.params.id, 
+      exercise_list: 
+        { $elemMatch: 
+          {_id: req.body.exercise_list_id }
+        }
+    },
+    newValues,
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) throw err;
+      response.json(result);
+    }
+  );
 });
 
 // DELETE

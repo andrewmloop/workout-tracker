@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import bcrypt from "bcryptjs";
 
 import User from "../models/User.js";
@@ -69,15 +69,16 @@ userRoutes.route("/delete/:id").delete( (req, response) => {
 
 // LOGIN
 userRoutes.route("/login").post( async (req, response) => {
-  const [user] = await User.find({ email: req.body.email }, (findErr, user) => {
+  const [user] = await User.find({ email: req.body.email }, (findErr, result) => {
     if (findErr) throw findErr;
-    if (!user) throw new Error("No user found.");
   }).clone().catch( err => { throw err; });
 
-  bcrypt.compare(req.body.password, user.password, (matchErr, isMatch) => {
+  if (!user) response.status(404).send({ "error": "No email found." });
+
+  if (user) bcrypt.compare(req.body.password, user.password, (matchErr, isMatch) => {
     if (matchErr) throw matchErr;
-    if (!isMatch) throw new Error("Password does not match.");
-    response.send("Password matches.");
+    if (!isMatch) response.status(401).send({ "error": "Incorrect password." });
+    if (isMatch) response.send("Password matches.");
   });
 });
 
