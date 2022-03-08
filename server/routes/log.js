@@ -10,7 +10,8 @@ logRoutes.route("/add").post( (req, response) => {
     exercise: req.body.exercise,
     weight: req.body.weight,
     reps: req.body.reps,
-    form: req.body.form
+    form: req.body.form,
+    user: req.body.user,
   };
 
   Log.create(logObj, (err, result) => {
@@ -20,9 +21,9 @@ logRoutes.route("/add").post( (req, response) => {
 });
 
 // READ
-// Get all logs
-logRoutes.route("/list").get( (req, response) => {
-  Log.find({}, (err, result) => {
+// Get all logs for a user
+logRoutes.route("/list/:user").get( (req, response) => {
+  Log.find({ user: req.params.user }, (err, result) => {
     if (err) throw err;
     response.json(result);
   });
@@ -44,7 +45,8 @@ logRoutes.route("/update/:id").post( (req, response) => {
       exercise: req.body.exercise,
       weight: req.body.weight,
       reps: req.body.reps,
-      form: req.body.form
+      form: req.body.form,
+      user: req.body.user,
     }
   };
 

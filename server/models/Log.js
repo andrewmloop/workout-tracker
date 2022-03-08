@@ -27,6 +27,11 @@ const LogSchema = new Schema({
     type: String,
     enum: ["good", "okay", "poor"],
     lowercase: true,
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   }
 });
 
