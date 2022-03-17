@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export const ExerciseList = () => {
-  const [exerciseList, setExerciseList] = useState();
+  const [exerciseList, setExerciseList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
+  useEffect( () => {
     fetchExercises();
   }, []);
 
   const fetchExercises = async () => {
-    await fetch("http://192.168.0.104:9900/exercise/list")
+    await fetch("http://localhost:9900/exercise/list")
       .then( response => {
         if (response.ok) {
           return response.json();
