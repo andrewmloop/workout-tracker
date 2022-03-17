@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-export const Routine = () => {
+export const Routine = (props) => {
   // Routine data from route history
   const location = useLocation();
   const routineData = location.state.routine;
@@ -16,7 +16,6 @@ export const Routine = () => {
       try {
         const response = await fetch(`http://localhost:9900/exercise/${exercise.exercise}`);
         const data = await response.json();
-        console.log(data);
         setExerciseList([...exerciseList, data]);
       } catch (error) {
         console.error("Error fetching routine exercise: ", error);
@@ -28,6 +27,7 @@ export const Routine = () => {
   };
 
   useEffect( () => {
+    props.setBannerText(routineData.name);
     fetchRoutineExercises();
   }, []);
 
@@ -36,11 +36,9 @@ export const Routine = () => {
 
   return (
     <div className="p-8 text-center text-white">
-      <h1 className="font-bold mb-4">{routineData.name}</h1>
-      <ul className="my-4 flex flex-col justify-start text-left">
+      <ul className="flex flex-col justify-start text-left">
         {
           exerciseList.map( exercise => {
-            console.log(exerciseList);
             return (
               <li 
                 key={exercise._id}

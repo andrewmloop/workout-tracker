@@ -1,33 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export const ExerciseList = () => {
+export const ExerciseList = (props) => {
   const [exerciseList, setExerciseList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect( () => {
+    props.setBannerText("Exercises");
     fetchExercises();
   }, []);
 
   const fetchExercises = async () => {
-    await fetch("http://localhost:9900/exercise/list")
-      .then( response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw response;
-      })
-      .then( data => {
-        setExerciseList(data);
-      })
-      .catch( error => {
-        console.error("Error fetching exercise list: ", error);
-        setError(true);
-      })
-      .finally( () => {
-        setLoading(false);
-      });
+    try {
+      const res = await fetch("http://localhost:9900/exercise/list");
+      const data = await res.json();
+      setExerciseList(data);
+    } catch (error) {
+      console.error("Error fetching exercise list: ", error);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) return "Loading...";
@@ -35,9 +29,7 @@ export const ExerciseList = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-white text-center font-bold">Exercises</h1>
-      <ul className="my-4 flex flex-col justify-start">
-        {console.log(exerciseList)}
+      <ul className="flex flex-col justify-start">
         {
           exerciseList.map( exercise => {
             return (

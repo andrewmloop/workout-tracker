@@ -1,33 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export const RoutineList = () => {
+export const RoutineList = (props) => {
   const [routineList, setRoutineList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect( () => {
+    props.setBannerText("Routines");
     fetchRoutines();
   }, []);
 
   const fetchRoutines = async () => {
-    await fetch("http://localhost:9900/routine/list/621925cd651cd2b3e2bc9936")
-      .then( response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw response;
-      })
-      .then( data => {
-        setRoutineList(data);
-      })
-      .catch( error => {
-        console.log("Error fetching routine list: ", error);
-        setError(true);
-      })
-      .finally( () => {
-        setLoading(false);
-      });
+    try {
+      const res = await fetch("http://localhost:9900/routine/list/621925cd651cd2b3e2bc9936");
+      const data = await res.json();
+      setRoutineList(data);
+    } catch (error) {
+      console.log("Error fetching routine list: ", error);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) return "Loading...";
@@ -35,9 +29,7 @@ export const RoutineList = () => {
 
   return (
     <div className="p-8">
-      <h1 className="text-white text-center font-bold">Exercises</h1>
-      <ul className="my-4 flex flex-col justify-start">
-        {console.log(routineList)}
+      <ul className="flex flex-col justify-start">
         {
           routineList.map( routine => {
             return (

@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export const Exercise = () => {
+export const Exercise = (props) => {
   const location = useLocation();
   const data = location.state.exercise;
+
+  useEffect( () => {
+    props.setBannerText("Exercise Details");
+  }, []);
   
   return (
     <div className="p-8 text-center text-white">

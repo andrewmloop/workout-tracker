@@ -13,12 +13,30 @@ function App() {
 
   return (
     <div className="h-screen bg-gray-600"> 
-      <Banner bannerText={bannerText} setBannerText={setBannerText} />
+      <Banner 
+        bannerText={bannerText} 
+        setBannerText={setBannerText} 
+      />
       <Routes>
-        <Route path="/" element={<RoutineList />} />
-        <Route path="/exercise-list" element={<ExerciseList />} />
-        <Route path="/exercise" element={<Exercise />} />
-        <Route path="/routine" element={<Routine />} />
+        <Route path="/" element={
+          <RoutineList 
+            setBannerText={setBannerText}
+          />
+        }/>
+        <Route path="/exercise-list" element={
+          <ExerciseList 
+            setBannerText={setBannerText}
+          />
+        }/>
+        <Route path="/exercise" element={
+          <Exercise 
+          />
+        }/>
+        <Route path="/routine" element={
+          <Routine 
+            setBannerText={setBannerText}
+          />
+        }/>
       </Routes>
       <Navbar />
     </div>
