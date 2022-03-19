@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 export const Routine = (props) => {
   // Routine data from route history
@@ -42,8 +42,18 @@ export const Routine = (props) => {
             return (
               <li 
                 key={exercise._id}
-                className="mb-2 py-2 border-b-2"
-              >{exercise.name}</li>
+                className="flex justify-between mb-2 py-2 border-b-2"
+              >
+                <Link 
+                  to="/exercise"
+                  state={{ "exercise": exercise }}
+                  className="block"
+                >{exercise.name}</Link>
+                <Link
+                  to="/log"
+                  state={{ "exercise": exercise }}
+                >Add</Link>
+              </li>
             );
           })
         }
