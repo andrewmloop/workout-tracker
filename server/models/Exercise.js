@@ -7,18 +7,45 @@ const ExerciseSchema = new Schema({
     type: String,
     required: [true, "An exercise name is required."],
   },
-  description: {
+  force: {
     type: String,
+    enum: ["push", "pull", "static", null]
   },
-  token: {
+  level: {
     type: String,
-  },
-  muscle_group: {
-    type: String,
-    required: [true, "Please select a muscle group"],
-    enum: ["chest", "shoulders", "back", "biceps", "triceps", "legs"],
+    enum: ["beginner", "intermediate", "expert"],
     lowercase: true,
   },
+  mechanic: {
+    type: String,
+    enum: ["isolation", "compound", null],
+    lowercase: true,
+  },
+  equipment: String,
+  primary_muscles: {
+    type: [String],
+    enum: ["shoulders", "chest", "quadriceps", "calves", "glutes", "hamstrings", "abdominals", "adductors", "biceps", "forearms", "abductors", "triceps", "lower back", "traps", "middle back", "lats", ]
+  },
+  secondary_muscles: {
+    type: [String],
+  },
+  category: {
+    type: String,
+    enum: ["strength", "stretching", "plyometrics", "strongman", "powerlifting", "cardio", "olympic weightlifting"],
+    lowercase: true,
+  },
+  instructions: {
+    type: [String],
+  },
+  user_created: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  }
 }, {timestamps: true});
 
 export default mongoose.model("Exercise", ExerciseSchema);

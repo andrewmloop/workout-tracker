@@ -10,6 +10,8 @@ exerciseRoutes.route("/add").post( (req, response) => {
     description: req.body.description,
     token: req.body.token,
     muscle_group: req.body.muscle_group,
+    user_created: true,
+    user: req.user.id,
   };
 
   Exercise.create(routeObj, (err, result) => {
