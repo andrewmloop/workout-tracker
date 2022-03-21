@@ -13,7 +13,11 @@ export const ExerciseList = (props) => {
 
   const fetchExercises = async () => {
     try {
-      const res = await fetch("http://localhost:9900/exercise/list");
+      const res = await fetch("http://localhost:9900/exercise/list", {
+        headers: {
+          "x-access-token": localStorage.getItem("token")
+        }
+      });
       const data = await res.json();
       setExerciseList(data);
     } catch (error) {
@@ -28,7 +32,7 @@ export const ExerciseList = (props) => {
   if (error) return "Error!";
 
   return (
-    <div className="p-8">
+    <div className="p-8 h-full overflow-y-scroll">
       <ul className="flex flex-col justify-start">
         {
           exerciseList.map( exercise => {

@@ -8,6 +8,8 @@ import { Routine } from "./pages/Routine";
 import { ExerciseList } from "./pages/ExerciseList";
 import { Exercise } from "./pages/Exercise";
 import { Log } from "./pages/Log";
+import { Settings } from "./pages/Settings";
+import { Login } from "./pages/Login";
 
 function App() {
   const [bannerText, setBannerText] = useState("");
@@ -42,6 +44,15 @@ function App() {
         <Route path="/log" element={
           <Log 
             setBannerText={setBannerText}
+          />
+        }/>
+        <Route path="/settings" element={
+          <Settings 
+            setBannerText={setBannerText}
+          />
+        }/>
+        <Route path="/login" element={
+          <Login 
           />
         }/>
       </Routes>
