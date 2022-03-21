@@ -28,13 +28,15 @@ export const Log = (props) => {
       weight: weight,
       reps: reps,
       form: values[form],
-      user: "621925cd651cd2b3e2bc9936",
     };
 
     try {
       const res = await fetch("http://localhost:9900/log/add", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "x-access-token": localStorage.getItem("token"),
+        },
         body: JSON.stringify(newLog),
       });
       const data = await res.json();
@@ -46,9 +48,10 @@ export const Log = (props) => {
 
   const fetchLogs = async () => {
     try {
-      const res = await fetch("http://localhost:9900/log/list/621925cd651cd2b3e2bc9936");
+      const res = await fetch("http://localhost:9900/log/list", {
+        headers: { "x-access-token": localStorage.getItem("token") },
+      });
       const data = await res.json();
-      console.log("Fetched Logs: ", data);
       setLogHistory(data);
     } catch (error) {
       console.error("Error fetching log history: ", error);
@@ -56,7 +59,6 @@ export const Log = (props) => {
   };
 
   useEffect( () => {
-    console.log(data);
     props.setBannerText(data.name);
     fetchLogs();
   }, []);

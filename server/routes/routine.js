@@ -7,7 +7,7 @@ const routineRoutes = express.Router();
 routineRoutes.route("/add").post( (req, response) => {
   const routeObj = {
     exercise_list: [],
-    user: req.body.user,
+    user: req.user.id,
     name: req.body.name
   };
 
@@ -19,8 +19,8 @@ routineRoutes.route("/add").post( (req, response) => {
 
 // READ
 // Get all routines for a user
-routineRoutes.route("/list/:id").get( (req, response) => {
-  Routine.find({ user: req.params.id }, (err, result) => {
+routineRoutes.route("/list").get( (req, response) => {
+  Routine.find({ user: req.user.id }, (err, result) => {
     if (err) throw err;
     response.json(result);
   });

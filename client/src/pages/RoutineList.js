@@ -13,7 +13,11 @@ export const RoutineList = (props) => {
 
   const fetchRoutines = async () => {
     try {
-      const res = await fetch("http://localhost:9900/routine/list/621925cd651cd2b3e2bc9936");
+      const res = await fetch("http://localhost:9900/routine/list", {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        }
+      });
       const data = await res.json();
       setRoutineList(data);
     } catch (error) {

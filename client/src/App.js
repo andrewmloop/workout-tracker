@@ -12,13 +12,13 @@ import { Settings } from "./pages/Settings";
 import { Login } from "./pages/Login";
 
 function App() {
+  const [exerciseList, setExerciseList] = useState([]);
   const [bannerText, setBannerText] = useState("");
 
   return (
     <div className="relative h-screen bg-gray-600"> 
       <Banner 
         bannerText={bannerText} 
-        setBannerText={setBannerText} 
       />
       <Routes>
         <Route path="/" element={
@@ -29,6 +29,8 @@ function App() {
         <Route path="/exercise-list" element={
           <ExerciseList 
             setBannerText={setBannerText}
+            exerciseList={exerciseList}
+            setExerciseList={setExerciseList}
           />
         }/>
         <Route path="/exercise" element={

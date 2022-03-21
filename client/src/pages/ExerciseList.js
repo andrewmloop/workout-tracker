@@ -2,13 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export const ExerciseList = (props) => {
-  const [exerciseList, setExerciseList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
+  // Sets "exerciseList" passed down from app component on first
+  // render. Pulls from "exerciseList" state on subsequent renders
+  // to avoid excessive requests
   useEffect( () => {
     props.setBannerText("Exercises");
-    fetchExercises();
+    if (props.exerciseList.length === 0) {
+      fetchExercises();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const fetchExercises = async () => {
@@ -19,7 +25,7 @@ export const ExerciseList = (props) => {
         }
       });
       const data = await res.json();
-      setExerciseList(data);
+      props.setExerciseList(data);
     } catch (error) {
       console.error("Error fetching exercise list: ", error);
       setError(true);
@@ -35,7 +41,7 @@ export const ExerciseList = (props) => {
     <div className="p-8 h-full overflow-y-scroll">
       <ul className="flex flex-col justify-start">
         {
-          exerciseList.map( exercise => {
+          props.exerciseList.map( exercise => {
             return (
               <li 
                 key={exercise._id}

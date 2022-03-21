@@ -11,7 +11,7 @@ logRoutes.route("/add").post( (req, response) => {
     weight: req.body.weight,
     reps: req.body.reps,
     form: req.body.form,
-    user: req.body.user,
+    user: req.user.id,
   };
 
   Log.create(logObj, (err, result) => {
@@ -22,8 +22,8 @@ logRoutes.route("/add").post( (req, response) => {
 
 // READ
 // Get all logs for a user
-logRoutes.route("/list/:user").get( (req, response) => {
-  Log.find({ user: req.params.user }, (err, result) => {
+logRoutes.route("/list").get( (req, response) => {
+  Log.find({ user: req.user.id }, (err, result) => {
     if (err) throw err;
     response.json(result);
   });

@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 // }
 
 export const Exercise = (props) => {
+  // Exercise data passed from ExerciseList page to avoid multiple requests
   const location = useLocation();
   const data = location.state.exercise;
 
