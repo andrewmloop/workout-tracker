@@ -1,31 +1,10 @@
 import express from "express";
-import bcrypt from "bcryptjs";
 
 import User from "../models/User.js";
 
 const userRoutes = express.Router();
 
-// CREATE
-userRoutes.route("/add").post( (req, response) => {
-  bcrypt.genSalt(10, (saltErr, salt) => {
-    if (saltErr) throw saltErr;
-    bcrypt.hash(req.body.password, salt, (hashErr, hash) => {
-      if (hashErr) throw hashErr;
-
-      const userObj = {
-        email: req.body.email,
-        password: hash,
-        first_name: req.body.first_name,
-        birth_date: req.body.birth_date,
-      };
-
-      User.create(userObj, (userErr, result) => {
-        if (userErr) throw userErr;
-        response.json(result);
-      });
-    });
-  });
-});
+// CREATE handled by Auth route
 
 // READ
 // Get one user
@@ -64,21 +43,6 @@ userRoutes.route("/delete/:id").delete( (req, response) => {
   User.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);
-  });
-});
-
-// LOGIN
-userRoutes.route("/login").post( async (req, response) => {
-  const [user] = await User.find({ email: req.body.email }, (findErr, result) => {
-    if (findErr) throw findErr;
-  }).clone().catch( err => { throw err; });
-
-  if (!user) response.status(404).send({ "error": "No email found." });
-
-  if (user) bcrypt.compare(req.body.password, user.password, (matchErr, isMatch) => {
-    if (matchErr) throw matchErr;
-    if (!isMatch) response.status(401).send({ "error": "Incorrect password." });
-    if (isMatch) response.send("Password matches.");
   });
 });
 
