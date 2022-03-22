@@ -10,6 +10,7 @@ import { Exercise } from "./pages/Exercise";
 import { Log } from "./pages/Log";
 import { Settings } from "./pages/Settings";
 import { Login } from "./pages/Login";
+import { Register } from "./pages/Register";
 
 function App() {
   const [exerciseList, setExerciseList] = useState([]);
@@ -21,7 +22,7 @@ function App() {
         bannerText={bannerText} 
       />
       <Routes>
-        <Route path="/" element={
+        <Route path="/routine-list" element={
           <RoutineList 
             setBannerText={setBannerText}
           />
@@ -55,6 +56,14 @@ function App() {
         }/>
         <Route path="/login" element={
           <Login 
+          />
+        }/>
+        <Route path="/" element={
+          <Login 
+          />
+        }/>
+        <Route path="/register" element={
+          <Register 
           />
         }/>
       </Routes>

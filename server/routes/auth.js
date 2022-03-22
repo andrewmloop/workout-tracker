@@ -18,7 +18,10 @@ authRoutes.route("/register").post( async (req, response) => {
   const takenEmail = await User.findOne({ email: email });
 
   if (takenEmail) {
-    response.json({ message: "Email is already in use." });
+    response.json({ 
+      message: "failure",
+      error: "Email already in use.",
+    });
   } else {
     const hash = await bcrypt.hash(password, 10);
     
@@ -33,7 +36,7 @@ authRoutes.route("/register").post( async (req, response) => {
       if (userErr) throw userErr;
       response.json({ 
         result: result,
-        message: "Success" 
+        message: "success" 
       });
     });
   }
@@ -68,7 +71,7 @@ authRoutes.route("/login").post( async (req, response) => {
               response.json({ "message": "Error signing token" });
             }
             return response.json({
-              message: "Success",
+              message: "success",
               token: `Bearer ${token}`,
             });
           }

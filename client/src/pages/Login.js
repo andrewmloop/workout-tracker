@@ -1,13 +1,20 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Login = () => {
+  // Redirect user on successful login
+  const navigate = useNavigate();
+
+  // State for login form inputs
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     const user = {
       email: userEmail,
       password: userPassword,
@@ -25,6 +32,7 @@ export const Login = () => {
       });
       const data = await response.json();
       localStorage.setItem("token", data.token);
+      navigate("/routine-list");
     } catch (error) {
       console.error("Error authenticating user: ", error);
       setError(true);
@@ -38,10 +46,7 @@ export const Login = () => {
       <div>
         <form
           className="flex flex-col"
-          onSubmit={ (e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}>
+          onSubmit={handleSubmit}>
           <label htmlFor="email">Email</label>
           <input 
             type="email" 
@@ -63,6 +68,7 @@ export const Login = () => {
         </form>
         { loading ? "Loading" : null }
         { error ? "Error logging in." : null }
+        <p>Don&apos;t have an account? <Link to="/register">Sign Up</Link></p>
       </div>
     </div>
   );
