@@ -1,14 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
+import Banner from "../components/Banner";
 
-export const Settings = (props) => {
-
-  useEffect( () => {
-    props.setBannerText("Settings");
-  }, []);
-
+export default function Settings() {
   return (
-    <div>
-      Setings
-    </div>
+    <>
+      <Banner
+        bannerText={"Settings"}
+      />
+      <div>
+        Setings
+      </div>
+    </>
   );
-};
+}

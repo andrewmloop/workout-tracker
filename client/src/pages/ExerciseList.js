@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Banner from "../components/Banner";
 
-export const ExerciseList = (props) => {
+export default function ExerciseList(props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -38,25 +39,31 @@ export const ExerciseList = (props) => {
   if (error) return "Error!";
 
   return (
-    <div className="p-8 h-full overflow-y-scroll">
-      <ul className="flex flex-col justify-start">
-        {
-          props.exerciseList.map( exercise => {
-            return (
-              <li 
-                key={exercise._id}
-                className="mb-2 py-2 border-b-2 text-white"
-              >
-                <Link 
-                  to="/exercise"
-                  state={{ "exercise": exercise }}
-                  className="block"
-                >{exercise.name}</Link>
-              </li>
-            );
-          })
-        }
-      </ul>
-    </div>
+    <>
+      <Banner 
+        bannerText={"Exercises"} 
+        showAdd={true}
+      />
+      <div className="p-8 h-full overflow-y-scroll">
+        <ul className="flex flex-col justify-start">
+          {
+            props.exerciseList.map( exercise => {
+              return (
+                <li 
+                  key={exercise._id}
+                  className="mb-2 py-2 border-b-2 text-white"
+                >
+                  <Link 
+                    to="/exercise"
+                    state={{ "exercise": exercise }}
+                    className="block"
+                  >{exercise.name}</Link>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+    </>
   );
-};
+}

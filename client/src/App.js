@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
-import { Navbar } from "./components/navbar/Navbar";
-import { Banner } from "./components/banner/Banner";
-
-import { RoutineList } from "./pages/RoutineList";
-import { Routine } from "./pages/Routine";
-import { ExerciseList } from "./pages/ExerciseList";
-import { Exercise } from "./pages/Exercise";
-import { Log } from "./pages/Log";
-import { Settings } from "./pages/Settings";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
+import Navbar from "./components/Navbar";
+import ExerciseList from "./pages/ExerciseList";
+import Exercise from "./pages/Exercise";
+import RoutineList from "./pages/RoutineList";
+import Routine from "./pages/Routine";
+import Log from "./pages/Log";
+import Settings from "./pages/Settings";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 export default function App() {
   const [exerciseList, setExerciseList] = useState([]);
@@ -25,31 +23,38 @@ export default function App() {
           <Route exact path="/register" element={<Register />}/>
         </Route>
         <Route element={<WithNav bannerText={bannerText} />}>
-          <Route path="/routine-list" element={
-            <RoutineList 
-              setBannerText={setBannerText}
-            />
-          }/>
           <Route path="/exercise-list" element={
             <ExerciseList 
               setBannerText={setBannerText}
               exerciseList={exerciseList}
               setExerciseList={setExerciseList}
+              showAdd={true}
             />
           }/>
           <Route path="/exercise" element={
             <Exercise
               setBannerText={setBannerText}
+              showBack={true}
             />
           }/>
+          <Route path="/routine-list" element={
+            <RoutineList 
+              setBannerText={setBannerText}
+              showBack={false}
+              showAdd={true}
+            />
+          }/>                   
           <Route path="/routine" element={
             <Routine 
               setBannerText={setBannerText}
+              showBack={true}
+              showAdd={true}
             />
           }/>
           <Route path="/log" element={
             <Log 
               setBannerText={setBannerText}
+              showBack={true}
             />
           }/>
           <Route path="/settings" element={
@@ -63,10 +68,9 @@ export default function App() {
   );
 }
 
-function WithNav(props) {
+function WithNav() {
   return (
     <>
-      <Banner bannerText={props.bannerText} />
       <Outlet />
       <Navbar />
     </>

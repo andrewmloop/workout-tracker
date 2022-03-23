@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Banner from "../components/Banner";
 
-export const Log = (props) => {
+export default function Log() {
   // Location data that gets passed to log from routine
   const location = useLocation();
   const data = location.state.exercise;
@@ -59,74 +60,79 @@ export const Log = (props) => {
   };
 
   useEffect( () => {
-    props.setBannerText(data.name);
     fetchLogs();
   }, []);
 
   return (
-    <div className="flex h-full p-8">
-      {/* Log Column */}
-      <div className="w-2/3 h-full">
-        <ul className="flex flex-col">
-          {
-            logHistory.map( (log, i) => {
-              return (
-                <li
-                  key={i}
-                  className="mb-2 mr-2 py-2 px-4 bg-amber-400 rounded-md"
-                >
-                  <p>{log.weight} lbs. X {log.reps} reps.</p>
-                  <p>{log.form} form</p>
-                </li>
-              );
-            })
-          }
-        </ul>
-      </div>
-      {/* Form Column */}
-      <div className="w-1/3">
-        <form
-          onSubmit={ (e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-          className="flex flex-col"
-        >
-          <input
-            type="number"
-            name="weight"
-            placeholder={weight || "lbs"}
-            onChange={ (e) => {
-              setWeight(e.target.value);
-            }}
-            className="w-full p-2 rounded-lg mb-2"
-          />
-          <input
-            type="number"
-            name="reps"
-            placeholder={reps || "reps"}
-            onChange={ (e) => {
-              setReps(e.target.value);
-            }}
-            className="w-full p-2 rounded-lg mb-2"
-          />
-          <button 
-            value={values[form]}
-            onClick={ (e) => {
+    <>
+      <Banner
+        bannerText={data.name}
+        showBack={true}
+      />
+      <div className="flex h-full p-8">
+        {/* Log Column */}
+        <div className="w-2/3 h-full">
+          <ul className="flex flex-col">
+            {
+              logHistory.map( (log, i) => {
+                return (
+                  <li
+                    key={i}
+                    className="mb-2 mr-2 py-2 px-4 bg-amber-400 rounded-md"
+                  >
+                    <p>{log.weight} lbs. X {log.reps} reps.</p>
+                    <p>{log.form} form</p>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </div>
+        {/* Form Column */}
+        <div className="w-1/3">
+          <form
+            onSubmit={ (e) => {
               e.preventDefault();
-              handleToggle();
+              handleSubmit();
             }}
-            className={`w-full p-2 rounded-lg mb-2 
-              ${form === 0 ? "bg-green-700" : form === 1 ? "bg-amber-400" : "bg-red-700"}`}
+            className="flex flex-col"
           >
-            {values[form]}
-          </button>
-          <button
-            type="submit"
-            className="w-full p-2 rounded-lg mb-2 bg-black text-white"
-          >Submit</button>
-        </form>
+            <input
+              type="number"
+              name="weight"
+              placeholder={weight || "lbs"}
+              onChange={ (e) => {
+                setWeight(e.target.value);
+              }}
+              className="w-full p-2 rounded-lg mb-2"
+            />
+            <input
+              type="number"
+              name="reps"
+              placeholder={reps || "reps"}
+              onChange={ (e) => {
+                setReps(e.target.value);
+              }}
+              className="w-full p-2 rounded-lg mb-2"
+            />
+            <button 
+              value={values[form]}
+              onClick={ (e) => {
+                e.preventDefault();
+                handleToggle();
+              }}
+              className={`w-full p-2 rounded-lg mb-2 
+                ${form === 0 ? "bg-green-700" : form === 1 ? "bg-amber-400" : "bg-red-700"}`}
+            >
+              {values[form]}
+            </button>
+            <button
+              type="submit"
+              className="w-full p-2 rounded-lg mb-2 bg-black text-white"
+            >Submit</button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
-};
+}

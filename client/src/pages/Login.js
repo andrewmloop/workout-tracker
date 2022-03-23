@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export default function Login() {
   // Redirect user on successful login
   const navigate = useNavigate();
 
@@ -9,7 +9,6 @@ export const Login = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
 
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -19,8 +18,6 @@ export const Login = () => {
       email: userEmail,
       password: userPassword,
     };
-
-    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:9900/auth/login", {
@@ -37,8 +34,6 @@ export const Login = () => {
       console.error("Error authenticating user: ", error);
       setError(true);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -66,10 +61,9 @@ export const Login = () => {
             className="w-full bg-amber-400"
           >Submit</button>
         </form>
-        { loading ? "Loading" : null }
         { error ? "Error logging in." : null }
         <p>Don&apos;t have an account? <Link to="/register">Sign Up</Link></p>
       </div>
     </div>
   );
-};
+}

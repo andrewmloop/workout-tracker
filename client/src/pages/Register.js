@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export const Register = () => {
+export default function Register() {
   // Redirect user on successful register
   const navigate = useNavigate();
 
@@ -171,4 +171,4 @@ export const Register = () => {
       </div>
     </div>
   );
-};
+}
