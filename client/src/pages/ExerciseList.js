@@ -3,18 +3,14 @@ import { Link } from "react-router-dom";
 import Banner from "../components/Banner";
 
 export default function ExerciseList(props) {
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   // Sets "exerciseList" passed down from app component on first
   // render. Pulls from "exerciseList" state on subsequent renders
   // to avoid excessive requests
   useEffect( () => {
-    props.setBannerText("Exercises");
     if (props.exerciseList.length === 0) {
       fetchExercises();
-    } else {
-      setLoading(false);
     }
   }, []);
 
@@ -30,12 +26,9 @@ export default function ExerciseList(props) {
     } catch (error) {
       console.error("Error fetching exercise list: ", error);
       setError(true);
-    } finally {
-      setLoading(false);
     }
   };
 
-  if (loading) return "Loading...";
   if (error) return "Error!";
 
   return (

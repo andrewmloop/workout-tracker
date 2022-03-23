@@ -9,7 +9,6 @@ export default function Routine() {
 
   // Routine exercise state
   const [exerciseList, setExerciseList] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const fetchRoutineExercises = () => {
@@ -27,15 +26,12 @@ export default function Routine() {
         setError(true);
       }
     });
-
-    setLoading(false);
   };
 
   useEffect( () => {
     fetchRoutineExercises();
   }, []);
 
-  if (loading) return "Loading...";
   if (error) return "Error!";
 
   return (

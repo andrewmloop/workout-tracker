@@ -4,7 +4,6 @@ import Banner from "../components/Banner";
 
 export default function RoutineList() {
   const [routineList, setRoutineList] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect( () => {
@@ -23,12 +22,9 @@ export default function RoutineList() {
     } catch (error) {
       console.log("Error fetching routine list: ", error);
       setError(true);
-    } finally {
-      setLoading(false);
     }
   };
 
-  if (loading) return "Loading...";
   if (error) return "Error!";
 
   return (
