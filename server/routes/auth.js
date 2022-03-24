@@ -50,7 +50,10 @@ authRoutes.route("/login").post( async (req, response) => {
     const foundUser = await User.findOne({ email: user.email });
 
     if (!foundUser) {
-      return response.json({ message: "Invalid email or password."});
+      return response.json({ 
+        result: "failure",
+        message: "Invalid email or password.",
+      });
     }
 
     bcrypt.compare(user.password, foundUser.password, (matchErr, isMatch) => {
@@ -68,17 +71,21 @@ authRoutes.route("/login").post( async (req, response) => {
           (jwtError, token) => {
             if (jwtError) {
               console.error("Error signing web token: ", jwtError);
-              response.json({ "message": "Error signing token" });
+              response.json({ 
+                result: "failure",
+                message: "Error signing token." 
+              });
             }
             return response.json({
-              message: "success",
+              result: "success",
               token: `Bearer ${token}`,
             });
           }
         );
       } else {
         return response.json({
-          message: "Invalid email or password",
+          result: "failure",
+          message: "Invalid email or password.",
         });
       }
     });

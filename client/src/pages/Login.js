@@ -8,32 +8,60 @@ export default function Login() {
   // State for login form inputs
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
+  const [valErrors, setValErrors] = useState({});
 
-  const [error, setError] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const user = {
-      email: userEmail,
-      password: userPassword,
-    };
+    let isValidForm = handleValidation();
 
-    try {
-      const response = await fetch("http://localhost:9900/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user)
-      });
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      navigate("/routine-list");
-    } catch (error) {
-      console.error("Error authenticating user: ", error);
-      setError(true);
+    if (isValidForm) {
+      const user = {
+        email: userEmail,
+        password: userPassword,
+      };
+  
+      try {
+        const response = await fetch("http://localhost:9900/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(user)
+        });
+        const data = await response.json();
+        if (data.result === "success") {
+          localStorage.setItem("token", data.token);
+          navigate("/routine-list");
+        } else {
+          setLoginError(data.message);
+        }
+      } catch (error) {
+        console.error("Error authenticating user: ", error);
+        setLoginError({error});
+      }
     }
+  };
+
+  const handleValidation = () => {
+    let tempErrors = {};
+    let isValid = true;
+
+    if (userEmail <= 0) {
+      tempErrors["userEmail"] = true;
+      isValid = false;
+    }
+
+    if (userPassword <= 0) {
+      tempErrors["userPassword"] = true;
+      isValid = false;
+    }
+
+    setValErrors({...tempErrors});
+    return isValid;
+
   };
 
   return (
@@ -49,6 +77,9 @@ export default function Login() {
             onChange={ (e) => setUserEmail(e.target.value) }
             className="mb-2"
           />
+          {valErrors?.userEmail && (
+            <p className="text-red-500">Please enter an email.</p>
+          )}
           <label htmlFor="password">Password</label>
           <input 
             type="password" 
@@ -56,12 +87,17 @@ export default function Login() {
             onChange={ (e) => setUserPassword(e.target.value) }
             className="mb-2"
           />
+          {valErrors?.userPassword && (
+            <p className="text-red-500">Please enter a password.</p>
+          )}
           <button
             type="submit"
             className="w-full bg-amber-400"
           >Submit</button>
         </form>
-        { error ? "Error logging in." : null }
+        {loginError && (
+          <p className="text-red-500">{loginError}.</p>
+        )}
         <p>Don&apos;t have an account? <Link to="/register">Sign Up</Link></p>
       </div>
     </div>
