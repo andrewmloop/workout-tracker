@@ -10,10 +10,14 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AddRoutine from "./pages/AddRoutine";
+import Notification from "./components/Notification";
 
 export default function App() {
   const [exerciseList, setExerciseList] = useState([]);
   const [bannerText, setBannerText] = useState("");
+  const [showNotif, setShowNotif] = useState(false);
+  const [notifText, setNotifText] = useState("");
+  const [notifType, setNotifType] = useState(true);
 
   return (
     <div className="relative h-screen bg-gray-600">
@@ -46,7 +50,11 @@ export default function App() {
             />
           }/>
           <Route path="/add-routine" element={
-            <AddRoutine />
+            <AddRoutine 
+              setShowNotif={setShowNotif} 
+              setNotifText={setNotifText}
+              setNotifType={setNotifType}
+            />
           }/>
           <Route path="/routine" element={
             <Routine 
@@ -68,6 +76,11 @@ export default function App() {
           }/>
         </Route>
       </Routes>
+      <Notification 
+        showNotif={showNotif} 
+        notifText={notifText}
+        notifType={notifType}
+      />
     </div>
   );
 }

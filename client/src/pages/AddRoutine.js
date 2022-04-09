@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Banner from "../components/Banner";
 
-export default function AddRoutine() {
+export default function AddRoutine(props) {
   const [name, setName] = useState("");
 
   const navigate = useNavigate();
@@ -29,6 +29,9 @@ export default function AddRoutine() {
         const data = await response.json();
         if (data.result === "success") {
           navigate("/routine-list");
+          props.setNotifText("Successfully created routine.");
+          props.setNotifType(true);
+          props.setShowNotif(true);
         }
       } catch (error) {
         console.error("Error creating routine: ", error);
