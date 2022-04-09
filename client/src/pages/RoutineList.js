@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Banner from "../components/Banner";
 
 export default function RoutineList() {
   const [routineList, setRoutineList] = useState([]);
   const [error, setError] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect( () => {
     fetchRoutines();
@@ -32,6 +34,7 @@ export default function RoutineList() {
       <Banner
         bannerText={"Routines"}
         showAdd={true}
+        addFunction={() => navigate("/add-routine")}
       />
       <div className="p-8">
         <ul className="flex flex-col justify-start">

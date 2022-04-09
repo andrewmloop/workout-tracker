@@ -9,6 +9,7 @@ import Log from "./pages/Log";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AddRoutine from "./pages/AddRoutine";
 
 export default function App() {
   const [exerciseList, setExerciseList] = useState([]);
@@ -43,7 +44,10 @@ export default function App() {
               showBack={false}
               showAdd={true}
             />
-          }/>                   
+          }/>
+          <Route path="/add-routine" element={
+            <AddRoutine />
+          }/>
           <Route path="/routine" element={
             <Routine 
               setBannerText={setBannerText}

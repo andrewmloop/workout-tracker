@@ -13,7 +13,11 @@ routineRoutes.route("/add").post( (req, response) => {
 
   Routine.create(routeObj, (err, result) => {
     if (err) throw err;
-    response.json(result);
+    response.json({
+      result: "success",
+      message: "success",
+      data: result,
+    });
   });
 });
 

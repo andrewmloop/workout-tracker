@@ -6,6 +6,7 @@ export default function Banner(props) {
 
   const showBack = props.showBack;
   const showAdd = props.showAdd;
+  const addFunction = props.addFunction;
 
   return (
     <div className="sticky top-0 left-0 w-full bg-black p-4 text-white">
@@ -19,7 +20,7 @@ export default function Banner(props) {
         <h1 className="justify-self-center">{props.bannerText}</h1>
         <div className="justify-self-end">
           { showAdd 
-            ? <button>Add</button> 
+            ? <button onClick={addFunction}>Add</button> 
             : undefined
           }
         </div>
