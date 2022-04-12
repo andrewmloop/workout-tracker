@@ -15,8 +15,18 @@ logRoutes.route("/add").post( (req, response) => {
   };
 
   Log.create(logObj, (err, result) => {
-    if (err) throw err;
-    response.json(result);
+    if (err) {
+      console.error("Error creating log: ", err);
+      response.json({
+        result: "failure",
+        message: "Failed to create log",
+      }); 
+    }
+    response.json({
+      result: "success",
+      message: "Successfully created log",
+      data: result,
+    });
   });
 });
 

@@ -14,40 +14,30 @@ import Notification from "./components/Notification";
 
 export default function App() {
   const [exerciseList, setExerciseList] = useState([]);
-  const [bannerText, setBannerText] = useState("");
   const [showNotif, setShowNotif] = useState(false);
   const [notifText, setNotifText] = useState("");
   const [notifType, setNotifType] = useState(true);
 
   return (
-    <div className="relative h-screen bg-gray-600">
+    <div className="h-screen bg-gray-600">
       <Routes>
         <Route element={<WithoutNav  />}>
           <Route exact path="/" element={<Login />}/>
           <Route exact path="/login" element={<Login />}/>
           <Route exact path="/register" element={<Register />}/>
         </Route>
-        <Route element={<WithNav bannerText={bannerText} />}>
+        <Route element={<WithNav />}>
           <Route path="/exercise-list" element={
             <ExerciseList 
-              setBannerText={setBannerText}
               exerciseList={exerciseList}
               setExerciseList={setExerciseList}
-              showAdd={true}
             />
           }/>
           <Route path="/exercise" element={
-            <Exercise
-              setBannerText={setBannerText}
-              showBack={true}
-            />
+            <Exercise />
           }/>
           <Route path="/routine-list" element={
-            <RoutineList 
-              setBannerText={setBannerText}
-              showBack={false}
-              showAdd={true}
-            />
+            <RoutineList />
           }/>
           <Route path="/add-routine" element={
             <AddRoutine 
@@ -57,22 +47,17 @@ export default function App() {
             />
           }/>
           <Route path="/routine" element={
-            <Routine 
-              setBannerText={setBannerText}
-              showBack={true}
-              showAdd={true}
-            />
+            <Routine />
           }/>
           <Route path="/log" element={
             <Log 
-              setBannerText={setBannerText}
-              showBack={true}
+              setShowNotif={setShowNotif} 
+              setNotifText={setNotifText}
+              setNotifType={setNotifType}
             />
           }/>
           <Route path="/settings" element={
-            <Settings 
-              setBannerText={setBannerText}
-            />
+            <Settings />
           }/>
         </Route>
       </Routes>
