@@ -22,10 +22,10 @@ export default function Exercise() {
         <p>{data.level} | {data.force} | {data.category}</p>
         <p>{data.category} | {data.mechanic}</p>
         <p>{data.equipment}</p>
-        { data.primary_muscles.map( (muscle, i) => {
+        { data.primaryMuscles.map( (muscle, i) => {
           return <p key={i}>{muscle}</p>;
         })}
-        { data.secondary_muscles.map( (muscle, i) => {
+        { data.secondaryMuscles.map( (muscle, i) => {
           return <p key={i}>{muscle}</p>;
         })}
         { data.instructions.map( (line, i) => {

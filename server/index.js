@@ -39,6 +39,7 @@ app.listen(port, () => {
   console.log("App is listening at port: " + port);
 });
 
+
 // MIDDLEWARE FUNCTIONS
 function verifyJWT(req, res, next) {
   // Strips "Bearer" off "Bearer <token>" in request header
@@ -47,8 +48,9 @@ function verifyJWT(req, res, next) {
   if (token) {
     jwt.verify(token, jwtSecret, (err, decoded) => {
       if (err) return res.json({
-        isLoggedIn: false,
+        result: "failure",
         message: "Failed to authenticate",
+        isLoggedIn: false,
       });
       req.user = {};
       req.user.id = decoded.id;
@@ -56,6 +58,10 @@ function verifyJWT(req, res, next) {
       next();
     });
   } else {
-    res.json({ message: "Incorrect token given", isLoggedIn: false });
+    res.json({
+      result: "failure",
+      message: "Incorrect token given", 
+      isLoggedIn: false 
+    });
   }
 }

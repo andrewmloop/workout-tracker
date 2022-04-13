@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import ExerciseGroup from "./pages/ExerciseGroup";
 import ExerciseList from "./pages/ExerciseList";
 import Exercise from "./pages/Exercise";
 import RoutineList from "./pages/RoutineList";
@@ -27,6 +28,9 @@ export default function App() {
           <Route exact path="/register" element={<Register />}/>
         </Route>
         <Route element={<WithNav />}>
+          <Route path="/exercise-group" element={
+            <ExerciseGroup />
+          }/>
           <Route path="/exercise-list" element={
             <ExerciseList 
               exerciseList={exerciseList}

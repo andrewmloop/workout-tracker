@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Banner from "../components/Banner";
 
 export default function ExerciseList(props) {
   const [error, setError] = useState(false);
 
+  // Get muscle group to fetch from state passed by React
+  // Router Link component
+  const location = useLocation();
+  const muscleGroup = location.state.group || "/all";
+  const muscleGroupLabel = location.state.text;
+
   // Sets "exerciseList" passed down from app component on first
   // render. Pulls from "exerciseList" state on subsequent renders
   // to avoid excessive requests
   useEffect( () => {
-    if (props.exerciseList.length === 0) {
-      fetchExercises();
-    }
+    fetchExercises();
   }, []);
 
   const fetchExercises = async () => {
     try {
-      const res = await fetch("http://localhost:9900/exercise/list", {
+      const res = await fetch(`http://localhost:9900/exercise/list${muscleGroup}`, {
         headers: {
           "x-access-token": localStorage.getItem("token")
         }
       });
       const data = await res.json();
-      props.setExerciseList(data);
+      if (data.result === "success") {
+        props.setExerciseList(data.data);
+      }
     } catch (error) {
       console.error("Error fetching exercise list: ", error);
       setError(true);
@@ -34,8 +40,9 @@ export default function ExerciseList(props) {
   return (
     <>
       <Banner 
-        bannerText={"Exercises"} 
+        bannerText={muscleGroupLabel} 
         showAdd={true}
+        showBack={true}
       />
       <div className="p-8 h-full overflow-y-scroll">
         <ul className="flex flex-col justify-start">

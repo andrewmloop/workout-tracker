@@ -22,11 +22,189 @@ const exerciseRoutes = express.Router();
 
 // READ
 // Get all exercises
-exerciseRoutes.route("/list").get( (req, response) => {
+exerciseRoutes.route("/list/all").get( (req, res) => {
   Exercise
     .find({}, (err, result) => {
-      if (err) throw err;
-      response.json(result);
+      if (err) {
+        console.error("Error fetching exercises: ", err);
+        res.json({
+          result: "failure",
+          message: "Failure to fetch exercises."
+        });
+      }
+      res.json({
+        result: "success",
+        message: "success",
+        data: result,
+      });
+    });
+});
+
+// GET ab exercises
+exerciseRoutes.route("/list/abs").get( (req, res) => {
+  Exercise
+    .find({"primaryMuscles": "abdominals"}, (err, result) => {
+      if (err) {
+        console.error("Error fetching exercises: ", err);
+        res.json({
+          result: "failure",
+          message: "Failure to fetch exercises."
+        });
+      }
+      res.json({
+        result: "success",
+        message: "success",
+        data: result,
+      });
+    });
+});
+
+// GET arm exercises
+exerciseRoutes.route("/list/arms").get( (req, res) => {
+  Exercise
+    .find({$or: [
+      {"primaryMuscles": "biceps"},
+      {"primaryMuscles": "triceps"},
+      {"primaryMuscles": "forearms"}
+    ]}, (err, result) => {
+      if (err) {
+        console.error("Error fetching exercises: ", err);
+        res.json({
+          result: "failure",
+          message: "Failure to fetch exercises."
+        });
+      }
+      res.json({
+        result: "success",
+        message: "success",
+        data: result,
+      });
+    });
+});
+
+// GET back exercises
+exerciseRoutes.route("/list/back").get( (req, res) => {
+  Exercise
+    .find({$or: [
+      {"primaryMuscles": "lower back"},
+      {"primaryMuscles": "traps"},
+      {"primaryMuscles": "middle back"},
+      {"primaryMuscles": "lats"}
+    ]}, (err, result) => {
+      if (err) {
+        console.error("Error fetching exercises: ", err);
+        res.json({
+          result: "failure",
+          message: "Failure to fetch exercises."
+        });
+      }
+      res.json({
+        result: "success",
+        message: "success",
+        data: result,
+      });
+    });
+});
+
+// GET chest exercises
+exerciseRoutes.route("/list/chest").get( (req, res) => {
+  Exercise
+    .find({"primaryMuscles": "chest"}, (err, result) => {
+      if (err) {
+        console.error("Error fetching exercises: ", err);
+        res.json({
+          result: "failure",
+          message: "Failure to fetch exercises."
+        });
+      }
+      res.json({
+        result: "success",
+        message: "success",
+        data: result,
+      });
+    });
+});
+
+// GET shoulder exercises
+exerciseRoutes.route("/list/shoulders").get( (req, res) => {
+  Exercise
+    .find({"primaryMuscles": "shoulders"}, (err, result) => {
+      if (err) {
+        console.error("Error fetching exercises: ", err);
+        res.json({
+          result: "failure",
+          message: "Failure to fetch exercises."
+        });
+      }
+      res.json({
+        result: "success",
+        message: "success",
+        data: result,
+      });
+    });
+});
+
+// GET leg exercises
+exerciseRoutes.route("/list/legs").get( (req, res) => {
+  Exercise
+    .find({$or: [
+      {"primaryMuscles": "quadriceps"},
+      {"primaryMuscles": "calves"},
+      {"primaryMuscles": "glutes"},
+      {"primaryMuscles": "hamstrings"},
+      {"primaryMuscles": "adductors"},
+      {"primaryMuscles": "abductors"}
+    ]}, (err, result) => {
+      if (err) {
+        console.error("Error fetching exercises: ", err);
+        res.json({
+          result: "failure",
+          message: "Failure to fetch exercises."
+        });
+      }
+      res.json({
+        result: "success",
+        message: "success",
+        data: result,
+      });
+    });
+});
+
+// GET cardio exercises
+exerciseRoutes.route("/list/cardio").get( (req, res) => {
+  Exercise
+    .find({"category": "cardio"}, (err, result) => {
+      if (err) {
+        console.error("Error fetching exercises: ", err);
+        res.json({
+          result: "failure",
+          message: "Failure to fetch exercises."
+        });
+      }
+      res.json({
+        result: "success",
+        message: "success",
+        data: result,
+      });
+    });
+});
+
+// GET stretching exercises
+exerciseRoutes.route("/list/stretch").get( (req, res) => {
+  Exercise
+    .find({"category": "stretching"}, (err, result) => {
+      if (err) {
+        console.error("Error fetching exercises: ", err);
+        res.json({
+          result: "failure",
+          message: "Failure to fetch exercises."
+        });
+      }
+      res.json({
+        result: "success",
+        message: "success",
+        data: result,
+      });
     });
 });
 

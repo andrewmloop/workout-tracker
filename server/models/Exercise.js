@@ -22,12 +22,13 @@ const ExerciseSchema = new Schema({
     lowercase: true,
   },
   equipment: String,
-  primary_muscles: {
+  primaryMuscles: {
     type: [String],
-    enum: ["shoulders", "chest", "quadriceps", "calves", "glutes", "hamstrings", "abdominals", "adductors", "biceps", "forearms", "abductors", "triceps", "lower back", "traps", "middle back", "lats", ]
+    enum: ["shoulders", "chest", "quadriceps", "calves", "glutes", "hamstrings", "abdominals", "adductors", "biceps", "forearms", "abductors", "triceps", "lower back", "traps", "middle back", "lats", "neck"]
   },
-  secondary_muscles: {
+  secondaryMuscles: {
     type: [String],
+    enum: ["shoulders", "chest", "quadriceps", "calves", "glutes", "hamstrings", "abdominals", "adductors", "biceps", "forearms", "abductors", "triceps", "lower back", "traps", "middle back", "lats", "neck"]
   },
   category: {
     type: String,
