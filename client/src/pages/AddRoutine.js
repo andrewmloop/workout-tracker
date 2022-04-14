@@ -35,6 +35,9 @@ export default function AddRoutine(props) {
         }
       } catch (error) {
         console.error("Error creating routine: ", error);
+        props.setNotifText("The iron gods are upset at the moment.");
+        props.setNotifType(false);
+        props.setShowNotif(true);
       }
     }
   };

@@ -22,7 +22,7 @@ export default function RoutineList() {
       const data = await res.json();
       setRoutineList(data);
     } catch (error) {
-      console.log("Error fetching routine list: ", error);
+      console.error("Error fetching routine list: ", error);
       setError(true);
     }
   };

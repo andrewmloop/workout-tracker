@@ -17,7 +17,7 @@ export default function Banner(props) {
             : undefined
           }
         </div>
-        <h1 className="justify-self-center">{props.bannerText}</h1>
+        <h1 className="w-full text-center whitespace-nowrap justify-self-center">{props.bannerText}</h1>
         <div className="justify-self-end">
           { showAdd 
             ? <button onClick={addFunction}>Add</button> 

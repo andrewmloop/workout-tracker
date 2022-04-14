@@ -66,6 +66,7 @@ export default function App() {
         </Route>
       </Routes>
       <Notification 
+        setShowNotif={setShowNotif}
         showNotif={showNotif} 
         notifText={notifText}
         notifType={notifType}

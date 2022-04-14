@@ -11,20 +11,20 @@ export default function Routine() {
   const [exerciseList, setExerciseList] = useState([]);
   const [error, setError] = useState(false);
 
-  const fetchRoutineExercises = () => {
-    routineData.exercise_list.map( async (exercise) => {
-      try {
-        const response = await fetch(`http://localhost:9900/exercise/${exercise.exercise}`, {
-          headers: {
-            "x-access-token": localStorage.getItem("token"),
-          }
-        });
-        const data = await response.json();
-        setExerciseList([...exerciseList, data]);
-      } catch (error) {
-        console.error("Error fetching routine exercise: ", error);
-        setError(true);
-      }
+  const fetchRoutineExercises = async () => {
+    Promise.all(routineData.exercise_list.map( async (exercise) => {
+      const response = await fetch(`http://localhost:9900/exercise/${exercise.exercise}`, {
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        }
+      });
+      const data = await response.json();
+      return data;
+    })).then( exercises => {
+      setExerciseList(...exerciseList, exercises);
+    }).catch( error => {
+      console.error("Error fetching routine exercises: ", error);
+      setError(true);
     });
   };
 
@@ -43,7 +43,7 @@ export default function Routine() {
       />
       <div className="p-8 text-center text-white">
         <ul className="flex flex-col justify-start text-left">
-          { console.log(exerciseList) }
+          {console.log(exerciseList)}
           {
             exerciseList.map( exercise => {
               return (
