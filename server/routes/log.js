@@ -10,6 +10,7 @@ logRoutes.route("/add").post( (req, response) => {
     exercise: req.body.exercise,
     weight: req.body.weight,
     reps: req.body.reps,
+    maxRep: req.body.maxRep,
     form: req.body.form,
     user: req.user.id,
   };
@@ -39,12 +40,31 @@ logRoutes.route("/list").get( (req, response) => {
   });
 });
 
-//Get one log
+// Get one log
 logRoutes.route("/:id").get( (req, response) => {
   Log.findById(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);
   });
+});
+
+// Get logs for exercise for most recent date
+logRoutes.route("/exercise/:exercise").get( (req, response) => {
+  Log.find({ exercise: req.params.exercise,
+    user: req.user.id }, (err, result) => {
+    if (err) {
+      console.error("Error fetching logs for that exercise and date: ", error);
+      response.json({
+        result: "failure",
+        message: "Failed to fetch log."
+      });
+    }
+    response.json({
+      result: "success",
+      message: "Successfully found logs.",
+      data: result,
+    });
+  }).sort({ date: -1 });
 });
 
 // UPDATE

@@ -15,13 +15,17 @@ const LogSchema = new Schema({
   },
   weight: {
     type: Number,
-    required: [true, "Please record your weight"],
-    min: [1, "Please record your weight."]
+    default: 0,
+    min: [0, "Please record your weight."],
   },
   reps: {
     type: Number,
     required: [true, "Please record your weight"],
     min: [1, "Please record your reps."],
+  },
+  maxRep: {
+    type: Number,
+    default: 0,
   },
   form: {
     type: String,
