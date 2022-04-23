@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Banner from "../components/Banner";
 
 import { useUser } from "../context/UserContext";
@@ -8,6 +8,7 @@ export default function Settings(props) {
 
   const [isLeftHand, setIsLeftHand] = useState(userStore.left_hand);
   const [isMetric, setIsMetric] = useState(userStore.use_metric);
+  const isMounted = useRef(false);
 
   const handleChange = async () => {
     const newData = {
@@ -44,7 +45,11 @@ export default function Settings(props) {
   };
 
   useEffect(() => {
-    handleChange();
+    if (isMounted.current) {
+      handleChange();
+    } else {
+      isMounted.current = true;
+    }
   }, [isLeftHand, isMetric]);
 
   return (
