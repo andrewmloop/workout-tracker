@@ -53,7 +53,7 @@ logRoutes.route("/exercise/:exercise").get( (req, response) => {
   Log.find({ exercise: req.params.exercise,
     user: req.user.id }, (err, result) => {
     if (err) {
-      console.error("Error fetching logs for that exercise and date: ", error);
+      console.error("Error fetching logs for that exercise and date: ", err);
       response.json({
         result: "failure",
         message: "Failed to fetch log."

@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+
 import Banner from "../components/Banner";
+
+import { useUser } from "../context/UserContext";
 
 export default function Log(props) {
   // Location data that gets passed to log from routine
   const location = useLocation();
   const exercise = location.state.exercise;
 
+  const { userStore } = useUser();
+
   // Values for form button toggle
   const values = ["Good", "Okay", "Poor"];
+  const units = userStore.use_metric ? "kg." : "lbs.";
 
   // State to hold weight, reps, form, date for submit
-  const [weight, setWeight] = useState(0);
-  const [reps, setReps] = useState(0);
+  const [weight, setWeight] = useState("");
+  const [reps, setReps] = useState("");
   const [form, setForm] = useState(0);
   const [logDate, setLogDate] = useState(Date());
 
@@ -25,8 +31,25 @@ export default function Log(props) {
     form === 2 ? setForm(0) : setForm(form + 1);
   };
 
+  // Prevent fetch if form is empty
+  const handleValidation = () => {
+    let isValid = true;
+
+    if (weight === "") isValid = false;
+    if (reps === "") isValid = false;
+
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!handleValidation()) {
+      props.setNotifText("Add a weight and rep");
+      props.setNotifType(false);
+      props.setShowNotif(true);
+      return;
+    }
 
     const newLog = {
       exercise: exercise._id,
@@ -94,7 +117,7 @@ export default function Log(props) {
     }
   };
 
-  // The user can select on a previous log to autofill the 
+  // The user can click on a previous log to autofill the 
   // form for the next log to be added quicker.
   const setInputs = (w, r) => {
     setWeight(w);
@@ -111,19 +134,19 @@ export default function Log(props) {
         bannerText={exercise.name}
         showBack={true}
       />
-      <div className="grid grid-cols-[66%_33%] h-[calc(100%-120px)] p-4">
+      <div className={`grid ${userStore.left_hand ? "grid-cols-[33%_66%]" : "grid-cols-[66%_33%]"} h-[calc(100%-120px)] gap-2 p-4`}>
         {/* Log Column */}
-        <div className="flex flex-col overflow-hidden">
+        <div className={`flex flex-col overflow-hidden ${userStore.left_hand ? "order-2" : ""}`}>
           <ul className="flex flex-col overflow-y-scroll">
             {
               logHistory.map( (log, i) => {
                 return (
                   <li
                     key={i}
-                    className="mb-2 mr-2 py-2 px-4 bg-amber-400 rounded-md"
+                    className="mb-2 py-2 px-4 bg-amber-400 rounded-md"
                     onClick={() => setInputs(log.weight, log.reps)}
                   >
-                    <p>{log.weight} lbs. X {log.reps} reps.</p>
+                    <p>{log.weight} {units} X {log.reps} reps.</p>
                     <p>{formatDate(log.date)}</p>
                     <p>{log.form} form</p>
                     <p>1RM: {log.maxRep}</p>
@@ -134,14 +157,14 @@ export default function Log(props) {
           </ul>
         </div>
         {/* Form Column */}
-        <div className="w-full">
+        <div>
           <form onSubmit={ (e) => handleSubmit(e) }
             className="h-full flex flex-col justify-center"
           >
             <input
               type="number"
               name="weight"
-              placeholder={weight || "lbs"}
+              placeholder={units}
               value={weight}
               onChange={ (e) => setWeight(e.target.value) }
               className="w-full p-2 rounded-lg mb-2 text-center"
@@ -149,7 +172,7 @@ export default function Log(props) {
             <input
               type="number"
               name="reps"
-              placeholder={reps || "reps"}
+              placeholder={"reps"}
               value={reps}
               onChange={ (e) => setReps(e.target.value) }
               className="w-full p-2 rounded-lg mb-2 text-center"
