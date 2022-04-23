@@ -60,7 +60,7 @@ export default function Log(props) {
       }
     } catch (error) {
       console.error("Error submiting log: ", error);
-      props.setNotifText("The iron gods are upset at the moment.");
+      props.setNotifText("The iron gods are upset at the moment");
       props.setNotifType(false);
       props.setShowNotif(true);
     }

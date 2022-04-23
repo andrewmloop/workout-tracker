@@ -16,7 +16,7 @@ userRoutes.route("/:id").get( (req, response) => {
 });
 
 // UPDATE
-userRoutes.route("/update/:id").post( (req, response) => {
+userRoutes.route("/update").post( (req, response) => {
   const newValues = {
     $set: {
       email: req.body.email,
@@ -29,12 +29,22 @@ userRoutes.route("/update/:id").post( (req, response) => {
   };
 
   User.findByIdAndUpdate(
-    req.params.id, 
+    req.user.id, 
     newValues, 
     { returnOriginal: false },
     (err, result) => {
-      if (err) throw err;
-      response.json(result);
+      if (err) {
+        console.error("Error updating user: ", err);
+        return response.json({
+          result: "failure",
+          message: "Failed to update user",
+        });
+      }
+      response.json({
+        result: "success",
+        message: "Updated user",
+        data: result,
+      });
     });
 });
 

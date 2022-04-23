@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { useUser } from "../context/UserContext";
+
 export default function Login() {
-  // Redirect user on successful login
+
+  // Access to change global user store
+  const { handleUser } = useUser();
+
+  // For redirect user on successful login
   const navigate = useNavigate();
 
   // State for login form inputs
@@ -34,6 +40,7 @@ export default function Login() {
         const data = await response.json();
         if (data.result === "success") {
           localStorage.setItem("token", data.token);
+          handleUser(data.data);
           navigate("/routine-list");
         } else {
           setLoginError(data.message);

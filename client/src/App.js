@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 import ExerciseGroup from "./pages/ExerciseGroup";
 import ExerciseList from "./pages/ExerciseList";
@@ -13,6 +14,8 @@ import Register from "./pages/Register";
 import AddRoutine from "./pages/AddRoutine";
 import Notification from "./components/Notification";
 
+import { UserProvider } from "./context/UserContext";
+
 export default function App() {
   const [exerciseList, setExerciseList] = useState([]);
   const [showNotif, setShowNotif] = useState(false);
@@ -20,58 +23,64 @@ export default function App() {
   const [notifType, setNotifType] = useState(true);
 
   return (
-    <div className="h-screen bg-gray-600">
-      <Routes>
-        <Route element={<WithoutNav  />}>
-          <Route exact path="/" element={<Login />}/>
-          <Route exact path="/login" element={<Login />}/>
-          <Route exact path="/register" element={<Register />}/>
-        </Route>
-        <Route element={<WithNav />}>
-          <Route path="/exercise-group" element={
-            <ExerciseGroup />
-          }/>
-          <Route path="/exercise-list" element={
-            <ExerciseList 
-              exerciseList={exerciseList}
-              setExerciseList={setExerciseList}
-            />
-          }/>
-          <Route path="/exercise" element={
-            <Exercise />
-          }/>
-          <Route path="/routine-list" element={
-            <RoutineList />
-          }/>
-          <Route path="/add-routine" element={
-            <AddRoutine 
-              setShowNotif={setShowNotif} 
-              setNotifText={setNotifText}
-              setNotifType={setNotifType}
-            />
-          }/>
-          <Route path="/routine" element={
-            <Routine />
-          }/>
-          <Route path="/log" element={
-            <Log 
-              setShowNotif={setShowNotif} 
-              setNotifText={setNotifText}
-              setNotifType={setNotifType}
-            />
-          }/>
-          <Route path="/settings" element={
-            <Settings />
-          }/>
-        </Route>
-      </Routes>
-      <Notification 
-        setShowNotif={setShowNotif}
-        showNotif={showNotif} 
-        notifText={notifText}
-        notifType={notifType}
-      />
-    </div>
+    <UserProvider>
+      <div className="h-screen bg-gray-600">
+        <Routes>
+          <Route element={<WithoutNav  />}>
+            <Route exact path="/" element={<Login />}/>
+            <Route exact path="/login" element={<Login />}/>
+            <Route exact path="/register" element={<Register />}/>
+          </Route>
+          <Route element={<WithNav />}>
+            <Route path="/exercise-group" element={
+              <ExerciseGroup />
+            }/>
+            <Route path="/exercise-list" element={
+              <ExerciseList 
+                exerciseList={exerciseList}
+                setExerciseList={setExerciseList}
+              />
+            }/>
+            <Route path="/exercise" element={
+              <Exercise />
+            }/>
+            <Route path="/routine-list" element={
+              <RoutineList />
+            }/>
+            <Route path="/add-routine" element={
+              <AddRoutine 
+                setShowNotif={setShowNotif} 
+                setNotifText={setNotifText}
+                setNotifType={setNotifType}
+              />
+            }/>
+            <Route path="/routine" element={
+              <Routine />
+            }/>
+            <Route path="/log" element={
+              <Log 
+                setShowNotif={setShowNotif} 
+                setNotifText={setNotifText}
+                setNotifType={setNotifType}
+              />
+            }/>
+            <Route path="/settings" element={
+              <Settings
+                setShowNotif={setShowNotif} 
+                setNotifText={setNotifText}
+                setNotifType={setNotifType} 
+              />
+            }/>
+          </Route>
+        </Routes>
+        <Notification 
+          setShowNotif={setShowNotif}
+          showNotif={showNotif} 
+          notifText={notifText}
+          notifType={notifType}
+        />
+      </div>
+    </UserProvider>
   );
 }
 

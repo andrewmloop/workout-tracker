@@ -25,18 +25,19 @@ authRoutes.route("/register").post( async (req, response) => {
   } else {
     const hash = await bcrypt.hash(password, 10);
     
-    const userObj = {
+    const newUser = {
       email: email,
       password: hash,
       first_name: firstName,
       birth_date: birthDate,
     };
   
-    User.create(userObj, (userErr, result) => {
+    User.create(newUser, (userErr, result) => {
       if (userErr) throw userErr;
       response.json({ 
-        result: result,
-        message: "success" 
+        result: "success",
+        message: "New user created.",
+        data: result,
       });
     });
   }
@@ -71,7 +72,7 @@ authRoutes.route("/login").post( async (req, response) => {
           (jwtError, token) => {
             if (jwtError) {
               console.error("Error signing web token: ", jwtError);
-              response.json({ 
+              return response.json({ 
                 result: "failure",
                 message: "Error signing token." 
               });
@@ -79,6 +80,13 @@ authRoutes.route("/login").post( async (req, response) => {
             return response.json({
               result: "success",
               token: `Bearer ${token}`,
+              data: {
+                birth_date: foundUser.birth_date,
+                email: foundUser.email,
+                first_name: foundUser.first_name,
+                left_hand: foundUser.left_hand,
+                use_metric: foundUser.use_metric,
+              }
             });
           }
         );

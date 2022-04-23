@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Banner from "../components/Banner";
 
 export default function RoutineList() {
+
   const [routineList, setRoutineList] = useState([]);
   const [error, setError] = useState(false);
 
