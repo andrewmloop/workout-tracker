@@ -7,7 +7,6 @@ export default function Navbar() {
       <div className="flex h-full justify-around items-center text-center">
         <NavItem to="/exercise-group" text="Exercises" />
         <NavItem to="/routine-list" text="Routines" />
-        <NavItem to="/log-list" text="Logs" />
         <NavItem to="/settings" text="Settings" />
       </div>
     </nav>

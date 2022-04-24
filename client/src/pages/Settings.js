@@ -56,6 +56,7 @@ export default function Settings(props) {
     <>
       <Banner
         bannerText={"Settings"}
+        showBack={true}
       />
       <div className="p-8 text-white">
         <div className="flex flex-col mb-4">
