@@ -13,7 +13,7 @@ export default function Banner(props) {
       <div className="grid grid-cols-3">
         <div className="justify-self-start">
           { showBack 
-            ? <button onClick={() => navigate(-1)}>Back</button> 
+            ? <button onClick={() => navigate(-1, {})}>Back</button> 
             : undefined
           }
         </div>

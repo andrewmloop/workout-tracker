@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation  } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Banner from "../components/Banner";
 import Loading from "../components/Loading";
 
@@ -7,7 +7,7 @@ import { useExerciseList } from "../context/ExerciseListContext";
 
 export default function ExerciseList() {
   // Global exercise store to cut down on number of fetch calls
-  const { exerciseListStore, handleExerciseList } = useExerciseList();
+  const { exerciseListStore, fetchExercises } = useExerciseList();
 
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,31 +19,12 @@ export default function ExerciseList() {
   const muscleGroup = location.state.group || "/all";
   const muscleGroupLabel = location.state.text;
 
-  const fetchExercises = async () => {
+  useEffect( async () => {
     setLoading(true);
-
-    try {
-      const res = await fetch(`http://localhost:9900/exercise/list${muscleGroup}`, {
-        headers: {
-          "x-access-token": localStorage.getItem("token")
-        }
-      });
-      const data = await res.json();
-      if (data.result === "success") {
-        handleExerciseList(data.data);
-        setLoading(false);
-        setError(false);
-      }
-    } catch (error) {
-      console.error("Error fetching exercise list: ", error);
-      setLoading(false);
-      setError(true);
-    }
-  };
-
-  useEffect( () => {
-    fetchExercises();
-  }, []);
+    const isSuccess = await fetchExercises(muscleGroup);
+    if (!isSuccess) setError(true);
+    setLoading(false);
+  }, [muscleGroup]);
 
   if (error) return "Error!";
   if (loading) {
