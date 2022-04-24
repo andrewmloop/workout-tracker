@@ -4,13 +4,15 @@ import { useLocation } from "react-router-dom";
 import Banner from "../components/Banner";
 
 import { useUser } from "../context/UserContext";
+import { useNotif } from "../context/NotificationContext";
 
-export default function Log(props) {
+export default function Log() {
   // Location data that gets passed to log from routine
   const location = useLocation();
   const exercise = location.state.exercise;
 
   const { userStore } = useUser();
+  const { handleNotif } = useNotif();
 
   // Values for form button toggle
   const values = ["Good", "Okay", "Poor"];
@@ -45,9 +47,8 @@ export default function Log(props) {
     e.preventDefault();
 
     if (!handleValidation()) {
-      props.setNotifText("Add a weight and rep");
-      props.setNotifType(false);
-      props.setShowNotif(true);
+      let errorText = "Add a weight and rep";
+      handleNotif(errorText, false, true);
       return;
     }
 
@@ -72,20 +73,15 @@ export default function Log(props) {
       const data = await res.json();
       if (data.result === "success") {
         setLogHistory([data.data, ...logHistory]);
-        props.setNotifText("Log added");
-        props.setNotifType(true);
-        props.setShowNotif(true);
+        handleNotif(data.message, true, true);
       }
       if (data.result === "failure") {
-        props.setNotifText("Failed to add log");
-        props.setNotifType(false);
-        props.setShowNotif(true);
+        handleNotif(data.message, false, true);
       }
     } catch (error) {
       console.error("Error submiting log: ", error);
-      props.setNotifText("The iron gods are upset at the moment");
-      props.setNotifType(false);
-      props.setShowNotif(true);
+      const errorText = "The iron gods are upset at the moment";
+      handleNotif(errorText, false, true);
     }
   };
 

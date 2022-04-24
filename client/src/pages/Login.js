@@ -41,7 +41,7 @@ export default function Login() {
         if (data.result === "success") {
           localStorage.setItem("token", data.token);
           handleUser(data.data);
-          navigate("/routine-list");
+          navigate("/routine");
         } else {
           setLoginError(data.message);
         }

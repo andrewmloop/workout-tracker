@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -16,64 +16,38 @@ import Notification from "./components/Notification";
 
 import { UserProvider } from "./context/UserContext";
 import { ExerciseListProvider } from "./context/ExerciseListContext";
+import { NotifProvider } from "./context/NotificationContext";
 
 export default function App() {
-  const [showNotif, setShowNotif] = useState(false);
-  const [notifText, setNotifText] = useState("");
-  const [notifType, setNotifType] = useState(true);
-
   return (
-    <UserProvider>
-      <ExerciseListProvider>
-        <div>
-          <Routes>
-            <Route element={<WithoutNav  />}>
-              <Route exact path="/" element={<Login />}/>
-              <Route exact path="/login" element={<Login />}/>
-              <Route exact path="/register" element={<Register />}/>
+    <UserProvider><ExerciseListProvider><NotifProvider>
+      <div>
+        <Routes>
+          <Route element={<WithoutNav  />}>
+            <Route exact path="/" element={<Login />}/>
+            <Route exact path="/login" element={<Login />}/>
+            <Route exact path="/register" element={<Register />}/>
+          </Route>
+          <Route element={<WithNav />}>
+            <Route path="/exercise">
+              <Route index path="/exercise" element={<ExerciseGroup />} />
+              <Route path="list" element={<ExerciseList />} />
+              <Route path="detail" element={<ExerciseDetail />} />
             </Route>
-            <Route element={<WithNav />}>
-              <Route path="/exercise">
-                <Route index path="/exercise" element={<ExerciseGroup />} />
-                <Route path="list" element={<ExerciseList />} />
-                <Route path="detail" element={<ExerciseDetail />} />
-              </Route>
-              <Route path="/routine">
-                <Route index path="/routine" element={<RoutineList />} />
-                <Route path="add" element={
-                  <AddRoutine 
-                    setShowNotif={setShowNotif} 
-                    setNotifText={setNotifText}
-                    setNotifType={setNotifType}
-                  />
-                } />
-                <Route path="detail" element={<RoutineDetail />} />
-                <Route path="log" element={
-                  <Log 
-                    setShowNotif={setShowNotif} 
-                    setNotifText={setNotifText}
-                    setNotifType={setNotifType}
-                  />
-                } />
-              </Route>
-              <Route exact path="/settings" element={
-                <Settings
-                  setShowNotif={setShowNotif} 
-                  setNotifText={setNotifText}
-                  setNotifType={setNotifType} 
-                />
-              }/>
+            <Route path="/routine">
+              <Route index path="/routine" element={<RoutineList />} />
+              <Route path="add" element={<AddRoutine />} />
+              <Route path="detail" element={<RoutineDetail />} />
+              <Route path="log" element={<Log />} />
             </Route>
-          </Routes>
-          <Notification 
-            setShowNotif={setShowNotif}
-            showNotif={showNotif} 
-            notifText={notifText}
-            notifType={notifType}
-          />
-        </div>
-      </ExerciseListProvider>
-    </UserProvider>
+            <Route exact path="/settings" element={
+              <Settings />
+            }/>
+          </Route>
+        </Routes>
+        <Notification />
+      </div>
+    </NotifProvider></ExerciseListProvider></UserProvider>
   );
 }
 

@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Banner from "../components/Banner";
 
-export default function AddRoutine(props) {
+import { useNotif } from "../context/NotificationContext";
+
+export default function AddRoutine() {
+  const { handleNotif } = useNotif();
+
   const [name, setName] = useState("");
 
   const navigate = useNavigate();
@@ -12,7 +16,7 @@ export default function AddRoutine(props) {
 
     if (name.length > 0) {
       const routine = {
-        // Backend handles empty array for new routine
+        // Backend handles empty exercise array for new routine
         // Backend handles user id based on JWT taken from local storage
         name: name,
       };
@@ -28,17 +32,17 @@ export default function AddRoutine(props) {
         });
         const data = await response.json();
         if (data.result === "success") {
-          navigate("/routine-list");
-          props.setNotifText("Successfully created routine.");
-          props.setNotifType(true);
-          props.setShowNotif(true);
+          handleNotif(data.message, true, true);
+          navigate("/routine");
         }
       } catch (error) {
         console.error("Error creating routine: ", error);
-        props.setNotifText("The iron gods are upset at the moment.");
-        props.setNotifType(false);
-        props.setShowNotif(true);
+        const errorText = "The iron gods are upset at the moment";
+        handleNotif(errorText, false, true);
       }
+    } else {
+      let emptyFieldText = "Your routine needs a name";
+      handleNotif(emptyFieldText, false, true);
     }
   };
 

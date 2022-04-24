@@ -2,7 +2,7 @@ import React from "react";
 
 const UserContext = React.createContext(null);
 
-const UserProvider = ({children}) =>  {
+const UserProvider = ({children}) => {
   const [userStore, setUserStore] = React.useState({});
 
   return (

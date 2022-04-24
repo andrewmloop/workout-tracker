@@ -12,12 +12,19 @@ routineRoutes.route("/add").post( (req, response) => {
   };
 
   Routine.create(routeObj, (err, result) => {
-    if (err) throw err;
-    response.json({
-      result: "success",
-      message: "success",
-      data: result,
-    });
+    if (err) {
+      console.error("Failed to create routine: ", err);
+      response.json({
+        result: "failure",
+        message: "Failed to create routine",
+      });
+    } else {
+      response.json({
+        result: "success",
+        message: "Successfully created routine",
+        data: result,
+      });
+    }
   });
 });
 

@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import Banner from "../components/Banner";
 
 import { useUser } from "../context/UserContext";
+import { useNotif } from "../context/NotificationContext";
 
-export default function Settings(props) {
+export default function Settings() {
   const { userStore, handleUser } = useUser();
+  const { handleNotif } = useNotif();
 
   const [isLeftHand, setIsLeftHand] = useState(userStore.left_hand);
   const [isMetric, setIsMetric] = useState(userStore.use_metric);
@@ -27,20 +29,15 @@ export default function Settings(props) {
       });
       const data = await response.json();
       if (data.result === "success") {
-        props.setNotifText(data.message);
-        props.setNotifType(true);
-        props.setShowNotif(true);
+        handleNotif(data.message, true, true);
         handleUser(data.data);
       } else {
-        props.setNotifText(data.message);
-        props.setNotifType(false);
-        props.setShowNotif(true);
+        handleNotif(data.message, false, true);
       }
     } catch (error) {
       console.error("Error updating user: ", error);
-      props.setNotifText("The iron gods are upset at the moment");
-      props.setNotifType(false);
-      props.setShowNotif(true);
+      let errorText = "The iron gods are upset at the moment";
+      handleNotif(errorText, false, true);
     }
   };
 
