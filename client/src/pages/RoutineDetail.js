@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import Banner from "../components/Banner";
 
-export default function Routine() {
+export default function RoutineDetail() {
   // Routine data from route history
   const location = useLocation();
   const routineData = location.state.routine;
@@ -52,12 +52,12 @@ export default function Routine() {
                   className="flex justify-between mb-2 py-2 border-b-2"
                 >
                   <Link 
-                    to="/exercise"
+                    to="/exercise/detail"
                     state={{ "exercise": exercise }}
                     className="block"
                   >{exercise.name}</Link>
                   <Link
-                    to="/log"
+                    to="/routine/log"
                     state={{ "exercise": exercise }}
                   >Add</Link>
                 </li>

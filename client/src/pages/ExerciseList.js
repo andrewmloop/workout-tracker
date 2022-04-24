@@ -72,7 +72,7 @@ export default function ExerciseList() {
                 <li key={exercise._id}
                   className="mb-2 py-2 border-b-[1px] text-white last:border-0"
                 >
-                  <Link to="/exercise"
+                  <Link to="/exercise/detail"
                     state={{ "exercise": exercise }}
                     className="block"
                   >{exercise.name}</Link>

@@ -30,7 +30,7 @@ function GroupItem(props) {
   return (
     <li className="mb-2 py-2 border-b-2 text-white">
       <Link
-        to="/exercise-list"
+        to="/exercise/list"
         state={{"group": props.group,
           "text": props.text}}
         className="block"

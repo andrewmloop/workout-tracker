@@ -35,7 +35,7 @@ export default function RoutineList() {
       <Banner
         bannerText={"Routines"}
         showAdd={true}
-        addFunction={() => navigate("/add-routine")}
+        addFunction={() => navigate("/routine/add")}
       />
       <div className="p-8">
         <ul className="flex flex-col justify-start">
@@ -47,7 +47,7 @@ export default function RoutineList() {
                   className="mb-2 py-2 border-b-2 text-white"
                 >
                   <Link 
-                    to="/routine"
+                    to="detail"
                     state={{ "routine": routine }}
                     className="block"
                   >{routine.name}</Link>

@@ -2,11 +2,8 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import Banner from "../components/Banner";
 
-// function capitalizeFirstLetter(string) {
-//   return string.charAt(0).toUpperCase() + string.slice(1);
-// }
 
-export default function Exercise() {
+export default function ExerciseDetail() {
   // Exercise data passed from ExerciseList page to avoid multiple requests
   const location = useLocation();
   const data = location.state.exercise;
