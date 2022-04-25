@@ -34,7 +34,9 @@ export default function ExerciseList() {
           bannerText={muscleGroupLabel} 
           showBack={true}
         />
-        <Loading text="Moving the weights around..." />
+        <div className="h-full">
+          <Loading text="Moving the weights around..." />
+        </div>
       </>
     );
   }
@@ -51,7 +53,7 @@ export default function ExerciseList() {
             exerciseListStore.map( exercise => {
               return (
                 <li key={exercise._id}
-                  className="mb-2 py-2 border-b-[1px] text-white last:border-0"
+                  className="mb-2 py-2 border-b-[1px] border-gray-500 text-white"
                 >
                   <Link to="/exercise/detail"
                     state={{ "exercise": exercise }}

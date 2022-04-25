@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import Banner from "../components/Banner";
+import Loading from "../components/Loading";
 
 import { useUser } from "../context/UserContext";
 import { useNotif } from "../context/NotificationContext";
@@ -23,6 +24,7 @@ export default function Log() {
   const [reps, setReps] = useState("");
   const [form, setForm] = useState(0);
   const [logDate, setLogDate] = useState(Date());
+  const [loading, setLoading] = useState(false);
 
   // State to hold exercise log history
   const [logHistory, setLogHistory] = useState([]);
@@ -86,14 +88,18 @@ export default function Log() {
   };
 
   const fetchLogs = async () => {
+    setLoading(true);
+
     try {
       const res = await fetch(`http://localhost:9900/log/exercise/${exercise._id}`, {
         headers: { "x-access-token": localStorage.getItem("token") },
       });
       const data = await res.json();
       setLogHistory(data.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching log history: ", error);
+      setLoading(false);
     }
   };
 
@@ -130,30 +136,36 @@ export default function Log() {
         bannerText={exercise.name}
         showBack={true}
       />
-      <div className={`grid ${userStore.left_hand ? "grid-cols-[33%_66%]" : "grid-cols-[66%_33%]"} h-[calc(100%-120px)] gap-2 p-4`}>
+      <div className={`grid ${userStore.left_hand ? "grid-cols-[33%_66%]" : "grid-cols-[66%_33%]"} h-[calc(100vh-120px)] gap-2 p-4`}>
         {/* Log Column */}
-        <div className={`flex flex-col overflow-hidden ${userStore.left_hand ? "order-2" : ""}`}>
-          <ul className="flex flex-col overflow-y-scroll">
-            {
-              logHistory.map( (log, i) => {
-                return (
-                  <li
-                    key={i}
-                    className="mb-2 py-2 px-4 bg-amber-400 rounded-md"
-                    onClick={() => setInputs(log.weight, log.reps)}
-                  >
-                    <p>{log.weight} {units} X {log.reps} reps.</p>
-                    <p>{formatDate(log.date)}</p>
-                    <p>{log.form} form</p>
-                    <p>1RM: {log.maxRep}</p>
-                  </li>
-                );
-              })
-            }
-          </ul>
-        </div>
+        {
+          loading
+            ? <div className={`overflow-y-hidden ${userStore.left_hand ? "order-2" : ""}`}>
+              <Loading text="" />
+            </div>
+            : <div className={`flex flex-col overflow-hidden ${userStore.left_hand ? "order-2" : ""}`}>
+              <ul className="flex flex-col overflow-y-scroll">
+                {
+                  logHistory.map( (log, i) => {
+                    return (
+                      <li
+                        key={i}
+                        className="mb-2 py-2 px-4 bg-amber-400 rounded-md"
+                        onClick={() => setInputs(log.weight, log.reps)}
+                      >
+                        <p>{log.weight} {units} x {log.reps} reps.</p>
+                        <p>{formatDate(log.date)}</p>
+                        <p>{log.form} form</p>
+                        <p>1RM: {log.maxRep}</p>
+                      </li>
+                    );
+                  })
+                }
+              </ul>
+            </div>
+        }
         {/* Form Column */}
-        <div>
+        <div className="h-[calc(100vh-120px)">
           <form onSubmit={ (e) => handleSubmit(e) }
             className="h-full flex flex-col justify-center"
           >

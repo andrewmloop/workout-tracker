@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
+
 import Banner from "../components/Banner";
+import Loading from "../components/Loading";
 
 export default function RoutineDetail() {
   // Routine data from route history
@@ -9,9 +11,12 @@ export default function RoutineDetail() {
 
   // Routine exercise state
   const [exerciseList, setExerciseList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const fetchRoutineExercises = async () => {
+    setLoading(true);
+
     Promise.all(routineData.exercise_list.map( async (exercise) => {
       const response = await fetch(`http://localhost:9900/exercise/${exercise.exercise}`, {
         headers: {
@@ -22,9 +27,11 @@ export default function RoutineDetail() {
       return data;
     })).then( exercises => {
       setExerciseList(...exerciseList, exercises);
+      setLoading(false);
     }).catch( error => {
       console.error("Error fetching routine exercises: ", error);
       setError(true);
+      setLoading(false);
     });
   };
 
@@ -33,6 +40,18 @@ export default function RoutineDetail() {
   }, []);
 
   if (error) return "Error!";
+  if (loading) {
+    return (
+      <>
+        <Banner
+          bannerText={routineData.name}
+          showBack={true}
+          showAdd={true}
+        />
+        <Loading text="Stretching out..." />
+      </>
+    );
+  }
 
   return (
     <>
@@ -43,23 +62,23 @@ export default function RoutineDetail() {
       />
       <div className="p-8 text-center text-white">
         <ul className="flex flex-col justify-start text-left">
-          {console.log(exerciseList)}
           {
             exerciseList.map( exercise => {
               return (
                 <li 
                   key={exercise._id}
-                  className="flex justify-between mb-2 py-2 border-b-2"
+                  className="flex justify-between items-center mb-2 py-2 border-b-[1px] border-gray-500"
                 >
                   <Link 
                     to="/exercise/detail"
                     state={{ "exercise": exercise }}
-                    className="block"
+                    className="block w-full"
                   >{exercise.name}</Link>
                   <Link
                     to="/routine/log"
                     state={{ "exercise": exercise }}
-                  >Add</Link>
+                    className="px-4 py-2 bg-amber-400 rounded-md"
+                  >Log</Link>
                 </li>
               );
             })

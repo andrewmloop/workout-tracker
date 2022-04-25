@@ -28,7 +28,7 @@ export default function ExerciseGroup() {
 
 function GroupItem(props) {
   return (
-    <li className="mb-2 py-2 border-b-2 text-white">
+    <li className="mb-2 py-2 border-b-[1px] border-gray-500 text-white">
       <Link
         to="/exercise/list"
         state={{"group": props.group,
