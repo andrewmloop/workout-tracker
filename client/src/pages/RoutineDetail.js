@@ -77,7 +77,7 @@ export default function RoutineDetail() {
                   <Link
                     to="/routine/log"
                     state={{ "exercise": exercise }}
-                    className="px-4 py-2 bg-amber-400 rounded-md"
+                    className="px-4 py-1 bg-amber-400 rounded-md font-semibold text-gray-700"
                   >Log</Link>
                 </li>
               );

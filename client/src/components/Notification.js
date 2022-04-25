@@ -15,9 +15,11 @@ export default function Notification() {
   // const color = props.notifType ? "bg-green-400" : "bg-red-400";
 
   useEffect(() => {
-    setTimeout(() => {
-      handleNotif(text, type, false);
-    }, 3000);
+    if (notifStore.show) {
+      setTimeout(() => {
+        handleNotif(text, type, false);
+      }, 3000);
+    }
   }, [notifStore]);
 
   return (

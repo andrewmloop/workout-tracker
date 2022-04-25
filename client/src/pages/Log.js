@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import Banner from "../components/Banner";
@@ -17,7 +17,7 @@ export default function Log() {
 
   // Values for form button toggle
   const values = ["Good", "Okay", "Poor"];
-  const units = userStore.use_metric ? "kg." : "lbs.";
+  const units = userStore.use_metric ? "kg" : "lbs";
 
   // State to hold weight, reps, form, date for submit
   const [weight, setWeight] = useState("");
@@ -28,6 +28,10 @@ export default function Log() {
 
   // State to hold exercise log history
   const [logHistory, setLogHistory] = useState([]);
+  // An array of dates from logHistory to group logs displayed
+  const [displayDates, setDisplayDates] = useState([]);
+  // Ref toggle to refetch logs when a new one is submitted
+  const shouldRefetch = useRef(false);
 
   // Handle form button toggle, toggle through values array
   const handleToggle = (e) => {
@@ -76,6 +80,7 @@ export default function Log() {
       if (data.result === "success") {
         setLogHistory([data.data, ...logHistory]);
         handleNotif(data.message, true, true);
+        shouldRefetch.current = !shouldRefetch.current;
       }
       if (data.result === "failure") {
         handleNotif(data.message, false, true);
@@ -96,6 +101,7 @@ export default function Log() {
       });
       const data = await res.json();
       setLogHistory(data.data);
+      populateDates(data.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching log history: ", error);
@@ -103,7 +109,7 @@ export default function Log() {
     }
   };
 
-  const formatDate = (d) => {
+  const formatDate = d => {
     const date = new Date(d);
     const currentMonth = date.getMonth() + 1;
     const monthString = currentMonth >= 10 ? currentMonth : `0${currentMonth}`;
@@ -126,9 +132,19 @@ export default function Log() {
     setReps(r);
   };
 
+  const populateDates = arrOfObjs => {
+    let dates = [...displayDates];
+    for (let obj of arrOfObjs) {
+      let date = new Date(obj.date).toDateString();
+      if (dates.includes(date)) continue;
+      dates.push(date);
+    }
+    setDisplayDates(dates);
+  };
+
   useEffect( () => {
     fetchLogs();
-  }, []);
+  }, [shouldRefetch]);
 
   return (
     <>
@@ -136,36 +152,50 @@ export default function Log() {
         bannerText={exercise.name}
         showBack={true}
       />
-      <div className={`grid ${userStore.left_hand ? "grid-cols-[33%_66%]" : "grid-cols-[66%_33%]"} h-[calc(100vh-120px)] gap-2 p-4`}>
+      <div className={`grid ${userStore.left_hand ? "grid-cols-[35%_65%]" : "grid-cols-[65%_35%]"} h-[calc(100vh-120px)] justify-between gap-1 p-4`}>
         {/* Log Column */}
         {
           loading
             ? <div className={`overflow-y-hidden ${userStore.left_hand ? "order-2" : ""}`}>
               <Loading text="" />
             </div>
-            : <div className={`flex flex-col overflow-hidden ${userStore.left_hand ? "order-2" : ""}`}>
-              <ul className="flex flex-col overflow-y-scroll">
-                {
-                  logHistory.map( (log, i) => {
-                    return (
-                      <li
-                        key={i}
-                        className="mb-2 py-2 px-4 bg-amber-400 rounded-md"
-                        onClick={() => setInputs(log.weight, log.reps)}
-                      >
-                        <p>{log.weight} {units} x {log.reps} reps.</p>
-                        <p>{formatDate(log.date)}</p>
-                        <p>{log.form} form</p>
-                        <p>1RM: {log.maxRep}</p>
-                      </li>
-                    );
-                  })
-                }
-              </ul>
-            </div>
+            : logHistory.length > 0 
+              ? <div className={`flex flex-col overflow-hidden ${userStore.left_hand ? "order-2" : ""}`}>
+                <ul className="flex flex-col overflow-y-scroll text-white">
+                  {
+                    displayDates.map( (date, i) => {
+                      return (
+                        <div key={i} className="mb-2">
+                          <h3 className="mb-1">{date}</h3>
+                          {
+                            logHistory.map( log => {
+                              if (new Date(log.date).toDateString() === date) {
+                                return (
+                                  <li
+                                    key={log._id}
+                                    className="mb-2 px-2 py-1 mr-3 bg-slate-800 rounded-md"
+                                    onClick={() => setInputs(log.weight, log.reps)}
+                                  >
+                                    <p className="text-lg">{log.weight} {units} x {log.reps} reps.</p>
+                                    <div className="w-full flex justify-between items-center text-sm">
+                                      <p>1RM: {log.maxRep} {units}</p>
+                                      <p className="first-letter:uppercase">{log.form} form</p>
+                                    </div>
+                                  </li>
+                                );
+                              }
+                            })
+                          }
+                        </div>
+                      );
+                    })
+                  }
+                </ul>
+              </div>
+              : <p>No logs yet</p>
         }
         {/* Form Column */}
-        <div className="h-[calc(100vh-120px)">
+        <div className="h-[calc(100vh-120px) bg-slate-900">
           <form onSubmit={ (e) => handleSubmit(e) }
             className="h-full flex flex-col justify-center"
           >
@@ -201,7 +231,7 @@ export default function Log() {
             />
             <button
               type="submit"
-              className="w-full p-2 rounded-lg mb-2 bg-black text-white"
+              className="w-full p-2 rounded-lg mb-2 bg-amber-400 text-gray-800 font-semibold"
             >Submit</button>
           </form>
         </div>

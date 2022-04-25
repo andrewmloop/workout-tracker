@@ -57,17 +57,17 @@ export default function AddRoutine() {
           onSubmit={handleSubmit}
           className="flex flex-col"
         >
-          <label htmlFor="routine-name">Name</label>
+          <label htmlFor="routine-name" className="text-white mb-1">Name</label>
           <input
             type="text"
             name="routine-name"
             placeholder="Routine name"
             onChange={ (e) => setName(e.target.value)}
-            className="w-full p-1 rounded-lg mb-2"
+            className="w-full px-2 py-1 rounded-lg mb-2"
           />
           <button
             type="submit"
-            className="w-full bg-amber-400"
+            className="w-full bg-amber-400 py-1 font-semibold rounded-md text-gray-700"
           >Submit</button>
         </form>
       </div>
