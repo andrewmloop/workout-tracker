@@ -92,7 +92,7 @@ export default function Login() {
             type="password" 
             name="password"
             onChange={ (e) => setUserPassword(e.target.value) }
-            className="mb-2"
+            className="mb-2 text-black"
           />
           {valErrors?.userPassword && (
             <p className="text-red-500">Please enter a password.</p>

@@ -15,39 +15,40 @@ import AddRoutine from "./pages/AddRoutine";
 import Notification from "./components/Notification";
 
 import { UserProvider } from "./context/UserContext";
-import { ExerciseListProvider } from "./context/ExerciseListContext";
 import { NotifProvider } from "./context/NotificationContext";
 
 export default function App() {
   return (
-    <UserProvider><ExerciseListProvider><NotifProvider>
-      <div>
-        <Routes>
-          <Route element={<WithoutNav  />}>
-            <Route exact path="/" element={<Login />}/>
-            <Route exact path="/login" element={<Login />}/>
-            <Route exact path="/register" element={<Register />}/>
-          </Route>
-          <Route element={<WithNav />}>
-            <Route path="/exercise">
-              <Route index path="/exercise" element={<ExerciseGroup />} />
-              <Route path="list" element={<ExerciseList />} />
-              <Route path="detail" element={<ExerciseDetail />} />
+    <UserProvider>
+      <NotifProvider>
+        <div>
+          <Routes>
+            <Route element={<WithoutNav  />}>
+              <Route exact path="/" element={<Login />}/>
+              <Route exact path="/login" element={<Login />}/>
+              <Route exact path="/register" element={<Register />}/>
             </Route>
-            <Route path="/routine">
-              <Route index path="/routine" element={<RoutineList />} />
-              <Route path="add" element={<AddRoutine />} />
-              <Route path="detail" element={<RoutineDetail />} />
-              <Route path="log" element={<Log />} />
+            <Route element={<WithNav />}>
+              <Route path="/exercise">
+                <Route index path="/exercise" element={<ExerciseGroup />} />
+                <Route path="list" element={<ExerciseList />} />
+                <Route path="detail" element={<ExerciseDetail />} />
+              </Route>
+              <Route path="/routine">
+                <Route index path="/routine" element={<RoutineList />} />
+                <Route path="add" element={<AddRoutine />} />
+                <Route path="detail" element={<RoutineDetail />} />
+                <Route path="log" element={<Log />} />
+              </Route>
+              <Route exact path="/settings" element={
+                <Settings />
+              }/>
             </Route>
-            <Route exact path="/settings" element={
-              <Settings />
-            }/>
-          </Route>
-        </Routes>
-        <Notification />
-      </div>
-    </NotifProvider></ExerciseListProvider></UserProvider>
+          </Routes>
+          <Notification />
+        </div>
+      </NotifProvider>
+    </UserProvider>
   );
 }
 

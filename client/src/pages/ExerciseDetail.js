@@ -21,7 +21,8 @@ export default function ExerciseDetail() {
           <p className="first-letter:uppercase">&nbsp;{data.category}</p>
         </div>
         <div className="flex justify-center mb-4">
-          {data.mechanic && <p className="first-letter:uppercase">{data.mechanic}&nbsp;|</p>}
+          <p className="first-letter:uppercase">{data.mechanic}</p>
+          { (data.mechanic && data.force) && <p>&nbsp;|&nbsp;</p>}
           <p className="first-letter:uppercase">&nbsp;{data.force}</p>
         </div>
         <h2 className="font-bold">Equipment</h2>
