@@ -72,7 +72,7 @@ export default function Login() {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-8 text-white">
       <div>
         <form
           className="flex flex-col"
@@ -82,7 +82,7 @@ export default function Login() {
             type="email" 
             name="email"
             onChange={ (e) => setUserEmail(e.target.value) }
-            className="mb-2"
+            className="mb-2 text-black"
           />
           {valErrors?.userEmail && (
             <p className="text-red-500">Please enter an email.</p>
