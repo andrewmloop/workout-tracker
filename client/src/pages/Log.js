@@ -231,7 +231,7 @@ export default function Log() {
             />
             <button
               type="submit"
-              className="w-full p-2 rounded-lg mb-2 bg-amber-400 text-gray-800 font-semibold"
+              className="w-full btn"
             >Submit</button>
           </form>
         </div>

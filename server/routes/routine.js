@@ -34,7 +34,7 @@ routineRoutes.route("/list").get( (req, response) => {
   Routine.find({ user: req.user.id }, (err, result) => {
     if (err) throw err;
     response.json(result);
-  });
+  }).sort({ name: 1 }).collation({ locale: "en", caseLevel: true});
 });
 
 // Get one routine
@@ -137,8 +137,19 @@ routineRoutes.route("/upd-exercise/:id").post( (req, response) => {
 // DELETE
 routineRoutes.route("/delete/:id").delete( (req, response) => {
   Routine.findByIdAndDelete(req.params.id, (err, result) => {
-    if (err) throw err;
-    response.json(result);
+    if (err) {
+      console.error("Failed to create routine: ", err);
+      response.json({
+        result: "failure",
+        message: "Failed to delete routine",
+      });
+    } else {
+      response.json({
+        result: "success",
+        message: "Successfully deleted routine",
+        data: result,
+      });
+    }
   });
 });
 
