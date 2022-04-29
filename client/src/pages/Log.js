@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import Banner from "../components/Banner";
@@ -31,7 +31,7 @@ export default function Log() {
   // An array of dates from logHistory to group logs displayed
   const [displayDates, setDisplayDates] = useState([]);
   // Ref toggle to refetch logs when a new one is submitted
-  const shouldRefetch = useRef(false);
+  const [refetch, setRefetch] = useState(false);
 
   // Handle form button toggle, toggle through values array
   const handleToggle = (e) => {
@@ -80,7 +80,7 @@ export default function Log() {
       if (data.result === "success") {
         setLogHistory([data.data, ...logHistory]);
         handleNotif(data.message, true, true);
-        shouldRefetch.current = !shouldRefetch.current;
+        setRefetch(prev => !prev);
       }
       if (data.result === "failure") {
         handleNotif(data.message, false, true);
@@ -144,7 +144,7 @@ export default function Log() {
 
   useEffect( () => {
     fetchLogs();
-  }, [shouldRefetch]);
+  }, [refetch]);
 
   return (
     <>

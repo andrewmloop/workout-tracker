@@ -34,7 +34,7 @@ routineRoutes.route("/list").get( (req, response) => {
   Routine.find({ user: req.user.id }, (err, result) => {
     if (err) throw err;
     response.json(result);
-  }).sort({ name: 1 }).collation({ locale: "en", caseLevel: true});
+  }).sort({ name: 1 }).collation({ locale: "en", caseLevel: true}).populate("exercise_list");
 });
 
 // Get one routine
