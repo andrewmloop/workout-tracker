@@ -7,7 +7,9 @@
     --color-confirm: rgb(74 222 128);
     --color-deny: rgb(239 68 68);
     --color-gray: rgb(31 41 55);
-    --border-radius: 0.375rem;
+    --color-input-bg: rgb(71 85 105);
+    --button-radius: 0.375rem;
+    --input-radius: 0.125rem;
 }
 
 body {
@@ -24,7 +26,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding: .25rem 1rem;
     color: var(--color-gray);
     font-weight: 600;
-    border-radius: var(--border-radius);
+    border-radius: var(--button-radius);
 }
 
 .btn-confirm {
@@ -32,7 +34,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding: .25rem 1rem;
     color: var(--color-gray);
     font-weight: 600;
-    border-radius: var(--border-radius);
+    border-radius: var(--button-radius);
 }
 
 .btn-deny {
@@ -40,5 +42,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     padding: .25rem 1rem;
     color: var(--color-gray);
     font-weight: 600;
-    border-radius: var(--border-radius);
+    border-radius: var(--button-radius);
+}
+
+.text-input {
+    padding: .25rem .4rem;
+    border-radius: var(--input-radius);
+    border-width: 4px;
+    border-color: transparent;
+    background-color: var(--color-input-bg);
+    color: white;
+    appearance: none;
+}
+
+.text-input:focus {
+    border-color: var(--color-primary);
+}
+
+.date-input {
+    padding: .25rem .4rem;
+    border-radius: var(--input-radius);
+    border-width: 4px;
+    border-color: transparent;
+    background-color: var(--color-input-bg);
+    color: white;
+    appearance: none;
 }

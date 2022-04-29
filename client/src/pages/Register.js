@@ -88,7 +88,7 @@ export default function Register() {
   };
 
   return (
-    <div className="p-8"> 
+    <div className="p-8 text-white"> 
       <div>
         <form
           className="flex flex-col"
@@ -99,7 +99,7 @@ export default function Register() {
             type="text" 
             name="name"
             onChange={ (e) => setName(e.target.value) }
-            className="mb-2"
+            className="mb-2 text-input"
           />
           {valErrors?.name && (
             <p className="text-red-500">Please enter a name.</p>
@@ -111,7 +111,7 @@ export default function Register() {
             name="birth_date"
             placeholder="mm/dd/yyyy"
             onChange={ (e) => setBirthDate(e.target.value) }
-            className="mb-2"
+            className="mb-2 date-input"
           />
           {valErrors?.birthDate && (
             <p className="text-red-500">Please enter a correct date.</p>
@@ -122,7 +122,7 @@ export default function Register() {
             type="email" 
             name="email"
             onChange={ (e) => setEmail(e.target.value) }
-            className="mb-2"
+            className="mb-2 text-input"
           />
           {valErrors?.email && (
             <p className="text-red-500">Please enter a valid email.</p>
@@ -133,7 +133,7 @@ export default function Register() {
             type="password" 
             name="password"
             onChange={ (e) => setPassword(e.target.value) }
-            className="mb-2"
+            className="mb-2 text-input"
           />
           {valErrors?.password && (
             <p className="text-red-500">Password does not match format.</p>
@@ -144,7 +144,7 @@ export default function Register() {
             type="password" 
             name="password_match"
             onChange={ (e) => setPasswordMatch(e.target.value) }
-            className="mb-2"
+            className="mb-2 text-input"
           />
           {valErrors?.passwordMatch && (
             <p className="text-red-500">Passwords do not match.</p>
@@ -152,7 +152,7 @@ export default function Register() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-amber-400"
+            className="w-full btn"
           >Submit</button>
           <div className="text-left">
             {successMessage && (
@@ -167,7 +167,7 @@ export default function Register() {
             )}
           </div>
         </form>
-        <p>Already have an account? <Link to="/login">Log In</Link></p>
+        <p>Already have an account? <Link to="/login" className="text-amber-400">Log In</Link></p>
       </div>
     </div>
   );

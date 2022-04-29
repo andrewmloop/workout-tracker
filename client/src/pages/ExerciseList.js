@@ -98,7 +98,7 @@ export default function ExerciseList() {
           <input id="search" name="search" type="text"
             placeholder="Search exercises"
             onChange={(e) => debounceSearch(e.target.value, fetchList)}
-            className="w-full px-2 py-1 rounded-sm border-4 border-transparent bg-slate-600 text-white appearance-none focus:border-amber-400"
+            className="w-full text-input"
           /> 
         </div>
         <ul className="flex flex-col justify-start mb-20">

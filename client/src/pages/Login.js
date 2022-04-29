@@ -82,7 +82,7 @@ export default function Login() {
             type="email" 
             name="email"
             onChange={ (e) => setUserEmail(e.target.value) }
-            className="mb-2 text-black"
+            className="mb-2 text-input"
           />
           {valErrors?.userEmail && (
             <p className="text-red-500">Please enter an email.</p>
@@ -92,20 +92,20 @@ export default function Login() {
             type="password" 
             name="password"
             onChange={ (e) => setUserPassword(e.target.value) }
-            className="mb-2 text-black"
+            className="mb-2 text-input"
           />
           {valErrors?.userPassword && (
             <p className="text-red-500">Please enter a password.</p>
           )}
           <button
             type="submit"
-            className="w-full bg-amber-400"
+            className="w-full btn"
           >Submit</button>
         </form>
         {loginError && (
           <p className="text-red-500">{loginError}.</p>
         )}
-        <p>Don&apos;t have an account? <Link to="/register">Sign Up</Link></p>
+        <p>Don&apos;t have an account? <Link to="/register" className="text-amber-400">Sign Up</Link></p>
       </div>
     </div>
   );
