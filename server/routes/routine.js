@@ -87,23 +87,33 @@ routineRoutes.route("/add-exercise/:id").post( (req, response) => {
 
 // Delete exercise from list
 routineRoutes.route("/del-exercise/:id").post( (req, response) => {
+  console.log("==========>", req.body.exercise_list_id);
   Routine.findByIdAndUpdate(
     req.params.id, 
     {
       $pull: {
-        exercise_list: {
-          _id: req.body.exercise_list_id,
-        }
+        exercise_list: req.body.exercise_list_id
       }
     },
     { 
-      returnOriginal: false, 
+      returnOriginal: false,
       safe: true,
       multi: true,
     },
     (err, result) => {
-      if (err) throw err;
-      response.json(result);
+      if (err) {
+        console.error("Failed to delete exercise: ", err);
+        response.json({
+          result: "failure",
+          message: "Failed to delete exercise",
+        });
+      } else {
+        response.json({
+          result: "success",
+          message: "Successfully deleted exercise",
+          data: result,
+        });
+      }
     });
 });
 
@@ -111,9 +121,7 @@ routineRoutes.route("/del-exercise/:id").post( (req, response) => {
 routineRoutes.route("/upd-exercise/:id").post( (req, response) => {
   const newValues = {
     $set: {
-      "exercise_list.$.exercise": req.body.exercise,
-      "exercise_list.$.target_sets": req.body.target_sets,
-      "exercise_list.$.target_reps": req.body.target_reps,
+      "exercise_list.$.exercise": req.body.exercise
     }
   };
   
@@ -138,7 +146,7 @@ routineRoutes.route("/upd-exercise/:id").post( (req, response) => {
 routineRoutes.route("/delete/:id").delete( (req, response) => {
   Routine.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) {
-      console.error("Failed to create routine: ", err);
+      console.error("Failed to delete routine: ", err);
       response.json({
         result: "failure",
         message: "Failed to delete routine",
