@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 import Banner from "../components/Banner";
 
 import { useNotif } from "../context/NotificationContext";
 
-export default function RoutineDetail() {
+export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
   const { handleNotif } = useNotif();
+  const navigate = useNavigate();
   // Routine data from route history
   const location = useLocation();
   const routineData = location.state.routine;
+  console.log(routineData.exercise_list);
 
   // Routine exercise state
-  const [exerciseList] = useState(routineData.exercise_list);
+  const [exerciseList, setExerciseList] = useState(routineData.exercise_list);
   const [showControls, setShowControls] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
@@ -29,6 +31,10 @@ export default function RoutineDetail() {
       const data = await res.json();
       if (data.result === "success") {
         handleNotif(data.message, true, true);
+        let list = [...exerciseList];
+        let index = list.findIndex(obj => obj._id === exerciseId);
+        if (index > -1) list.splice(index, 1);
+        setExerciseList(list);
       } else {
         handleNotif(data.message, false, true);
       }
@@ -37,6 +43,12 @@ export default function RoutineDetail() {
       let errorText = "The iron gods are upset at the moment";
       handleNotif(errorText, false, true);
     }
+  };
+
+  const addExercise = async () => {
+    await setActiveRoutine(routineData._id);
+    await setAddMode(true);
+    navigate("/exercise");
   };
 
   return (
@@ -58,7 +70,8 @@ export default function RoutineDetail() {
         { showControls 
           && <EditButtons 
             editFunction={() => setEditMode(prev => !prev)} 
-            editMode={editMode} 
+            editMode={editMode}
+            addFunction={() => addExercise()}
           /> 
         }
         <div>
@@ -111,7 +124,7 @@ function EditButtons({editFunction, editMode, addFunction}) {
   return (
     <div className="flex justify-between items-center gap-4 mb-6">
       <button onClick={editFunction} className="w-full btn">{editText}</button>
-      <button onClick={() => addFunction}  className="w-full btn">Add</button>
+      <button onClick={addFunction}  className="w-full btn">Add</button>
     </div>
   );
 }

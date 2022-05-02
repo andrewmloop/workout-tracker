@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import Banner from "../components/Banner";
 
 
-export default function ExerciseGroup() {
+export default function ExerciseGroup({ addMode }) {
   return (
     <>
       <Banner
-        bannerText="Muscle Group"
+        bannerText={addMode ? "Add Exercises" : "Muscle Group"}
       />
       <div className="h-full p-8">
         <ul className="flex flex-col justify-start">

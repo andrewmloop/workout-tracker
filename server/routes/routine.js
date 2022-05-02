@@ -87,7 +87,6 @@ routineRoutes.route("/add-exercise/:id").post( (req, response) => {
 
 // Delete exercise from list
 routineRoutes.route("/del-exercise/:id").post( (req, response) => {
-  console.log("==========>", req.body.exercise_list_id);
   Routine.findByIdAndUpdate(
     req.params.id, 
     {
@@ -118,26 +117,31 @@ routineRoutes.route("/del-exercise/:id").post( (req, response) => {
 });
 
 // Update exercise in list
-routineRoutes.route("/upd-exercise/:id").post( (req, response) => {
-  const newValues = {
-    $set: {
-      "exercise_list.$.exercise": req.body.exercise
-    }
-  };
-  
-  Routine.updateOne(
+routineRoutes.route("/upd-routine/:id").post( (req, response) => {
+  Routine.findByIdAndUpdate(
+    req.params.id,
     {
-      _id: req.params.id, 
-      exercise_list: 
-        { $elemMatch: 
-          {_id: req.body.exercise_list_id }
+      $addToSet: {
+        exercise_list: {
+          $each: req.body.newExercises
         }
+      }
     },
-    newValues,
     { returnOriginal: false },
     (err, result) => {
-      if (err) throw err;
-      response.json(result);
+      if (err) {
+        console.error("Failed to add exercises: ", err);
+        response.json({
+          result: "failure",
+          message: "Failed to add exercises",
+        });
+      } else {
+        response.json({
+          result: "success",
+          message: "Successfully add exercises",
+          data: result,
+        });
+      }
     }
   );
 });

@@ -63,7 +63,7 @@ export default function AddRoutine() {
             name="routine-name"
             placeholder="Routine name"
             onChange={ (e) => setName(e.target.value)}
-            className="w-full px-2 py-1 rounded-lg mb-2"
+            className="w-full mb-2 text-input"
           />
           <button
             type="submit"

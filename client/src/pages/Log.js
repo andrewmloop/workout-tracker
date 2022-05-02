@@ -114,7 +114,8 @@ export default function Log() {
     const currentMonth = date.getMonth() + 1;
     const monthString = currentMonth >= 10 ? currentMonth : `0${currentMonth}`;
     const currentDate = date.getDate();
-    return `${date.getFullYear()}-${monthString}-${currentDate}`;
+    const dayString = currentDate >= 10 ? currentDate : `0${currentDate}`;
+    return `${date.getFullYear()}-${monthString}-${dayString}`;
   };
 
   const getOneRepMax = (weight, reps) => {
@@ -192,7 +193,7 @@ export default function Log() {
                   }
                 </ul>
               </div>
-              : <p>No logs yet</p>
+              : <p className="text-white m-auto">No logs yet</p>
         }
         {/* Form Column */}
         <div className="h-[calc(100vh-120px) bg-slate-900">

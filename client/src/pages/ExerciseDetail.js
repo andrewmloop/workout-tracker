@@ -23,7 +23,7 @@ export default function ExerciseDetail() {
         <div className="flex justify-center mb-4">
           <p className="first-letter:uppercase">{data.mechanic}</p>
           { (data.mechanic && data.force) && <p>&nbsp;|&nbsp;</p>}
-          <p className="first-letter:uppercase">&nbsp;{data.force}</p>
+          <p className="first-letter:uppercase">{data.force}</p>
         </div>
         <h2 className="font-bold">Equipment</h2>
         <p className="first-letter:uppercase mb-4">{data.equipment || "None"}</p>

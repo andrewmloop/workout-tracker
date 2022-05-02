@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -18,6 +18,14 @@ import { UserProvider } from "./context/UserContext";
 import { NotifProvider } from "./context/NotificationContext";
 
 export default function App() {
+  // Add mode that allows the user to add exercises to a routine
+  // This is passed to the <ExerciseGroup /> and <ExerciseList /> components.
+  // If in addMode, a button will allow users to add any exercise to the current
+  // set activeRoutine
+  const [addMode, setAddMode] = useState(false);
+  const [activeRoutine, setActiveRoutine] = useState("");
+  const [newExercises, setNewExercises] = useState([]);
+
   return (
     <UserProvider>
       <NotifProvider>
@@ -30,14 +38,27 @@ export default function App() {
             </Route>
             <Route element={<WithNav />}>
               <Route path="/exercise">
-                <Route index path="/exercise" element={<ExerciseGroup />} />
-                <Route path="list" element={<ExerciseList />} />
+                <Route index path="/exercise" element={<ExerciseGroup addMode={addMode} />} />
+                <Route path="list" element={
+                  <ExerciseList 
+                    addMode={addMode} 
+                    setAddMode={setAddMode}
+                    activeRoutine={activeRoutine} 
+                    newExercises={newExercises}
+                    setNewExercises={setNewExercises}
+                  />} 
+                />
                 <Route path="detail" element={<ExerciseDetail />} />
               </Route>
               <Route path="/routine">
                 <Route index path="/routine" element={<RoutineList />} />
                 <Route path="add" element={<AddRoutine />} />
-                <Route path="detail" element={<RoutineDetail />} />
+                <Route path="detail" element={
+                  <RoutineDetail 
+                    setAddMode={setAddMode} 
+                    setActiveRoutine={setActiveRoutine} 
+                  />} 
+                />
                 <Route path="log" element={<Log />} />
               </Route>
               <Route exact path="/settings" element={

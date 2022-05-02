@@ -81,6 +81,7 @@ export default function Login() {
           <input 
             type="email" 
             name="email"
+            autoComplete="email"
             onChange={ (e) => setUserEmail(e.target.value) }
             className="mb-2 text-input"
           />
@@ -91,6 +92,7 @@ export default function Login() {
           <input 
             type="password" 
             name="password"
+            autoComplete="current-password"
             onChange={ (e) => setUserPassword(e.target.value) }
             className="mb-2 text-input"
           />
