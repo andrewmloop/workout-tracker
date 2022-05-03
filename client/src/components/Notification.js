@@ -24,7 +24,7 @@ export default function Notification() {
 
   return (
     <>
-      <div className={`absolute bottom-[72px] left-[50%] translate-x-[-50%] text-center w-[85%] p-4 rounded-lg ${show ? "opacity-1" : "opacity-0 pointer-events-none"} ${color}`}>
+      <div className={`fixed bottom-[72px] left-[50%] translate-x-[-50%] text-center w-[85%] p-4 rounded-lg ${show ? "opacity-1" : "opacity-0 pointer-events-none"} ${color}`}>
         <p>{text}</p>
       </div>
     </>

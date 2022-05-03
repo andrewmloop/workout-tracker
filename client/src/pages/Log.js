@@ -23,7 +23,7 @@ export default function Log() {
   const [weight, setWeight] = useState("");
   const [reps, setReps] = useState("");
   const [form, setForm] = useState(0);
-  const [logDate, setLogDate] = useState(Date());
+  const [logDate] = useState(Date.now());
   const [loading, setLoading] = useState(false);
 
   // State to hold exercise log history
@@ -43,8 +43,8 @@ export default function Log() {
   const handleValidation = () => {
     let isValid = true;
 
-    if (weight === "") isValid = false;
-    if (reps === "") isValid = false;
+    if (weight === "" || typeof weight !== "number") isValid = false;
+    if (reps === "" || typeof reps !== "number") isValid = false;
 
     return isValid;
   };
@@ -109,15 +109,6 @@ export default function Log() {
     }
   };
 
-  const formatDate = d => {
-    const date = new Date(d);
-    const currentMonth = date.getMonth() + 1;
-    const monthString = currentMonth >= 10 ? currentMonth : `0${currentMonth}`;
-    const currentDate = date.getDate();
-    const dayString = currentDate >= 10 ? currentDate : `0${currentDate}`;
-    return `${date.getFullYear()}-${monthString}-${dayString}`;
-  };
-
   const getOneRepMax = (weight, reps) => {
     if (reps == 1) {
       return weight;
@@ -153,15 +144,15 @@ export default function Log() {
         bannerText={exercise.name}
         showBack={true}
       />
-      <div className={`grid ${userStore.left_hand ? "grid-cols-[35%_65%]" : "grid-cols-[65%_35%]"} h-[calc(100vh-120px)] justify-between gap-1 p-4`}>
+      <div className={`grid ${userStore.left_hand ? "grid-cols-[35%_65%]" : "grid-cols-[65%_35%]"} h-full justify-between gap-1 p-4`}>
         {/* Log Column */}
         {
           loading
-            ? <div className={`overflow-y-hidden ${userStore.left_hand ? "order-2" : ""}`}>
+            ? <div className={`overflow-y-hidden ${userStore.left_hand ? "order-2 ml-2" : ""}`}>
               <Loading text="" />
             </div>
             : logHistory.length > 0 
-              ? <div className={`flex flex-col overflow-hidden ${userStore.left_hand ? "order-2" : ""}`}>
+              ? <div className={`h-[75vh] flex flex-col overflow-hidden ${userStore.left_hand ? "order-2 ml-2" : ""}`}>
                 <ul className="flex flex-col overflow-y-scroll text-white">
                   {
                     displayDates.map( (date, i) => {
@@ -193,12 +184,10 @@ export default function Log() {
                   }
                 </ul>
               </div>
-              : <div className={`flex flex-col overflow-hidden ${userStore.left_hand ? "order-2" : ""}`}>
-                <p className="text-white m-auto">No logs yet</p>
-              </div>
+              : <p className="text-white m-auto">No logs yet</p>
         }
         {/* Form Column */}
-        <div className="h-[calc(100vh-120px) bg-slate-900">
+        <div className="bg-slate-900">
           <form onSubmit={ (e) => handleSubmit(e) }
             className="h-full flex flex-col justify-center"
           >
@@ -225,16 +214,9 @@ export default function Log() {
             >
               {values[form]}
             </button>
-            <input
-              type="date"
-              name="date"
-              value={formatDate(logDate)}
-              onChange={(e) => setLogDate(e.target.value) }
-              className="w-full p-2 rounded-lg mb-2 text-center"
-            />
             <button
               type="submit"
-              className="w-full btn"
+              className="w-full btn-lg"
             >Submit</button>
           </form>
         </div>

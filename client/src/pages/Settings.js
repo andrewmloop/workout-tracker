@@ -65,7 +65,7 @@ export default function Settings() {
               onChange={() => setIsLeftHand(!isLeftHand)} 
             />
           </div>
-          <p>This will move the buttons to record logs to the left side.</p>
+          <p>This will move the buttons to record exercise logs to the left side of the screen.</p>
         </div>
         <div className="flex flex-col mb-4">
           <div className="flex justify-between items-center mb-2">
@@ -93,7 +93,7 @@ function ToggleSwitch({ name, checked, onChange }) {
         className="hidden"
         onClick={onChange}
       />
-      <label htmlFor={name} className="flex justify-between align-middle cursor-pointer w-[80px] h-[40px] border-2 rounded-full" >
+      <label htmlFor={name} className="flex justify-between align-middle cursor-pointer w-[70px] h-[35px] border-2 rounded-full" >
         <span className={`${checked ? "bg-amber-400 translate-x-[100%]" : "bg-slate-300 translate-x-0"} w-1/2 rounded-full transition-transform duration-200`} />
       </label>
     </div>
