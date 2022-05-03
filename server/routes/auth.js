@@ -19,8 +19,8 @@ authRoutes.route("/register").post( async (req, response) => {
 
   if (takenEmail) {
     response.json({ 
-      message: "failure",
-      error: "Email already in use.",
+      result: "failure",
+      message: "Email already in use.",
     });
   } else {
     const hash = await bcrypt.hash(password, 10);
@@ -33,12 +33,18 @@ authRoutes.route("/register").post( async (req, response) => {
     };
   
     User.create(newUser, (userErr, result) => {
-      if (userErr) throw userErr;
-      response.json({ 
-        result: "success",
-        message: "New user created.",
-        data: result,
-      });
+      if (userErr) {
+        response.json({
+          result: "failure",
+          message: "Failed to create new user"
+        });
+      } else {
+        response.json({ 
+          result: "success",
+          message: "New user created.",
+          data: result,
+        });
+      }
     });
   }
 });

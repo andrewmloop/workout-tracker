@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { useNotif } from "../context/NotificationContext";
+
 export default function Register() {
   // Redirect user on successful register
   const navigate = useNavigate();
+  const { handleNotif } = useNotif();
 
   // State for form inputs
   const [name, setName] = useState("");
@@ -74,101 +77,105 @@ export default function Register() {
           })
         });
         const data = await response.json();
-        if (data.message === "success") {
+        if (data.result === "success") {
           setSuccessMessage(true);
+          handleNotif(data.message, true, true);
           navigate("/login");
-        } else if (data.message === "failure") {
+        } 
+        if (data.result === "failure") {
           setFailureMessage(true);
-          setRegError(data.error);
+          handleNotif(data.message, false, true);
+          setRegError(data.message);
         }
       } catch (error) {
         if (error) console.error("Error registering new user: ", error);
+        let errorText = "The iron gods are displeased at the moment";
+        handleNotif(errorText, false, true);
       }
     }
   };
 
   return (
-    <div className="p-8 text-white"> 
-      <div>
-        <form
-          className="flex flex-col"
-          onSubmit={handleSubmit}>
-          {/* First Name Input */}
-          <label htmlFor="name">First Name</label>
-          <input 
-            type="text" 
-            name="name"
-            onChange={ (e) => setName(e.target.value) }
-            className="mb-2 text-input"
-          />
-          {valErrors?.name && (
-            <p className="text-red-500">Please enter a name.</p>
+    <div className="flex flex-col h-screen p-8 text-white"> 
+      <form
+        className="flex flex-col"
+        onSubmit={handleSubmit}>
+        {/* First Name Input */}
+        <label htmlFor="name">First Name</label>
+        <input 
+          type="text" 
+          name="name"
+          onChange={ (e) => setName(e.target.value) }
+          className="mb-2 text-input"
+        />
+        {valErrors?.name && (
+          <p className="text-red-500">Please enter a name.</p>
+        )}
+        {/* Birth Date Input */}
+        <label htmlFor="birth_date">Birth Date</label>
+        <input 
+          type="date" 
+          name="birth_date"
+          placeholder="mm/dd/yyyy"
+          onChange={ (e) => setBirthDate(e.target.value) }
+          className="mb-2 date-input"
+        />
+        {valErrors?.birthDate && (
+          <p className="text-red-500">Please enter a correct date.</p>
+        )}
+        {/* Email Input */}
+        <label htmlFor="email">Email</label>
+        <input 
+          type="email" 
+          name="email"
+          onChange={ (e) => setEmail(e.target.value) }
+          className="mb-2 text-input"
+        />
+        {valErrors?.email && (
+          <p className="text-red-500">Please enter a valid email.</p>
+        )}
+        {/* Password Input */}
+        <label htmlFor="password">Password</label>
+        <input 
+          type="password" 
+          name="password"
+          onChange={ (e) => setPassword(e.target.value) }
+          className="mb-2 text-input"
+        />
+        {valErrors?.password && (
+          <p className="text-red-500">Password does not match format.</p>
+        )}
+        {/* Password Match Input */}
+        <label htmlFor="password_match">Re-enter Password</label>
+        <input 
+          type="password" 
+          name="password_match"
+          onChange={ (e) => setPasswordMatch(e.target.value) }
+          className="mb-3 text-input"
+        />
+        {valErrors?.passwordMatch && (
+          <p className="text-red-500">Passwords do not match.</p>
+        )}
+        {/* Submit */}
+        <button
+          type="submit"
+          className="w-full btn-lg mb-1"
+        >Submit</button>
+        <div className="text-left">
+          {successMessage && (
+            <p className="text-green-500 font-semibold text-sm my-2">
+              Your account has been created! Redirecting.
+            </p>
           )}
-          {/* Birth Date Input */}
-          <label htmlFor="birth_date">Birth Date</label>
-          <input 
-            type="date" 
-            name="birth_date"
-            placeholder="mm/dd/yyyy"
-            onChange={ (e) => setBirthDate(e.target.value) }
-            className="mb-2 date-input"
-          />
-          {valErrors?.birthDate && (
-            <p className="text-red-500">Please enter a correct date.</p>
+          {failureMessage && (
+            <p className="text-red-500 font-semibold text-sm my-2">
+              {regError}
+            </p>
           )}
-          {/* Email Input */}
-          <label htmlFor="email">Email</label>
-          <input 
-            type="email" 
-            name="email"
-            onChange={ (e) => setEmail(e.target.value) }
-            className="mb-2 text-input"
-          />
-          {valErrors?.email && (
-            <p className="text-red-500">Please enter a valid email.</p>
-          )}
-          {/* Password Input */}
-          <label htmlFor="password">Password</label>
-          <input 
-            type="password" 
-            name="password"
-            onChange={ (e) => setPassword(e.target.value) }
-            className="mb-2 text-input"
-          />
-          {valErrors?.password && (
-            <p className="text-red-500">Password does not match format.</p>
-          )}
-          {/* Password Match Input */}
-          <label htmlFor="password_match">Re-enter Password</label>
-          <input 
-            type="password" 
-            name="password_match"
-            onChange={ (e) => setPasswordMatch(e.target.value) }
-            className="mb-2 text-input"
-          />
-          {valErrors?.passwordMatch && (
-            <p className="text-red-500">Passwords do not match.</p>
-          )}
-          {/* Submit */}
-          <button
-            type="submit"
-            className="w-full btn"
-          >Submit</button>
-          <div className="text-left">
-            {successMessage && (
-              <p className="text-green-500 font-semibold text-sm my-2">
-                Your account has been created! Redirecting.
-              </p>
-            )}
-            {failureMessage && (
-              <p className="text-red-500 font-semibold text-sm my-2">
-                {regError}
-              </p>
-            )}
-          </div>
-        </form>
-        <p>Already have an account? <Link to="/login" className="text-amber-400">Log In</Link></p>
-      </div>
+        </div>
+      </form>
+      <p>Already have an account? <Link to="/login" className="text-amber-400">Log In</Link></p>
+      <p className="mt-auto leading-tight text-sm text-gray-400">Disclaimer: This is a hobby project, so please enjoy the app, but expect to encounter bugs and other broken functionality. For the best exeperience, view this app on a mobile device.</p>
     </div>
   );
 }

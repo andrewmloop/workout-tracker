@@ -72,43 +72,42 @@ export default function Login() {
   };
 
   return (
-    <div className="p-8 text-white">
-      <div>
-        <form
-          className="flex flex-col"
-          onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
-          <input 
-            type="email" 
-            name="email"
-            autoComplete="email"
-            onChange={ (e) => setUserEmail(e.target.value) }
-            className="mb-2 text-input"
-          />
-          {valErrors?.userEmail && (
-            <p className="text-red-500">Please enter an email.</p>
-          )}
-          <label htmlFor="password">Password</label>
-          <input 
-            type="password" 
-            name="password"
-            autoComplete="current-password"
-            onChange={ (e) => setUserPassword(e.target.value) }
-            className="mb-2 text-input"
-          />
-          {valErrors?.userPassword && (
-            <p className="text-red-500">Please enter a password.</p>
-          )}
-          <button
-            type="submit"
-            className="w-full btn"
-          >Submit</button>
-        </form>
-        {loginError && (
-          <p className="text-red-500">{loginError}.</p>
+    <div className="flex flex-col h-screen p-8 text-white">
+      <form
+        className="flex flex-col"
+        onSubmit={handleSubmit}>
+        <label htmlFor="email">Email</label>
+        <input 
+          type="email" 
+          name="email"
+          autoComplete="email"
+          onChange={ (e) => setUserEmail(e.target.value) }
+          className="mb-2 text-input"
+        />
+        {valErrors?.userEmail && (
+          <p className="text-red-500">Please enter an email.</p>
         )}
-        <p>Don&apos;t have an account? <Link to="/register" className="text-amber-400">Sign Up</Link></p>
-      </div>
+        <label htmlFor="password">Password</label>
+        <input 
+          type="password" 
+          name="password"
+          autoComplete="current-password"
+          onChange={ (e) => setUserPassword(e.target.value) }
+          className="mb-3 text-input"
+        />
+        {valErrors?.userPassword && (
+          <p className="text-red-500">Please enter a password.</p>
+        )}
+        <button
+          type="submit"
+          className="w-full btn-lg mb-1"
+        >Submit</button>
+      </form>
+      {loginError && (
+        <p className="text-red-500">{loginError}.</p>
+      )}
+      <p>Don&apos;t have an account? <Link to="/register" className="text-amber-400">Sign Up</Link></p>
+      <p className="relative mt-auto leading-tight text-sm text-gray-400">Disclaimer: This is a hobby project, so please enjoy the app, but expect to encounter bugs and other broken functionality. For the best exeperience, view this app on a mobile device.</p>
     </div>
   );
 }
