@@ -43,8 +43,8 @@ export default function Log() {
   const handleValidation = () => {
     let isValid = true;
 
-    if (weight === "" || typeof weight !== "number") isValid = false;
-    if (reps === "" || typeof reps !== "number") isValid = false;
+    if (weight === "") isValid = false;
+    if (reps === "") isValid = false;
 
     return isValid;
   };
@@ -184,7 +184,7 @@ export default function Log() {
                   }
                 </ul>
               </div>
-              : <p className="text-white m-auto">No logs yet</p>
+              : <p className="flex justify-center items-center h-[75vh] text-white">No logs yet</p>
         }
         {/* Form Column */}
         <div className="bg-slate-900">

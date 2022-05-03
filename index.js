@@ -7,7 +7,7 @@ import cors from "cors";
 import routes from "./routes/index.js";
 
 // ENV variables
-const port = process.env.PORT;
+const port = process.env.PORT || 9900;
 const mongoDB = process.env.MONGO_URI;
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -26,12 +26,16 @@ mongoose.connect(mongoDB, { useNewURLParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error."));
 
+// Serve client
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("build"));
+}
+
 // Set up routing
 app.use("/exercise", verifyJWT, routes.exerciseRoutes);
 app.use("/log", verifyJWT, routes.logRoutes);
 app.use("/routine", verifyJWT, routes.routineRoutes);
 app.use("/user", verifyJWT, routes.userRoutes);
-app.use("/workout", verifyJWT, routes.workoutRoutes);
 app.use("/auth", routes.authRoutes);
 
 // Listening

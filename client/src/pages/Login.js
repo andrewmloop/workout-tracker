@@ -72,7 +72,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col h-screen p-8 text-white">
+    <div className="flex flex-col p-8 text-white">
       <form
         className="flex flex-col"
         onSubmit={handleSubmit}>
@@ -106,7 +106,7 @@ export default function Login() {
       {loginError && (
         <p className="text-red-500">{loginError}.</p>
       )}
-      <p>Don&apos;t have an account? <Link to="/register" className="text-amber-400">Sign Up</Link></p>
+      <p className="mb-1">Don&apos;t have an account? <Link to="/register" className="text-amber-400">Sign Up</Link></p>
       <p className="relative mt-auto leading-tight text-sm text-gray-400">Disclaimer: This is a hobby project, so please enjoy the app, but expect to encounter bugs and other broken functionality. For the best exeperience, view this app on a mobile device.</p>
     </div>
   );
