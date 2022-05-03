@@ -45,26 +45,32 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
   };
 
   const addRoutineExercises = async exercisesToAdd => {
-    try {
-      const response = await fetch(`http://localhost:9900/routine/upd-routine/${activeRoutine}`, {
-        method: "POST",
-        headers: {
-          "x-access-token": localStorage.getItem("token"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ newExercises: exercisesToAdd })
-      });
-      const data = await response.json();
-      if (data.result === "success") {
-        handleNotif(data.message, true, true);
-      } else {
-        handleNotif(data.message, false, true);
+    if (exercisesToAdd.length > 0) {
+      try {
+        const response = await fetch(`http://localhost:9900/routine/upd-routine/${activeRoutine}`, {
+          method: "POST",
+          headers: {
+            "x-access-token": localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ newExercises: exercisesToAdd })
+        });
+        const data = await response.json();
+        if (data.result === "success") {
+          handleNotif(data.message, true, true);
+        } else {
+          handleNotif(data.message, false, true);
+        }
+      } catch (error) {
+        console.error("Error fetching exercise list: ", error);
+        let errorText = "The iron gods are displeased at the moment";
+        handleNotif(errorText, false, true);
+      } finally {
+        setAddMode(false);
+        setNewExercises([]);
+        navigate("/routine");
       }
-    } catch (error) {
-      console.error("Error fetching exercise list: ", error);
-      let errorText = "The iron gods are displeased at the moment";
-      handleNotif(errorText, false, true);
-    } finally {
+    } else {
       setAddMode(false);
       setNewExercises([]);
       navigate("/routine");
@@ -151,10 +157,13 @@ function ListItem({ exercise, addMode, newExercises, setNewExercises }) {
     <li className="flex justify-between mb-2 py-2 border-b-[1px] border-gray-500 text-white">
       <Link to="/exercise/detail"
         state={{ "exercise": exercise }}
-        className="block"
+        className="block whitespace-nowrap overflow-x-hidden text-ellipsis"
       >{exercise.name}</Link>
       {addMode &&
-        <button onClick={() => handleClick()}>{isClicked ? "Remove" : "Add"}</button>}
+        <button 
+          onClick={() => handleClick()}
+          className={`${isClicked ? "btn-deny" : "btn-confirm"} ml-4`}
+        >{isClicked ? "Remove" : "Add"}</button>}
     </li>
   );
 }

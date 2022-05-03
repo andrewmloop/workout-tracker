@@ -65,6 +65,32 @@ routineRoutes.route("/update/:id").post( (req, response) => {
     });
 });
 
+// Update exercise_list order
+routineRoutes.route("/upd-list/:id").post( (req, response) => {
+  Routine.findByIdAndUpdate(
+    req.params.id,
+    {
+      exercise_list: req.body.newList
+    },
+    { returnOriginal: false },
+    (err, result) => {
+      if (err) {
+        console.error("Failed to reorder routine: ", err);
+        response.json({
+          result: "failure",
+          message: "Failed to reorder routine",
+        });
+      } else {
+        response.json({
+          result: "success",
+          message: "Successfully add exercises",
+          data: result,
+        });
+      }
+    }
+  );
+});
+
 // Add exercise to list
 routineRoutes.route("/add-exercise/:id").post( (req, response) => {
   Routine.findOneAndUpdate(

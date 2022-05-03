@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import Banner from "../components/Banner";
 
@@ -11,12 +12,12 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
   // Routine data from route history
   const location = useLocation();
   const routineData = location.state.routine;
-  console.log(routineData.exercise_list);
 
   // Routine exercise state
   const [exerciseList, setExerciseList] = useState(routineData.exercise_list);
   const [showControls, setShowControls] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const firstRender = useRef(true);
 
   const deleteExercise = async (exerciseId) => {
     try {
@@ -51,6 +52,47 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
     navigate("/exercise");
   };
 
+  const handleOnDragEnd = async result => {
+    if (!result.destination) return;
+
+    let items = Array.from(exerciseList);
+    let [newOrder] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, newOrder);
+
+    setExerciseList(items);
+  };
+
+  const updateList = async () => {
+    try {
+      const res = await fetch(`http://localhost:9900/routine/upd-list/${routineData._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": localStorage.getItem("token"),
+        },
+        body: JSON.stringify({ newList: exerciseList})
+      });
+      const data = await res.json();
+      if (data.result === "success") {
+        return;
+      } else {
+        handleNotif(data.message, false, true);
+      }
+    } catch (error) {
+      console.error("Error deleting routine exercise: ", error);
+      let errorText = "The iron gods are upset at the moment";
+      handleNotif(errorText, false, true);
+    }
+  };
+    
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+    } else {
+      updateList();
+    }
+  }, [exerciseList]);
+
   return (
     <>
       <Banner
@@ -74,47 +116,74 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
             addFunction={() => addExercise()}
           /> 
         }
-        <div>
-          <ul className="flex flex-col justify-start text-left">
-            {
-              exerciseList.map( exercise => {
-                return <DetailItem 
-                  key={exercise._id} 
-                  exercise={exercise}
-                  editMode={editMode}
-                  deleteFunction={() => deleteExercise(exercise._id)}
-                />;
-              })
-            }
-          </ul>
-        </div>
+        {exerciseList.length <=0 
+          ? <p>To add exercises to this routine, click &quot;Edit&quot; in the header and then click &quot;Add&quot;.</p>
+          : <div>
+            <DragDropContext onDragEnd={result => handleOnDragEnd(result)}>
+              <Droppable droppableId="exercises">
+                {(provided) => {
+                  return (
+                    <ul className="flex flex-col justify-start text-left" {...provided.droppableProps} ref={provided.innerRef}>
+                      {
+                        exerciseList.map( (exercise, index) => {
+                          return (
+                            <DetailItem
+                              key={exercise._id}
+                              index={index}
+                              exercise={exercise}
+                              editMode={editMode}
+                              showControls={showControls}
+                              deleteFunction={() => deleteExercise(exercise._id)}
+                            />
+                          );
+                        })
+                      }
+                      {provided.placeholder}
+                    </ul>
+                  );
+                }}
+              </Droppable>
+            </DragDropContext>
+          </div>
+        }
       </div>
     </>
   );
 }
 
-function DetailItem({ exercise, editMode, deleteFunction }) {
+function DetailItem({ exercise, editMode, showControls, deleteFunction, index }) {
   return (
-    <li 
-      key={exercise._id}
-      className="flex justify-between items-center mb-2 py-2 border-b-[1px] border-gray-500"
-    >
-      <Link 
-        to="/exercise/detail"
-        state={{ "exercise": exercise }}
-        className="block w-full"
-      >{exercise.name}</Link>
-      {
-        editMode
-          ? <DeleteButton deleteFunction={deleteFunction} />
-          : <Link
-            to="/routine/log"
+    <Draggable key={exercise._id} draggableId={exercise._id} index={index} isDragDisabled={(showControls && !editMode) ? false : true}>
+      {provided => (
+        <li 
+          ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
+          className="flex justify-between items-center mb-2 py-2 border-b-[1px] border-gray-500"
+        >
+          {(showControls && !editMode) &&
+            <svg width={32} height={32} viewBox="0 0 32 32" stroke="white" strokeWidth={4} strokeLinecap="round" className="mr-2">
+              <line x1="4" x2="28" y1="10" y2="10" />
+              <line x1="4" x2="28" y1="22" y2="22" />
+            </svg>
+          }
+          <Link 
+            to="/exercise/detail"
             state={{ "exercise": exercise }}
-            className="btn"
-          >Log</Link>
-      }
-      
-    </li>
+            className="block w-full whitespace-nowrap overflow-x-hidden text-ellipsis"
+          >{exercise.name}</Link>
+          {
+            editMode && <DeleteButton deleteFunction={deleteFunction} />
+          }
+          {
+            (!showControls && !editMode) && 
+            <Link
+              to="/routine/log"
+              state={{ "exercise": exercise }}
+              className="btn ml-4"
+            >Log</Link>
+          }
+        </li>
+      )}
+    </Draggable>
   );
 }
 
@@ -124,13 +193,13 @@ function EditButtons({editFunction, editMode, addFunction}) {
   return (
     <div className="flex justify-between items-center gap-4 mb-6">
       <button onClick={editFunction} className="w-full btn">{editText}</button>
-      <button onClick={addFunction}  className="w-full btn">Add</button>
+      <button onClick={addFunction}  className="w-full btn-confirm">Add</button>
     </div>
   );
 }
 
 function DeleteButton({ deleteFunction }) {
   return (
-    <button onClick={deleteFunction} className="btn">Delete</button>
+    <button onClick={deleteFunction} className="btn-deny ml-4">Delete</button>
   );
 }
