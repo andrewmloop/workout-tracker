@@ -22,7 +22,7 @@ export default function AddRoutine() {
       };
 
       try {
-        const response = await fetch("http://localhost:9900/routine/add", {
+        const response = await fetch("/routine/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

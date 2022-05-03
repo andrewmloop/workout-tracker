@@ -19,7 +19,7 @@ export default function Settings() {
     };
 
     try {
-      const response = await fetch("http://localhost:9900/user/update", {
+      const response = await fetch("/user/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

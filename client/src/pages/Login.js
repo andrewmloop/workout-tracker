@@ -30,7 +30,7 @@ export default function Login() {
       };
   
       try {
-        const response = await fetch("http://localhost:9900/auth/login", {
+        const response = await fetch("/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

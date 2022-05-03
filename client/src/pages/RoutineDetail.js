@@ -21,7 +21,7 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
 
   const deleteExercise = async (exerciseId) => {
     try {
-      const res = await fetch(`http://localhost:9900/routine/del-exercise/${routineData._id}`, {
+      const res = await fetch(`/routine/del-exercise/${routineData._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
 
   const updateList = async () => {
     try {
-      const res = await fetch(`http://localhost:9900/routine/upd-list/${routineData._id}`, {
+      const res = await fetch(`/routine/upd-list/${routineData._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

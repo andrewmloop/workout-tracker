@@ -17,7 +17,7 @@ export default function RoutineList() {
   const fetchRoutines = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://localhost:9900/routine/list", {
+      const res = await fetch("/routine/list", {
         headers: {
           "x-access-token": localStorage.getItem("token"),
         }
@@ -80,7 +80,7 @@ function RoutineItem({ routine, setShouldRerender }) {
 
   const deleteRoutine = async (id) => {
     try {
-      const res = await fetch(`http://localhost:9900/routine/delete/${id}`, {
+      const res = await fetch(`/routine/delete/${id}`, {
         method: "DELETE",
         headers: {
           "x-access-token": localStorage.getItem("token"),

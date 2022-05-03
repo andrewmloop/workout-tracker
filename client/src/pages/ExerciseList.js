@@ -25,7 +25,7 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
   // store a copy in searchList which will be modified with the search function
   const fetchExercises = async route => {
     try {
-      const response = await fetch(`http://localhost:9900/exercise/list${route}`, {
+      const response = await fetch(`/exercise/list${route}`, {
         headers: {
           "x-access-token": localStorage.getItem("token")
         }
@@ -47,7 +47,7 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
   const addRoutineExercises = async exercisesToAdd => {
     if (exercisesToAdd.length > 0) {
       try {
-        const response = await fetch(`http://localhost:9900/routine/upd-routine/${activeRoutine}`, {
+        const response = await fetch(`/routine/upd-routine/${activeRoutine}`, {
           method: "POST",
           headers: {
             "x-access-token": localStorage.getItem("token"),

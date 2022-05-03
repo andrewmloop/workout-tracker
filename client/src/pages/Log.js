@@ -68,7 +68,7 @@ export default function Log() {
     };
 
     try {
-      const res = await fetch("http://localhost:9900/log/add", {
+      const res = await fetch("/log/add", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -96,7 +96,7 @@ export default function Log() {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:9900/log/exercise/${exercise._id}`, {
+      const res = await fetch(`/log/exercise/${exercise._id}`, {
         headers: { "x-access-token": localStorage.getItem("token") },
       });
       const data = await res.json();
@@ -193,7 +193,9 @@ export default function Log() {
                   }
                 </ul>
               </div>
-              : <p className="text-white m-auto">No logs yet</p>
+              : <div className={`flex flex-col overflow-hidden ${userStore.left_hand ? "order-2" : ""}`}>
+                <p className="text-white m-auto">No logs yet</p>
+              </div>
         }
         {/* Form Column */}
         <div className="h-[calc(100vh-120px) bg-slate-900">
