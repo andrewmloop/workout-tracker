@@ -18,10 +18,6 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Your first name is required."],
   },
-  birth_date: {
-    type: Date,
-    required: [true, "Your birth date is required."]
-  },
   left_hand: {
     type: Boolean,
     default: false,

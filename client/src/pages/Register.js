@@ -10,7 +10,6 @@ export default function Register() {
 
   // State for form inputs
   const [name, setName] = useState("");
-  const [birthDate, setBirthDate] = useState(new Date());
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordMatch, setPasswordMatch] = useState("");
@@ -29,11 +28,6 @@ export default function Register() {
 
     if (name.length <= 0) {
       tempErrors["name"] = true;
-      isValid = false;
-    }
-
-    if (birthDate.length <= 0) {
-      tempErrors["birthDate"] = true;
       isValid = false;
     }
 
@@ -73,7 +67,6 @@ export default function Register() {
             email: email,
             password: password,
             first_name: name,
-            birth_date: birthDate,
           })
         });
         const data = await response.json();
@@ -110,18 +103,6 @@ export default function Register() {
         />
         {valErrors?.name && (
           <p className="text-red-500">Please enter a name.</p>
-        )}
-        {/* Birth Date Input */}
-        <label htmlFor="birth_date">Birth Date</label>
-        <input 
-          type="date" 
-          name="birth_date"
-          placeholder="mm/dd/yyyy"
-          onChange={ (e) => setBirthDate(e.target.value) }
-          className="mb-2 date-input"
-        />
-        {valErrors?.birthDate && (
-          <p className="text-red-500">Please enter a correct date.</p>
         )}
         {/* Email Input */}
         <label htmlFor="email">Email</label>

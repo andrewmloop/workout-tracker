@@ -13,7 +13,6 @@ authRoutes.route("/register").post( async (req, response) => {
   const email = req.body.email;
   const password = req.body.password;
   const firstName = req.body.first_name;
-  const birthDate = req.body.birth_date;
 
   const takenEmail = await User.findOne({ email: email });
 
@@ -29,7 +28,6 @@ authRoutes.route("/register").post( async (req, response) => {
       email: email,
       password: hash,
       first_name: firstName,
-      birth_date: birthDate,
     };
   
     User.create(newUser, (userErr, result) => {
