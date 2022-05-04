@@ -25,13 +25,12 @@ export default function RoutineList() {
         }
       });
       const data = await res.json();
-      if (data.result === "success") {
-        setRoutineList(data);
-      }
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
+      } else {
+        setRoutineList(data);
       }
     } catch (error) {
       console.error("Error fetching routine list: ", error);

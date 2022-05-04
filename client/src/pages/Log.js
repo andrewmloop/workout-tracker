@@ -199,7 +199,7 @@ export default function Log() {
               : <p className="flex justify-center items-center h-[75vh] text-white">No logs yet</p>
         }
         {/* Form Column */}
-        <div className="h-full flex flex-col justify-center bg-slate-900">
+        <div className="flex flex-col justify-center bg-slate-900">
           <form onSubmit={ (e) => handleSubmit(e) }
             className="flex flex-col justify-center"
           >
@@ -208,6 +208,7 @@ export default function Log() {
               name="weight"
               placeholder={units}
               value={weight}
+              onFocus={() => setWeight("")}
               onChange={ (e) => setWeight(e.target.value) }
               className="w-full p-2 rounded-lg mb-2 text-center"
             />
@@ -216,6 +217,7 @@ export default function Log() {
               name="reps"
               placeholder={"reps"}
               value={reps}
+              onFocus={() => setReps("")}
               onChange={ (e) => setReps(e.target.value) }
               className="w-full p-2 rounded-lg mb-2 text-center"
             />

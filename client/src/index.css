@@ -4,6 +4,7 @@
 
 * {
     --color-primary: #fbbf24;
+    --color-secondary: #0f172a;
     --color-confirm: rgb(74 222 128);
     --color-deny: rgb(239 68 68);
     --color-gray: rgb(31 41 55);
@@ -74,4 +75,15 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: var(--color-input-bg);
     color: white;
     appearance: none;
+}
+
+.timer {
+    background-color: var(--color-secondary);
+    border-width: .125rem;
+    border-color: var(--color-primary);
+    padding: .5rem 1.25rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+    text-align: center;
 }
