@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Banner from "../components/Banner";
 import Loading from "../components/Loading";
+import Timer from "../components/Timer";
 
 import { useUser } from "../context/UserContext";
 import { useNotif } from "../context/NotificationContext";
 
 export default function Log() {
+  const navigate = useNavigate();
   // Location data that gets passed to log from routine
   const location = useLocation();
   const exercise = location.state.exercise;
@@ -81,8 +83,11 @@ export default function Log() {
         setLogHistory([data.data, ...logHistory]);
         handleNotif(data.message, true, true);
         setRefetch(prev => !prev);
-      }
-      if (data.result === "failure") {
+      } else if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
+      } else {
         handleNotif(data.message, false, true);
       }
     } catch (error) {
@@ -100,11 +105,18 @@ export default function Log() {
         headers: { "x-access-token": localStorage.getItem("token") },
       });
       const data = await res.json();
-      setLogHistory(data.data);
-      populateDates(data.data);
-      setLoading(false);
+      if (data.result === "success") {
+        setLogHistory(data.data);
+        populateDates(data.data);
+      }
+      if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
+      }
     } catch (error) {
       console.error("Error fetching log history: ", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -187,9 +199,9 @@ export default function Log() {
               : <p className="flex justify-center items-center h-[75vh] text-white">No logs yet</p>
         }
         {/* Form Column */}
-        <div className="bg-slate-900">
+        <div className="h-full flex flex-col justify-center bg-slate-900">
           <form onSubmit={ (e) => handleSubmit(e) }
-            className="h-full flex flex-col justify-center"
+            className="flex flex-col justify-center"
           >
             <input
               type="number"
@@ -219,6 +231,7 @@ export default function Log() {
               className="w-full btn-lg"
             >Submit</button>
           </form>
+          <Timer />
         </div>
       </div>
     </>

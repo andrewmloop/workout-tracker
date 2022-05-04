@@ -9,6 +9,8 @@ import { useNotif } from "../context/NotificationContext";
 export default function RoutineList() {
   const navigate = useNavigate();
 
+  const { handleNotif } = useNotif();
+
   const [routineList, setRoutineList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -23,11 +25,18 @@ export default function RoutineList() {
         }
       });
       const data = await res.json();
-      setRoutineList(data);
-      setLoading(false);
+      if (data.result === "success") {
+        setRoutineList(data);
+      }
+      if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
+      }
     } catch (error) {
       console.error("Error fetching routine list: ", error);
       setError(true);
+    } finally {
       setLoading(false);
     }
   };
@@ -37,18 +46,6 @@ export default function RoutineList() {
   }, [shouldRerender]);
 
   if (error) return "Error!";
-  if (loading) {
-    return (
-      <>
-        <Banner
-          bannerText="Routines"
-          showAdd={true}
-          addFunction={() => navigate("add")}
-        />
-        <Loading text="Turning the lights on..." />
-      </>
-    );
-  }
 
   return (
     <>
@@ -57,24 +54,29 @@ export default function RoutineList() {
         showAdd={true}
         addFunction={() => navigate("add")}
       />
-      <div className="p-8">
-        <ul className="flex flex-col justify-start">
-          { 
-            routineList.map( routine => {
-              return <RoutineItem 
-                key={routine._id} 
-                routine={routine} 
-                setShouldRerender={setShouldRerender}
-              />;
-            })
-          }
-        </ul>
-      </div>
+      {
+        loading
+          ? <Loading text="Turning the lights on..." />
+          : <div className="p-8">
+            <ul className="flex flex-col justify-start">
+              { 
+                routineList.map( routine => {
+                  return <RoutineItem 
+                    key={routine._id} 
+                    routine={routine} 
+                    setShouldRerender={setShouldRerender}
+                  />;
+                })
+              }
+            </ul>
+          </div>
+      }
     </>
   );
 }
 
 function RoutineItem({ routine, setShouldRerender }) {
+  const navigate = useNavigate();
   const { handleNotif } = useNotif();
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -90,6 +92,10 @@ function RoutineItem({ routine, setShouldRerender }) {
       if (data.result === "success") {
         handleNotif(data.message, true, true);
         setShouldRerender(prev => !prev);
+      } else if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
       } else {
         handleNotif(data.message, false, true);
       }

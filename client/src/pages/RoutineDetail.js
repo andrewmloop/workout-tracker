@@ -36,6 +36,10 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
         let index = list.findIndex(obj => obj._id === exerciseId);
         if (index > -1) list.splice(index, 1);
         setExerciseList(list);
+      } else if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
       } else {
         handleNotif(data.message, false, true);
       }
@@ -75,6 +79,10 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
       const data = await res.json();
       if (data.result === "success") {
         return;
+      } else if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
       } else {
         handleNotif(data.message, false, true);
       }

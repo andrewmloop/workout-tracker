@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Banner from "../components/Banner";
 
 import { useUser } from "../context/UserContext";
@@ -7,6 +9,8 @@ import { useNotif } from "../context/NotificationContext";
 export default function Settings() {
   const { userStore, handleUser } = useUser();
   const { handleNotif } = useNotif();
+
+  const navigate = useNavigate();
 
   const [isLeftHand, setIsLeftHand] = useState(userStore.left_hand);
   const [isMetric, setIsMetric] = useState(userStore.use_metric);
@@ -31,6 +35,10 @@ export default function Settings() {
       if (data.result === "success") {
         handleNotif(data.message, true, true);
         handleUser(data.data);
+      } else if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
       } else {
         handleNotif(data.message, false, true);
       }

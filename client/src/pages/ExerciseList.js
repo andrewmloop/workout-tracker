@@ -35,6 +35,10 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
         setFetchList(data.data);
         setSearchList(data.data);
         return true;
+      } else if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
       } else {
         return false;
       }

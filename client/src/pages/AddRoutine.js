@@ -35,6 +35,11 @@ export default function AddRoutine() {
           handleNotif(data.message, true, true);
           navigate("/routine");
         }
+        if (data.isLoggedIn === false) {
+          navigate("/");
+          let loginText = "Your session has expired";
+          handleNotif(loginText, true, true);
+        }
       } catch (error) {
         console.error("Error creating routine: ", error);
         const errorText = "The iron gods are upset at the moment";
