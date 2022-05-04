@@ -28,7 +28,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error."));
 
 // Serve client
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("build"));
+  app.use(express.static("./client/build"));
 }
 
 // Set up routing
