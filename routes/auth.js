@@ -39,7 +39,7 @@ authRoutes.route("/register").post( async (req, response) => {
       } else {
         response.json({ 
           result: "success",
-          message: "New user created.",
+          message: "New user created",
           data: result,
         });
       }
@@ -57,7 +57,7 @@ authRoutes.route("/login").post( async (req, response) => {
     if (!foundUser) {
       return response.json({ 
         result: "failure",
-        message: "Invalid email or password.",
+        message: "Invalid email or password",
       });
     }
 
@@ -78,14 +78,13 @@ authRoutes.route("/login").post( async (req, response) => {
               console.error("Error signing web token: ", jwtError);
               return response.json({ 
                 result: "failure",
-                message: "Error signing token." 
+                message: "Error signing token" 
               });
             }
             return response.json({
               result: "success",
               token: `Bearer ${token}`,
               data: {
-                birth_date: foundUser.birth_date,
                 email: foundUser.email,
                 first_name: foundUser.first_name,
                 left_hand: foundUser.left_hand,
@@ -97,7 +96,7 @@ authRoutes.route("/login").post( async (req, response) => {
       } else {
         return response.json({
           result: "failure",
-          message: "Invalid email or password.",
+          message: "Invalid email or password",
         });
       }
     });
