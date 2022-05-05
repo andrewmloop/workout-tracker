@@ -86,6 +86,7 @@ export default function Settings() {
           </div>
           <p>This will show all measurements in kilograms and centimeters.</p>
         </div>
+        <Logout />
       </div>
     </>
   );
@@ -105,5 +106,23 @@ function ToggleSwitch({ name, checked, onChange }) {
         <span className={`${checked ? "bg-amber-400 translate-x-[100%]" : "bg-slate-300 translate-x-0"} w-1/2 rounded-full transition-transform duration-200`} />
       </label>
     </div>
+  );
+}
+
+function Logout() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    localStorage.setItem("rememberLogin", false);
+    localStorage.setItem("token", "");
+    navigate("/");
+  };
+
+  return (
+    <button 
+      type="button" 
+      onClick={() => handleClick()}
+      className="btn-deny-lg w-full"
+    >Logout</button>
   );
 }

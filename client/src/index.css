@@ -53,6 +53,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-radius: var(--button-radius);
 }
 
+.btn-deny-lg {
+    background-color: var(--color-deny);
+    padding: .5rem 1.25rem;
+    color: var(--color-gray);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+}
+
 .text-input {
     padding: .25rem .4rem;
     border-radius: var(--input-radius);
@@ -75,6 +83,33 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: var(--color-input-bg);
     color: white;
     appearance: none;
+}
+
+.checkbox {
+    appearance: none;
+    background-color: var(--color-input-bg);
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15rem;
+    height: 1.15rem;
+    border: 0.1rem solid currentColor;
+    border-radius: 0.15rem;
+    display: grid;
+    place-content: center;
+}
+
+.checkbox::before {
+    content: "";
+    width: 0.7rem;
+    height: 0.7rem;
+    transform: scale(0);
+    box-shadow: inset 1rem 1rem var(--color-primary);
+    border-radius: 0.1rem;
+}
+
+.checkbox:checked::before {
+    transform: scale(1);
 }
 
 .timer {

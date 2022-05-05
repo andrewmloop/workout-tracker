@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 const authRoutes = express.Router();
-const JWTSecret = process.env.JWT_SECRET;
+const jwtSecret = process.env.JWT_SECRET;
 
 // Register
 authRoutes.route("/register").post( async (req, response) => {
@@ -71,7 +71,7 @@ authRoutes.route("/login").post( async (req, response) => {
 
         jwt.sign(
           payload,
-          JWTSecret,
+          jwtSecret,
           {expiresIn: 86400},
           (jwtError, token) => {
             if (jwtError) {
@@ -102,6 +102,32 @@ authRoutes.route("/login").post( async (req, response) => {
     });
   } catch (error) {
     if (error) console.error("Error finding user: ", error);
+  }
+});
+
+// Remember me
+authRoutes.route("/remember-me").get( (req, res) => {
+  const token = req.headers["x-access-token"].split(" ")[1];
+
+  if (token) {
+    jwt.verify(token, jwtSecret, err => {
+      if (err) return res.json({
+        result: "failure",
+        message: "Failed to authenticate",
+        isLoggedIn: false,
+      });
+      res.json({
+        result: "success",
+        message: "User authenticated",
+        isLoggedIn: true
+      });
+    });
+  } else {
+    res.json({
+      result: "failure",
+      message: "Incorrect token given", 
+      isLoggedIn: false 
+    });
   }
 });
 
