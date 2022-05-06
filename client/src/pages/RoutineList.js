@@ -57,17 +57,20 @@ export default function RoutineList() {
         loading
           ? <Loading text="Turning the lights on..." />
           : <div className="p-8">
-            <ul className="flex flex-col justify-start">
-              { 
-                routineList.map( routine => {
-                  return <RoutineItem 
-                    key={routine._id} 
-                    routine={routine} 
-                    setShouldRerender={setShouldRerender}
-                  />;
-                })
-              }
-            </ul>
+            { routineList.length <= 0
+              ? <p className="text-white text-center">To add routines, click &quot;Add&quot; in the header.</p>
+              : <ul className="flex flex-col justify-start">
+                { 
+                  routineList.map( routine => {
+                    return <RoutineItem 
+                      key={routine._id} 
+                      routine={routine} 
+                      setShouldRerender={setShouldRerender}
+                    />;
+                  })
+                }
+              </ul>
+            }
           </div>
       }
     </>

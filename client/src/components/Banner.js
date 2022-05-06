@@ -5,11 +5,13 @@ export default function Banner({ bannerText, showBack, showAdd, addFunction, add
 
   return (
     <div className="sticky top-0 left-0 w-full bg-black p-4 text-white">
-      <div className="grid grid-cols-3 items-center">
+      <div className="grid grid-cols-[1fr_4fr_1fr] items-center">
         <div className="justify-self-start flex">
           { showBack && <BackButton /> }
         </div>
-        <h1 className="w-full text-center whitespace-nowrap justify-self-center">{bannerText}</h1>
+        <div className="text-center whitespace-nowrap text-ellipsis overflow-x-hidden">
+          <h1>{bannerText}</h1>
+        </div>
         <div className="justify-self-end">
           { showAdd && <AddButton addFunction={addFunction} addText={addText} /> }
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Banner from "../components/Banner";
 
 
@@ -7,12 +7,17 @@ export default function ExerciseDetail() {
   // Exercise data passed from ExerciseList page to avoid multiple requests
   const location = useLocation();
   const data = location.state.exercise;
+
+  const navigate = useNavigate();
   
   return (
     <>
       <Banner
         bannerText={"Exercise Details"}
         showBack={true}
+        showAdd={true}
+        addFunction={() => navigate("/chart", {state: {exercise: data}})}
+        addText="Chart"
       />
       <div className="p-8 text-center text-white">
         <h1 className="text-xl font-bold mb-2 first-letter:uppercase">{data.name}</h1>

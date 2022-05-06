@@ -56,12 +56,12 @@ logRoutes.route("/exercise/:exercise").get( (req, response) => {
       console.error("Error fetching logs for that exercise and date: ", err);
       response.json({
         result: "failure",
-        message: "Failed to fetch log."
+        message: "Failed to fetch logs"
       });
     }
     response.json({
       result: "success",
-      message: "Successfully found logs.",
+      message: "Successfully found logs",
       data: result,
     });
   }).sort({ date: -1 });

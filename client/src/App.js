@@ -12,6 +12,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AddRoutine from "./pages/AddRoutine";
+import Chart from "./pages/Chart";
 import Notification from "./components/Notification";
 
 import { UserProvider } from "./context/UserContext";
@@ -64,6 +65,7 @@ export default function App() {
               <Route exact path="/settings" element={
                 <Settings />
               }/>
+              <Route exact path="/chart" element={<Chart />} />
             </Route>
           </Routes>
           <Notification />

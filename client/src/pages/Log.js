@@ -155,6 +155,9 @@ export default function Log() {
       <Banner
         bannerText={exercise.name}
         showBack={true}
+        showAdd={true}
+        addText="Chart"
+        addFunction={() => navigate("/chart", {state: {exercise: exercise}})}
       />
       <div className={`grid ${userStore.left_hand ? "grid-cols-[35%_65%]" : "grid-cols-[65%_35%]"} h-full justify-between gap-1 p-4`}>
         {/* Log Column */}
