@@ -28,12 +28,12 @@ export default function ExerciseGroup({ addMode }) {
 
 function GroupItem(props) {
   return (
-    <li className="mb-2 py-2 border-b-[1px] border-gray-500 text-white">
+    <li className="py-3 border-b-[1px] border-gray-500 text-white">
       <Link
         to="/exercise/list"
         state={{"group": props.group,
           "text": props.text}}
-        className="block"
+        className="block py-1"
       >{props.text}</Link>
     </li>
   );

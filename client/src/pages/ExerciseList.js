@@ -149,10 +149,10 @@ function ListItem({ exercise, addMode, newExercises, setNewExercises }) {
   };
 
   return (
-    <li className="flex justify-between mb-2 py-2 border-b-[1px] border-gray-500 text-white">
+    <li className="flex justify-between py-3 border-b-[1px] border-gray-500 text-white">
       <Link to="/exercise/detail"
         state={{ "exercise": exercise }}
-        className="block whitespace-nowrap overflow-x-hidden text-ellipsis"
+        className="block py-1 whitespace-nowrap overflow-x-hidden text-ellipsis"
       >{exercise.name}</Link>
       {addMode &&
         <button 

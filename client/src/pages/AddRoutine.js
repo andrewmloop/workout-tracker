@@ -68,7 +68,7 @@ export default function AddRoutine() {
             name="routine-name"
             placeholder="Routine name"
             onChange={ (e) => setName(e.target.value)}
-            className="w-full mb-2 text-input"
+            className="w-full mb-3 text-input"
           />
           <button
             type="submit"

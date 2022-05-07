@@ -3,15 +3,16 @@ import { Link, useNavigate } from "react-router-dom";
 
 import Banner from "../components/Banner";
 import Loading from "../components/Loading";
+import EditButtons from "../components/EditButtons";
 
 import { useNotif } from "../context/NotificationContext";
 
 export default function RoutineList() {
   const navigate = useNavigate();
-
   const { handleNotif } = useNotif();
 
   const [routineList, setRoutineList] = useState([]);
+  const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [shouldRerender, setShouldRerender] = useState(false);
@@ -48,15 +49,16 @@ export default function RoutineList() {
 
   return (
     <>
-      <Banner
-        bannerText="Routines"
-        showAdd={true}
-        addFunction={() => navigate("add")}
-      />
+      <Banner bannerText="Routines" />
       {
         loading
           ? <Loading text="Turning the lights on..." />
           : <div className="p-8">
+            <EditButtons 
+              editFunction={() => setEditMode(prev => !prev)} 
+              editMode={editMode}
+              addFunction={() => navigate("add")}
+            /> 
             { routineList.length <= 0
               ? <p className="text-white text-center">To add routines, click &quot;Add&quot; in the header.</p>
               : <ul className="flex flex-col justify-start">
@@ -66,6 +68,7 @@ export default function RoutineList() {
                       key={routine._id} 
                       routine={routine} 
                       setShouldRerender={setShouldRerender}
+                      editMode={editMode}
                     />;
                   })
                 }
@@ -77,10 +80,9 @@ export default function RoutineList() {
   );
 }
 
-function RoutineItem({ routine, setShouldRerender }) {
+function RoutineItem({ routine, setShouldRerender, editMode }) {
   const navigate = useNavigate();
   const { handleNotif } = useNotif();
-  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const deleteRoutine = async (id) => {
     try {
@@ -110,22 +112,22 @@ function RoutineItem({ routine, setShouldRerender }) {
 
   return (
     <>
-      <li className="flex justify-between items-center mb-2 py-2 border-b-[1px] border-gray-500 text-white">
+      <li className="flex justify-between items-center py-3 border-b-[1px] border-gray-500 text-white">
         <Link 
           to="detail"
           state={{ "routine": routine }}
-          className="block w-full text-lg"
+          className="block w-full text-lg py-1"
         >{routine.name}</Link>
-        { confirmDelete 
-          ? 
-          <div className="flex">
-            <button onClick={() => deleteRoutine(routine._id)} className="btn-confirm">Confirm</button>
-            <button onClick={() => setConfirmDelete(false)} className="ml-3 btn-deny">Deny</button>
-          </div>
-          : 
-          <button onClick={() => setConfirmDelete(true)} className="btn">Delete</button>
+        { editMode && 
+          <DeleteButton deleteFunction={() => deleteRoutine(routine._id)} /> 
         }
       </li>
     </>
+  );
+}
+
+function DeleteButton({ deleteFunction }) {
+  return (
+    <button onClick={deleteFunction} className="btn-deny ml-4">Delete</button>
   );
 }

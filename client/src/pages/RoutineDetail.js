@@ -3,6 +3,7 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import Banner from "../components/Banner";
+import EditButtons from "../components/EditButtons";
 
 import { useNotif } from "../context/NotificationContext";
 
@@ -114,7 +115,7 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
           // when the user expects to have left edit mode
           if (editMode) setEditMode(false);
         }}
-        addText="Edit"
+        addText={showControls ? "Done" : "Edit"}
       />
       <div className="p-8 text-center text-white">
         { showControls 
@@ -165,18 +166,18 @@ function DetailItem({ exercise, editMode, showControls, deleteFunction, index })
       {provided => (
         <li 
           ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
-          className="flex justify-between items-center mb-2 py-2 border-b-[1px] border-gray-500"
+          className="flex justify-between items-center py-3 border-b-[1px] border-gray-500"
         >
           {(showControls && !editMode) &&
-            <svg width={32} height={32} viewBox="0 0 32 32" stroke="white" strokeWidth={4} strokeLinecap="round" className="mr-2">
-              <line x1="4" x2="28" y1="10" y2="10" />
-              <line x1="4" x2="28" y1="22" y2="22" />
+            <svg width={32} height={32} viewBox="0 0 32 32" stroke="white" strokeWidth={3} strokeLinecap="round" className="mr-2">
+              <line x1="4" x2="28" y1="12" y2="12" />
+              <line x1="4" x2="28" y1="20" y2="20" />
             </svg>
           }
           <Link 
             to="/exercise/detail"
             state={{ "exercise": exercise }}
-            className="block w-full whitespace-nowrap overflow-x-hidden text-ellipsis"
+            className="block w-full whitespace-nowrap overflow-x-hidden text-ellipsis py-1"
           >{exercise.name}</Link>
           {
             editMode && <DeleteButton deleteFunction={deleteFunction} />
@@ -192,17 +193,6 @@ function DetailItem({ exercise, editMode, showControls, deleteFunction, index })
         </li>
       )}
     </Draggable>
-  );
-}
-
-function EditButtons({editFunction, editMode, addFunction}) {
-  const editText = editMode ? "Done" : "Edit";
-
-  return (
-    <div className="flex justify-between items-center gap-4 mb-6">
-      <button onClick={editFunction} className="w-full btn">{editText}</button>
-      <button onClick={addFunction}  className="w-full btn-confirm">Add</button>
-    </div>
   );
 }
 
