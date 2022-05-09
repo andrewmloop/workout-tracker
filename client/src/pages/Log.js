@@ -206,34 +206,42 @@ export default function Log() {
           <form onSubmit={ (e) => handleSubmit(e) }
             className="flex flex-col justify-center"
           >
+            <label htmlFor="weight" className="text-sm font-bold text-gray-400">Weight</label>
             <input
+              id="weight"
               type="number"
               name="weight"
               placeholder={units}
               value={weight}
               onFocus={() => setWeight("")}
               onChange={ (e) => setWeight(e.target.value) }
-              className="w-full p-2 rounded-lg mb-2 text-center"
+              className="w-full p-3 rounded-lg text-center mb-1"
             />
+            <label htmlFor="Reps" className="text-sm font-bold text-gray-400">Reps</label>
             <input
+              id="reps"
               type="number"
               name="reps"
               placeholder={"reps"}
               value={reps}
               onFocus={() => setReps("")}
               onChange={ (e) => setReps(e.target.value) }
-              className="w-full p-2 rounded-lg mb-2 text-center"
+              className="w-full p-3 rounded-lg text-center mb-1"
             />
+            <label htmlFor="form" className="text-sm font-bold text-gray-400">Form</label>
             <button 
+              id="form"
               onClick={ (e) => handleToggle(e) }
-              className={`w-full p-2 rounded-lg mb-2 
+              className={`w-full p-3 rounded-lg mb-1 
                 ${form === 0 ? "bg-green-700" : form === 1 ? "bg-amber-400" : "bg-red-700"}`}
             >
               {values[form]}
             </button>
+            <label htmlFor="log-submit" className="text-sm font-bold text-gray-400">Log</label>
             <button
+              id="log-submit"
               type="submit"
-              className="w-full btn-lg"
+              className="w-full log-submit mb-1"
             >Submit</button>
           </form>
           <Timer />

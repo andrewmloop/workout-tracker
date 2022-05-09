@@ -39,6 +39,14 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-radius: var(--button-radius);
 }
 
+.log-submit {
+    background-color: var(--color-primary);
+    padding: .75rem 1.25rem;
+    color: var(--color-gray);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+}
+
 .btn-inactive-lg {
     background-color: var(--color-secondary);
     border-color: var(--color-primary);
@@ -128,9 +136,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: var(--color-secondary);
     border-width: .125rem;
     border-color: var(--color-primary);
-    padding: .5rem 1.25rem;
+    height: 3rem;
     color: var(--color-primary);
     font-weight: 600;
     border-radius: var(--button-radius);
-    text-align: center;
 }

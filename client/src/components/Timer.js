@@ -84,8 +84,9 @@ export default function Timer() {
   }, [start]);
 
   return (
-    <div className="w-full flex flex-col mt-2">
-      <select value={restTime} onChange={(e) => handleChange(e)} className="timer z-[50]">
+    <div className="w-full flex flex-col">
+      <label htmlFor="rest-time" className="text-sm text-gray-400 font-bold">Rest Time</label>
+      <select id="rest-time" value={restTime} onChange={(e) => handleChange(e)} className="timer z-[50] mb-2">
         <option value={30}>30 sec</option>
         <option value={60}>1 min</option>
         <option value={90}>90 sec</option>
@@ -93,7 +94,7 @@ export default function Timer() {
         <option value={150}>150 sec</option>
         <option value={180}>3 min</option>
       </select>
-      <button onClick={() => setStart(!start)} className="btn-lg mt-2">
+      <button onClick={() => setStart(!start)} className="log-submit">
         { !start ? "Start" : formatTime(timeLeft) }
       </button>
     </div>
