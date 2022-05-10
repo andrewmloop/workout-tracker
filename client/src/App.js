@@ -17,6 +17,7 @@ import Notification from "./components/Notification";
 
 import { UserProvider } from "./context/UserContext";
 import { NotifProvider } from "./context/NotificationContext";
+import { TimerContextProvider } from "./context/TimerContext";
 
 export default function App() {
   // Add mode that allows the user to add exercises to a routine
@@ -28,50 +29,48 @@ export default function App() {
   const [newExercises, setNewExercises] = useState([]);
 
   return (
-    <UserProvider>
-      <NotifProvider>
-        <div>
-          <Routes>
-            <Route element={<WithoutNav  />}>
-              <Route exact path="/" element={<Login />}/>
-              <Route exact path="/login" element={<Login />}/>
-              <Route exact path="/register" element={<Register />}/>
+    <UserProvider><NotifProvider><TimerContextProvider>
+      <div>
+        <Routes>
+          <Route element={<WithoutNav  />}>
+            <Route exact path="/" element={<Login />}/>
+            <Route exact path="/login" element={<Login />}/>
+            <Route exact path="/register" element={<Register />}/>
+          </Route>
+          <Route element={<WithNav />}>
+            <Route path="/exercise">
+              <Route index path="/exercise" element={<ExerciseGroup addMode={addMode} />} />
+              <Route path="list" element={
+                <ExerciseList 
+                  addMode={addMode} 
+                  setAddMode={setAddMode}
+                  activeRoutine={activeRoutine} 
+                  newExercises={newExercises}
+                  setNewExercises={setNewExercises}
+                />} 
+              />
+              <Route path="detail" element={<ExerciseDetail />} />
             </Route>
-            <Route element={<WithNav />}>
-              <Route path="/exercise">
-                <Route index path="/exercise" element={<ExerciseGroup addMode={addMode} />} />
-                <Route path="list" element={
-                  <ExerciseList 
-                    addMode={addMode} 
-                    setAddMode={setAddMode}
-                    activeRoutine={activeRoutine} 
-                    newExercises={newExercises}
-                    setNewExercises={setNewExercises}
-                  />} 
-                />
-                <Route path="detail" element={<ExerciseDetail />} />
-              </Route>
-              <Route path="/routine">
-                <Route index path="/routine" element={<RoutineList />} />
-                <Route path="add" element={<AddRoutine />} />
-                <Route path="detail" element={
-                  <RoutineDetail 
-                    setAddMode={setAddMode} 
-                    setActiveRoutine={setActiveRoutine} 
-                  />} 
-                />
-                <Route path="log" element={<Log />} />
-              </Route>
-              <Route exact path="/settings" element={
-                <Settings />
-              }/>
-              <Route exact path="/chart" element={<Chart />} />
+            <Route path="/routine">
+              <Route index path="/routine" element={<RoutineList />} />
+              <Route path="add" element={<AddRoutine />} />
+              <Route path="detail" element={
+                <RoutineDetail 
+                  setAddMode={setAddMode} 
+                  setActiveRoutine={setActiveRoutine} 
+                />} 
+              />
+              <Route path="log" element={<Log />} />
             </Route>
-          </Routes>
-          <Notification />
-        </div>
-      </NotifProvider>
-    </UserProvider>
+            <Route exact path="/settings" element={
+              <Settings />
+            }/>
+            <Route exact path="/chart" element={<Chart />} />
+          </Route>
+        </Routes>
+        <Notification />
+      </div>
+    </TimerContextProvider></NotifProvider></UserProvider>
   );
 }
 
