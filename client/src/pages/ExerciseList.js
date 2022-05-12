@@ -135,7 +135,6 @@ function ListItem({ exercise, addMode, newExercises, setNewExercises }) {
 
   const handleClick = () => {
     let list = [...newExercises];
-    console.log(list);
     
     let index = list.indexOf(exercise._id);
     if (index > -1) {

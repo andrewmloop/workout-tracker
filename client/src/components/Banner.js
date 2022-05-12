@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Banner({ bannerText, showBack, showAdd, addFunction, addText }) {
+export default function Banner({ bannerText, showBack, showAdd, addFunction, addText, targSets, targReps }) {
 
   return (
     <div className="sticky top-0 left-0 w-full bg-black p-4 text-white">
@@ -9,8 +9,20 @@ export default function Banner({ bannerText, showBack, showAdd, addFunction, add
         <div className="justify-self-start flex">
           { showBack && <BackButton /> }
         </div>
-        <div className="text-center whitespace-nowrap text-ellipsis overflow-x-hidden">
-          <h1>{bannerText}</h1>
+        <div className="flex flex-col items-center whitespace-nowrap overflow-x-hidden text-ellipsis">
+          <h1 className="w-full">{bannerText}</h1>
+          <div className="flex flex-center">
+            { targSets && 
+              <p className="font-light text-xs text-amber-400">
+                Sets: {targSets}&nbsp;
+              </p> 
+            }
+            { targReps && 
+              <p className="font-light text-xs text-amber-400">
+                Reps: {targReps}
+              </p> 
+            }
+          </div>
         </div>
         <div className="justify-self-end">
           { showAdd && <AddButton addFunction={addFunction} addText={addText} /> }
@@ -39,7 +51,7 @@ function AddButton({ addFunction, addText }) {
   const text = addText || "Add";
   return (
     <>
-      <button onClick={addFunction}>{text}</button>
+      <button onClick={addFunction} className="btn-banner">{text}</button>
     </>
   );
 }

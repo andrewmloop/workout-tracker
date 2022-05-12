@@ -4,9 +4,13 @@ const Schema = mongoose.Schema;
 
 const RoutineSchema = new Schema({
   exercise_list: [{
-    type: Schema.Types.ObjectId,
-    ref: "Exercise",
-    required: true,
+    exercise: {
+      type: Schema.Types.ObjectId,
+      ref: "Exercise",
+      required: true,
+    },
+    targSets: Number,
+    targReps: Number
   }],
   user: {
     type: Schema.Types.ObjectId,

@@ -23,12 +23,29 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
 .btn {
     background-color: var(--color-primary);
     padding: .25rem 1rem;
     color: var(--color-gray);
     font-weight: 600;
     border-radius: var(--button-radius);
+}
+
+.btn-banner {
+    padding: 0 0.5rem;
+    background-color: black;
+    border-color: white;
+    border-width: .125rem;
+    color: white;
+    font-weight: 600;
+    border-radius: 0.25rem;
+    font-size: small;
 }
 
 .btn-lg {
@@ -47,7 +64,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     border-radius: var(--button-radius);
 }
 
-.btn-inactive-lg {
+.btn-inverted-lg {
     background-color: var(--color-secondary);
     border-color: var(--color-primary);
     border-width: .125rem;
@@ -92,6 +109,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .text-input:focus {
+    border-color: var(--color-primary);
+}
+
+.text-input-sm {
+    width: 3rem;
+    margin-left: .5rem;
+    padding: .1rem .2rem;
+    border-radius: var(--button-radius);
+    border-width: 2px;
+    border-color: transparent;
+    background-color: var(--color-input-bg);
+    color: white;
+    text-align: center;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.text-input-sm:focus {
     border-color: var(--color-primary);
 }
 

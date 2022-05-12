@@ -34,7 +34,7 @@ routineRoutes.route("/list").get( (req, response) => {
   Routine.find({ user: req.user.id }, (err, result) => {
     if (err) throw err;
     response.json(result);
-  }).sort({ name: 1 }).collation({ locale: "en", caseLevel: true}).populate("exercise_list");
+  }).sort({ name: 1 }).collation({ locale: "en", caseLevel: true}).populate("exercise_list.exercise");
 });
 
 // Get one routine
@@ -144,12 +144,16 @@ routineRoutes.route("/del-exercise/:id").post( (req, response) => {
 
 // Update exercise in list
 routineRoutes.route("/upd-routine/:id").post( (req, response) => {
+  const newExercises = req.body.newExercises.map( id => {
+    return { exercise: id };
+  });
+
   Routine.findByIdAndUpdate(
     req.params.id,
     {
       $addToSet: {
         exercise_list: {
-          $each: req.body.newExercises
+          $each: newExercises
         }
       }
     },
@@ -165,6 +169,44 @@ routineRoutes.route("/upd-routine/:id").post( (req, response) => {
         response.json({
           result: "success",
           message: "Successfully add exercises",
+          data: result,
+        });
+      }
+    }
+  );
+});
+
+// Update routine exercise target sets and reps
+routineRoutes.route("/upd-targets/:id").post( (req, response) => {
+  Routine.findOneAndUpdate(
+    { 
+      _id: req.params.id, 
+      exercise_list: {
+        $elemMatch: {exercise: req.body.exerciseId}
+      }
+    },
+    {
+      $set: {
+        "exercise_list.$.targSets": req.body.targSets,
+        "exercise_list.$.targReps": req.body.targReps,
+      }
+    },
+    {
+      new: true,
+      safe: true,
+      upsert: true
+    },
+    (err, result) => {
+      if (err) {
+        console.error("Failed to set targets: ", err);
+        response.json({
+          result: "failure",
+          message: "Failed to set targets",
+        });
+      } else {
+        response.json({
+          result: "success",
+          message: "Successfully set targets",
           data: result,
         });
       }

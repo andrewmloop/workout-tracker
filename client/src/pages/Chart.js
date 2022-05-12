@@ -163,7 +163,7 @@ export default function Chart() {
               >Weight</button>
               <button  
                 onClick={() => handle1RMClick()}
-                className={`w-full btn-lg mb-4 ${!showWeight ? "btn-lg" : "btn-inactive-lg"}`}
+                className={`w-full btn-lg mb-4 ${!showWeight ? "btn-lg" : "btn-inverted-lg"}`}
               >1 Rep Max</button>
             </div>
           </div>

@@ -12,7 +12,7 @@ export default function Log() {
   const navigate = useNavigate();
   // Location data that gets passed to log from routine
   const location = useLocation();
-  const exercise = location.state.exercise;
+  const exerciseObj = location.state.exercise;
 
   const { userStore } = useUser();
   const { handleNotif } = useNotif();
@@ -61,7 +61,7 @@ export default function Log() {
     }
 
     const newLog = {
-      exercise: exercise._id,
+      exercise: exerciseObj.exercise._id,
       weight: weight,
       reps: reps,
       maxRep: getOneRepMax(weight, reps),
@@ -101,7 +101,7 @@ export default function Log() {
     setLoading(true);
 
     try {
-      const res = await fetch(`/log/exercise/${exercise._id}`, {
+      const res = await fetch(`/log/exercise/${exerciseObj.exercise._id}`, {
         headers: { "x-access-token": localStorage.getItem("token") },
       });
       const data = await res.json();
@@ -153,11 +153,13 @@ export default function Log() {
   return (
     <>
       <Banner
-        bannerText={exercise.name}
+        bannerText={exerciseObj.exercise.name}
         showBack={true}
         showAdd={true}
+        targSets={exerciseObj.targSets}
+        targReps={exerciseObj.targReps}
         addText="Chart"
-        addFunction={() => navigate("/chart", {state: {exercise: exercise}})}
+        addFunction={() => navigate("/chart", {state: {exercise: exerciseObj.exercise}})}
       />
       <div className={`grid ${userStore.left_hand ? "grid-cols-[35%_65%]" : "grid-cols-[65%_35%]"} h-full justify-between gap-1 p-4`}>
         {/* Log Column */}

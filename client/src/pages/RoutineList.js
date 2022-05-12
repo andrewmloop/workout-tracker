@@ -59,21 +59,18 @@ export default function RoutineList() {
               editMode={editMode}
               addFunction={() => navigate("add")}
             /> 
-            { routineList.length <= 0
-              ? <p className="text-white text-center">To add routines, click &quot;Add&quot; in the header.</p>
-              : <ul className="flex flex-col justify-start">
-                { 
-                  routineList.map( routine => {
-                    return <RoutineItem 
-                      key={routine._id} 
-                      routine={routine} 
-                      setShouldRerender={setShouldRerender}
-                      editMode={editMode}
-                    />;
-                  })
-                }
-              </ul>
-            }
+            <ul className="flex flex-col justify-start">
+              { 
+                routineList.map( routine => {
+                  return <RoutineItem 
+                    key={routine._id} 
+                    routine={routine} 
+                    setShouldRerender={setShouldRerender}
+                    editMode={editMode}
+                  />;
+                })
+              }
+            </ul>
           </div>
       }
     </>
