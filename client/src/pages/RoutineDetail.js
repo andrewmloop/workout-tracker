@@ -9,6 +9,7 @@ import { useNotif } from "../context/NotificationContext";
 export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
   const { handleNotif } = useNotif();
   const navigate = useNavigate();
+
   // Routine data from route history
   const location = useLocation();
   const routineData = location.state.routine;
@@ -19,7 +20,7 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
 
   const deleteExercise = async (exerciseId) => {
     try {
-      const res = await fetch(`/routine/del-exercise/${routineData._id}`, {
+      const res = await fetch(`/api/routine/del-exercise/${routineData._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,16 +29,16 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
         body: JSON.stringify({ exercise_list_id: exerciseId})
       });
       const data = await res.json();
-      if (data.result === "success") {
-        handleNotif(data.message, true, true);
-        let list = [...exerciseList];
-        let index = list.findIndex(obj => obj._id === exerciseId);
-        if (index > -1) list.splice(index, 1);
-        setExerciseList(list);
-      } else if (data.isLoggedIn === false) {
+      if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
+      } else if (res.status === 200) {
+        handleNotif(data.message, true, true);
+        let list = [...exerciseList];
+        let index = list.findIndex(obj => obj.exercise._id === exerciseId);
+        if (index > -1) list.splice(index, 1);
+        setExerciseList(list);
       } else {
         handleNotif(data.message, false, true);
       }
@@ -72,7 +73,7 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
 
   const updateList = async (newList) => {
     try {
-      const res = await fetch(`/routine/upd-list/${routineData._id}`, {
+      const res = await fetch(`/api/routine/upd-list/${routineData._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,12 +82,12 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
         body: JSON.stringify({ newList: newList})
       });
       const data = await res.json();
-      if (data.result === "success") {
-        return;
-      } else if (data.isLoggedIn === false) {
+      if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
+      } else if (res.status === 200) {
+        return;
       } else {
         handleNotif(data.message, false, true);
       }
@@ -135,7 +136,7 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
                             editMode={editMode}
                             targetMode={targetMode}
                             setExerciseList={setExerciseList}
-                            deleteFunction={() => deleteExercise(exercise._id)}
+                            deleteFunction={() => deleteExercise(exercise.exercise._id)}
                           />
                         );
                       })
@@ -243,7 +244,7 @@ function TargetInputs({ routineId, exercise, setExerciseList}) {
     };
 
     try {
-      const res = await fetch(`/routine/upd-targets/${routineId}`, {
+      const res = await fetch(`/api/routine/upd-targets/${routineId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -252,7 +253,11 @@ function TargetInputs({ routineId, exercise, setExerciseList}) {
         body: JSON.stringify(targets)
       });
       const data = await res.json();
-      if (data.result === "success") {
+      if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
+      } else if (res.status === 200) {
         // If the changes are updated in DB
         // update them in the component
         setExerciseList(prev => ([
@@ -265,10 +270,6 @@ function TargetInputs({ routineId, exercise, setExerciseList}) {
             } else { return item; }
           })
         ]));
-      } else if (data.isLoggedIn === false) {
-        navigate("/");
-        let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
       } else {
         handleNotif(data.message, false, true);
       }

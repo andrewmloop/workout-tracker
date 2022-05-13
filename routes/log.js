@@ -4,7 +4,8 @@ import Log from "../models/Log.js";
 const logRoutes = express.Router();
 
 // CREATE
-logRoutes.route("/add").post( (req, response) => {
+// USED
+logRoutes.route("/add").post( (req, res) => {
   const logObj = {
     date: req.body.date,
     exercise: req.body.exercise,
@@ -18,13 +19,11 @@ logRoutes.route("/add").post( (req, response) => {
   Log.create(logObj, (err, result) => {
     if (err) {
       console.error("Error creating log: ", err);
-      response.json({
-        result: "failure",
+      res.status(500).json({
         message: "Failed to create log",
       }); 
     }
-    response.json({
-      result: "success",
+    res.status(200).json({
       message: "Successfully created log",
       data: result,
     });
@@ -49,18 +48,17 @@ logRoutes.route("/:id").get( (req, response) => {
 });
 
 // Get logs for exercise for most recent date
-logRoutes.route("/exercise/:exercise").get( (req, response) => {
+// USED
+logRoutes.route("/exercise/:exercise").get( (req, res) => {
   Log.find({ exercise: req.params.exercise,
     user: req.user.id }, (err, result) => {
     if (err) {
       console.error("Error fetching logs for that exercise and date: ", err);
-      response.json({
-        result: "failure",
+      res.status(500).json({
         message: "Failed to fetch logs"
       });
     }
-    response.json({
-      result: "success",
+    res.status(200).json({
       message: "Successfully found logs",
       data: result,
     });

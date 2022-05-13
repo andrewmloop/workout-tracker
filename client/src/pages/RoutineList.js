@@ -14,13 +14,12 @@ export default function RoutineList() {
   const [routineList, setRoutineList] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
   const [shouldRerender, setShouldRerender] = useState(false);
  
   const fetchRoutines = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/routine/list", {
+      const res = await fetch("/api/routine/list", {
         headers: {
           "x-access-token": localStorage.getItem("token"),
         }
@@ -30,12 +29,12 @@ export default function RoutineList() {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
-      } else {
-        setRoutineList(data);
+      } 
+      if (res.status === 200) {
+        setRoutineList(data.data);
       }
     } catch (error) {
       console.error("Error fetching routine list: ", error);
-      setError(true);
     } finally {
       setLoading(false);
     }
@@ -44,8 +43,6 @@ export default function RoutineList() {
   useEffect( () => {
     fetchRoutines();
   }, [shouldRerender]);
-
-  if (error) return "Error!";
 
   return (
     <>
@@ -83,20 +80,20 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
 
   const deleteRoutine = async (id) => {
     try {
-      const res = await fetch(`/routine/delete/${id}`, {
+      const res = await fetch(`/api/routine/delete/${id}`, {
         method: "DELETE",
         headers: {
           "x-access-token": localStorage.getItem("token"),
         }
       });
       const data = await res.json();
-      if (data.result === "success") {
-        handleNotif(data.message, true, true);
-        setShouldRerender(prev => !prev);
-      } else if (data.isLoggedIn === false) {
+      if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
+      } else if (res.status === 200) {
+        handleNotif(data.message, true, true);
+        setShouldRerender(prev => !prev);
       } else {
         handleNotif(data.message, false, true);
       }

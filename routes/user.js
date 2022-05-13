@@ -8,15 +8,16 @@ const userRoutes = express.Router();
 
 // READ
 // Get one user
-userRoutes.route("/:id").get( (req, response) => {
+userRoutes.route("/:id").get( (req, res) => {
   User.findById(req.params.id, (err, result) => {
     if (err) throw err;
-    response.json(result);
+    res.json(result);
   });
 });
 
 // UPDATE
-userRoutes.route("/update").post( (req, response) => {
+// USED
+userRoutes.route("/update").post( (req, res) => {
   const newValues = {
     $set: {
       email: req.body.email,
@@ -35,13 +36,11 @@ userRoutes.route("/update").post( (req, response) => {
     (err, result) => {
       if (err) {
         console.error("Error updating user: ", err);
-        return response.json({
-          result: "failure",
+        return res.status(500).json({
           message: "Failed to update user",
         });
       }
-      response.json({
-        result: "success",
+      res.status(200).json({
         message: "Updated user",
         data: result,
       });

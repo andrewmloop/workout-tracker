@@ -12,6 +12,7 @@ import { useNotif } from "../context/NotificationContext";
 export default function Chart() {
   const { handleNotif } = useNotif();
   const navigate = useNavigate();
+
   const location = useLocation();
   const exercise = location.state.exercise;
 
@@ -103,19 +104,18 @@ export default function Chart() {
   const fetchLogs = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`/log/exercise/${exercise._id}`, {
+      const res = await fetch(`/api/log/exercise/${exercise._id}`, {
         headers: { "x-access-token": localStorage.getItem("token") },
       });
-
       const data = await res.json();
-      if (data.result === "success") {
-        setFetchedLogs(data.data);
-        createChartLogs(data.data);
-      }
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
+      }
+      if (res.status === 200) {
+        setFetchedLogs(data.data);
+        createChartLogs(data.data);
       }
     } catch (error) {
       console.log(error);

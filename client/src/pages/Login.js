@@ -24,7 +24,7 @@ export default function Login() {
 
   const checkExpire = async () => {
     try {
-      const response = await fetch("/auth/remember-me", {
+      const response = await fetch("/api/auth/remember-me", {
         headers: {
           "x-access-token": localStorage.getItem("token")
         }
@@ -54,15 +54,16 @@ export default function Login() {
       };
   
       try {
-        const response = await fetch("/auth/login", {
+        const res = await fetch("/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(user)
         });
-        const data = await response.json();
-        if (data.result === "success") {
+        const data = await res.json();
+        console.log(data);
+        if (res.status === 200) {
           localStorage.setItem("token", data.token);
           handleUser(data.data);
           setLoading(true);

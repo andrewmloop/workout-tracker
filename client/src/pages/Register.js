@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useNotif } from "../context/NotificationContext";
 
 export default function Register() {
-  // Redirect user on successful register
   const navigate = useNavigate();
   const { handleNotif } = useNotif();
 
@@ -60,7 +59,7 @@ export default function Register() {
     if (isValidForm) {
   
       try {
-        const response = await fetch("/auth/register", {
+        const res = await fetch("/api/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -69,13 +68,12 @@ export default function Register() {
             first_name: name,
           })
         });
-        const data = await response.json();
-        if (data.result === "success") {
+        const data = await res.json();
+        if (res.status === 200) {
           setSuccessMessage(true);
           handleNotif(data.message, true, true);
           navigate("/login");
-        } 
-        if (data.result === "failure") {
+        } else {
           setFailureMessage(true);
           handleNotif(data.message, false, true);
           setRegError(data.message);

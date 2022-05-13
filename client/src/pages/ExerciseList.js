@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+
 import Banner from "../components/Banner";
 import Loading from "../components/Loading";
 
@@ -12,7 +13,6 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
 
   const [fetchList, setFetchList] = useState([]);
   const [searchList, setSearchList] = useState([]);
-  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // Get muscle group to fetch from state passed by React
@@ -25,33 +25,36 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
   // store a copy in searchList which will be modified with the search function
   const fetchExercises = async route => {
     try {
-      const response = await fetch(`/exercise/list${route}`, {
+      setLoading(true);
+      const res = await fetch(`/api/exercise/list${route}`, {
         headers: {
           "x-access-token": localStorage.getItem("token")
         }
       });
-      const data = await response.json();
-      if (data.result === "success") {
-        setFetchList(data.data);
-        setSearchList(data.data);
-        return true;
-      } else if (data.isLoggedIn === false) {
+      const data = await res.json();
+      if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
+      } else if (res.status === 200) {
+        setFetchList(data.data);
+        setSearchList(data.data);
+        return true;
       } else {
         return false;
       }
     } catch (error) {
       console.error("Error fetching exercise list: ", error);
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
   const addRoutineExercises = async exercisesToAdd => {
     if (exercisesToAdd.length > 0) {
       try {
-        const response = await fetch(`/routine/upd-routine/${activeRoutine}`, {
+        const res = await fetch(`/api/routine/upd-routine/${activeRoutine}`, {
           method: "POST",
           headers: {
             "x-access-token": localStorage.getItem("token"),
@@ -59,8 +62,8 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
           },
           body: JSON.stringify({ newExercises: exercisesToAdd })
         });
-        const data = await response.json();
-        if (data.result === "success") {
+        const data = await res.json();
+        if (res.status === 200) {
           handleNotif(data.message, true, true);
         } else {
           handleNotif(data.message, false, true);
@@ -81,13 +84,9 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
     }
   };
 
-  useEffect( async () => {
-    setLoading(true);
-    const isSuccess = await fetchExercises(muscleGroup);
-    isSuccess ? setLoading(false) : setError(true);
+  useEffect( () => {
+    fetchExercises(muscleGroup);
   }, []);
-
-  if (error) return "Error!";
   
   return (
     <>

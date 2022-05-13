@@ -20,7 +20,7 @@ import { NotifProvider } from "./context/NotificationContext";
 import { TimerContextProvider } from "./context/TimerContext";
 
 export default function App() {
-  // Add mode that allows the user to add exercises to a routine
+  // addMode allows the user to add exercises to a routine
   // This is passed to the <ExerciseGroup /> and <ExerciseList /> components.
   // If in addMode, a button will allow users to add any exercise to the current
   // set activeRoutine
@@ -39,7 +39,9 @@ export default function App() {
           </Route>
           <Route element={<WithNav />}>
             <Route path="/exercise">
-              <Route index path="/exercise" element={<ExerciseGroup addMode={addMode} />} />
+              <Route index path="/exercise" element={
+                <ExerciseGroup addMode={addMode} />} 
+              />
               <Route path="list" element={
                 <ExerciseList 
                   addMode={addMode} 

@@ -32,11 +32,11 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Set up routing
-app.use("/exercise", verifyJWT, routes.exerciseRoutes);
-app.use("/log", verifyJWT, routes.logRoutes);
-app.use("/routine", verifyJWT, routes.routineRoutes);
-app.use("/user", verifyJWT, routes.userRoutes);
-app.use("/auth", routes.authRoutes);
+app.use("/api/exercise", verifyJWT, routes.exerciseRoutes);
+app.use("/api/log", verifyJWT, routes.logRoutes);
+app.use("/api/routine", verifyJWT, routes.routineRoutes);
+app.use("/api/user", verifyJWT, routes.userRoutes);
+app.use("/api/auth", routes.authRoutes);
 
 // Listening
 app.listen(port, () => {
@@ -51,7 +51,7 @@ function verifyJWT(req, res, next) {
 
   if (token) {
     jwt.verify(token, jwtSecret, (err, decoded) => {
-      if (err) return res.json({
+      if (err) return res.status(401).json({
         result: "failure",
         message: "Failed to authenticate",
         isLoggedIn: false,
@@ -62,7 +62,7 @@ function verifyJWT(req, res, next) {
       next();
     });
   } else {
-    res.json({
+    res.status(401).json({
       result: "failure",
       message: "Incorrect token given", 
       isLoggedIn: false 

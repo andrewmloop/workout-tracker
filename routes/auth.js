@@ -9,7 +9,7 @@ const authRoutes = express.Router();
 const jwtSecret = process.env.JWT_SECRET;
 
 // Register
-authRoutes.route("/register").post( async (req, response) => {
+authRoutes.route("/register").post( async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   const firstName = req.body.first_name;
@@ -17,8 +17,7 @@ authRoutes.route("/register").post( async (req, response) => {
   const takenEmail = await User.findOne({ email: email });
 
   if (takenEmail) {
-    response.json({ 
-      result: "failure",
+    res.status(400).json({
       message: "Email already in use.",
     });
   } else {
@@ -32,13 +31,11 @@ authRoutes.route("/register").post( async (req, response) => {
   
     User.create(newUser, (userErr, result) => {
       if (userErr) {
-        response.json({
-          result: "failure",
+        res.status(500).json({
           message: "Failed to create new user"
         });
       } else {
-        response.json({ 
-          result: "success",
+        res.status(200).json({ 
           message: "New user created",
           data: result,
         });
@@ -48,15 +45,14 @@ authRoutes.route("/register").post( async (req, response) => {
 });
 
 // Login
-authRoutes.route("/login").post( async (req, response) => {
+authRoutes.route("/login").post( async (req, res) => {
   const user = req.body;
 
   try {
     const foundUser = await User.findOne({ email: user.email });
 
     if (!foundUser) {
-      return response.json({ 
-        result: "failure",
+      return res.status(401).json({
         message: "Invalid email or password",
       });
     }
@@ -76,13 +72,11 @@ authRoutes.route("/login").post( async (req, response) => {
           (jwtError, token) => {
             if (jwtError) {
               console.error("Error signing web token: ", jwtError);
-              return response.json({ 
-                result: "failure",
+              return res.status(500).json({ 
                 message: "Error signing token" 
               });
             }
-            return response.json({
-              result: "success",
+            return res.status(200).json({
               token: `Bearer ${token}`,
               data: {
                 email: foundUser.email,
@@ -94,8 +88,7 @@ authRoutes.route("/login").post( async (req, response) => {
           }
         );
       } else {
-        return response.json({
-          result: "failure",
+        return res.status(401).json({
           message: "Invalid email or password",
         });
       }
@@ -111,20 +104,17 @@ authRoutes.route("/remember-me").get( (req, res) => {
 
   if (token) {
     jwt.verify(token, jwtSecret, err => {
-      if (err) return res.json({
-        result: "failure",
+      if (err) return res.status(401).json({
         message: "Failed to authenticate",
         isLoggedIn: false,
       });
-      res.json({
-        result: "success",
+      res.status(200).json({
         message: "User authenticated",
         isLoggedIn: true
       });
     });
   } else {
-    res.json({
-      result: "failure",
+    res.status(401).json({
       message: "Incorrect token given", 
       isLoggedIn: false 
     });

@@ -9,12 +9,11 @@ import { useNotif } from "../context/NotificationContext";
 export default function Settings() {
   const { userStore, handleUser } = useUser();
   const { handleNotif } = useNotif();
-
   const navigate = useNavigate();
 
   const [isLeftHand, setIsLeftHand] = useState(userStore.left_hand);
   const [isMetric, setIsMetric] = useState(userStore.use_metric);
-  const isMounted = useRef(false);
+  const firstRender = useRef(true);
 
   const handleChange = async () => {
     const newData = {
@@ -23,7 +22,7 @@ export default function Settings() {
     };
 
     try {
-      const response = await fetch("/user/update", {
+      const res = await fetch("/api/user/update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,14 +30,14 @@ export default function Settings() {
         },
         body: JSON.stringify(newData)
       });
-      const data = await response.json();
-      if (data.result === "success") {
-        handleNotif(data.message, true, true);
-        handleUser(data.data);
-      } else if (data.isLoggedIn === false) {
+      const data = await res.json();
+      if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
+      } else if (res.status === 200) {
+        handleNotif(data.message, true, true);
+        handleUser(data.data);
       } else {
         handleNotif(data.message, false, true);
       }
@@ -50,10 +49,10 @@ export default function Settings() {
   };
 
   useEffect(() => {
-    if (isMounted.current) {
-      handleChange();
+    if (firstRender.current) {
+      firstRender.current = false;
     } else {
-      isMounted.current = true;
+      handleChange();
     }
   }, [isLeftHand, isMetric]);
 

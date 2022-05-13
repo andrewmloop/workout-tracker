@@ -70,7 +70,7 @@ export default function Log() {
     };
 
     try {
-      const res = await fetch("/log/add", {
+      const res = await fetch("/api/log/add", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -79,14 +79,14 @@ export default function Log() {
         body: JSON.stringify(newLog),
       });
       const data = await res.json();
-      if (data.result === "success") {
-        setLogHistory([data.data, ...logHistory]);
-        handleNotif(data.message, true, true);
-        setRefetch(prev => !prev);
-      } else if (data.isLoggedIn === false) {
+      if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
+      } else if (res.status === 200) {
+        setLogHistory([data.data, ...logHistory]);
+        handleNotif(data.message, true, true);
+        setRefetch(prev => !prev);
       } else {
         handleNotif(data.message, false, true);
       }
@@ -98,21 +98,20 @@ export default function Log() {
   };
 
   const fetchLogs = async () => {
-    setLoading(true);
-
     try {
-      const res = await fetch(`/log/exercise/${exerciseObj.exercise._id}`, {
+      setLoading(true);
+      const res = await fetch(`/api/log/exercise/${exerciseObj.exercise._id}`, {
         headers: { "x-access-token": localStorage.getItem("token") },
       });
       const data = await res.json();
-      if (data.result === "success") {
-        setLogHistory(data.data);
-        populateDates(data.data);
-      }
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
+      }
+      if (res.status === 200) {
+        setLogHistory(data.data);
+        populateDates(data.data);
       }
     } catch (error) {
       console.error("Error fetching log history: ", error);

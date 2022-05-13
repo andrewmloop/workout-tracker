@@ -4,7 +4,8 @@ import Routine from "../models/Routine.js";
 const routineRoutes = express.Router();
 
 // CREATE
-routineRoutes.route("/add").post( (req, response) => {
+// USED
+routineRoutes.route("/add").post( (req, res) => {
   const routeObj = {
     exercise_list: [],
     user: req.user.id,
@@ -14,13 +15,11 @@ routineRoutes.route("/add").post( (req, response) => {
   Routine.create(routeObj, (err, result) => {
     if (err) {
       console.error("Failed to create routine: ", err);
-      response.json({
-        result: "failure",
+      res.status(500).json({
         message: "Failed to create routine",
       });
     } else {
-      response.json({
-        result: "success",
+      res.status(200).json({
         message: "Successfully created routine",
         data: result,
       });
@@ -30,43 +29,54 @@ routineRoutes.route("/add").post( (req, response) => {
 
 // READ
 // Get all routines for a user
-routineRoutes.route("/list").get( (req, response) => {
+// USED
+routineRoutes.route("/list").get( (req, res) => {
   Routine.find({ user: req.user.id }, (err, result) => {
-    if (err) throw err;
-    response.json(result);
+    if (err) {
+      console.error("Failed to fetch routines: ", err);
+      res.status(500).json({
+        message: "Failed to reorder routine",
+      });
+    } else {
+      res.status(200).json({
+        message: "Successfully added exercises",
+        data: result,
+      });
+    }
   }).sort({ name: 1 }).collation({ locale: "en", caseLevel: true}).populate("exercise_list.exercise");
 });
 
 // Get one routine
-routineRoutes.route("/:id").get( (req, response) => {
-  Routine.findById(req.params.id, (err, result) => {
-    if (err) throw err;
-    response.json(result);
-  });
-});
+// routineRoutes.route("/:id").get( (req, response) => {
+//   Routine.findById(req.params.id, (err, result) => {
+//     if (err) throw err;
+//     response.json(result);
+//   });
+// });
 
 // UPDATE
 // Update name, user for routine
-routineRoutes.route("/update/:id").post( (req, response) => {
-  const newValues = {
-    $set: {
-      user: req.body.user,
-      name: req.body.name,
-    }
-  };
+// routineRoutes.route("/update/:id").post( (req, response) => {
+//   const newValues = {
+//     $set: {
+//       user: req.body.user,
+//       name: req.body.name,
+//     }
+//   };
 
-  Routine.findByIdAndUpdate(
-    req.params.id, 
-    newValues, 
-    { returnOriginal: false },
-    (err, result) => {
-      if (err) throw err;
-      response.json(result);
-    });
-});
+//   Routine.findByIdAndUpdate(
+//     req.params.id, 
+//     newValues, 
+//     { returnOriginal: false },
+//     (err, result) => {
+//       if (err) throw err;
+//       response.json(result);
+//     });
+// });
 
 // Update exercise_list order
-routineRoutes.route("/upd-list/:id").post( (req, response) => {
+// Used
+routineRoutes.route("/upd-list/:id").post( (req, res) => {
   Routine.findByIdAndUpdate(
     req.params.id,
     {
@@ -76,14 +86,12 @@ routineRoutes.route("/upd-list/:id").post( (req, response) => {
     (err, result) => {
       if (err) {
         console.error("Failed to reorder routine: ", err);
-        response.json({
-          result: "failure",
+        res.status(500).json({
           message: "Failed to reorder routine",
         });
       } else {
-        response.json({
-          result: "success",
-          message: "Successfully add exercises",
+        res.status(200).json({
+          message: "Successfully added exercises",
           data: result,
         });
       }
@@ -92,32 +100,33 @@ routineRoutes.route("/upd-list/:id").post( (req, response) => {
 });
 
 // Add exercise to list
-routineRoutes.route("/add-exercise/:id").post( (req, response) => {
-  Routine.findOneAndUpdate(
-    { _id: req.params.id },
-    {
-      $push: {
-        exercise_list: {
-          exercise: req.body.exercise,
-          target_sets: req.body.target_sets,
-          target_reps: req.body.target_reps,
-        }
-      }
-    },
-    { returnOriginal: false },
-    (err, result) => {
-      if (err) throw err;
-      response.json(result);
-    });
-});
+// routineRoutes.route("/add-exercise/:id").post( (req, response) => {
+//   Routine.findOneAndUpdate(
+//     { _id: req.params.id },
+//     {
+//       $push: {
+//         exercise_list: {
+//           exercise: req.body.exercise,
+//         }
+//       }
+//     },
+//     { returnOriginal: false },
+//     (err, result) => {
+//       if (err) throw err;
+//       response.json(result);
+//     });
+// });
 
 // Delete exercise from list
-routineRoutes.route("/del-exercise/:id").post( (req, response) => {
+// USED
+routineRoutes.route("/del-exercise/:id").post( (req, res) => {
   Routine.findByIdAndUpdate(
     req.params.id, 
     {
       $pull: {
-        exercise_list: req.body.exercise_list_id
+        exercise_list: {
+          exercise: req.body.exercise_list_id
+        }
       }
     },
     { 
@@ -128,13 +137,11 @@ routineRoutes.route("/del-exercise/:id").post( (req, response) => {
     (err, result) => {
       if (err) {
         console.error("Failed to delete exercise: ", err);
-        response.json({
-          result: "failure",
+        res.status(500).json({
           message: "Failed to delete exercise",
         });
       } else {
-        response.json({
-          result: "success",
+        res.status(200).json({
           message: "Successfully deleted exercise",
           data: result,
         });
@@ -143,7 +150,8 @@ routineRoutes.route("/del-exercise/:id").post( (req, response) => {
 });
 
 // Update exercise in list
-routineRoutes.route("/upd-routine/:id").post( (req, response) => {
+// USED
+routineRoutes.route("/upd-routine/:id").post( (req, res) => {
   const newExercises = req.body.newExercises.map( id => {
     return { exercise: id };
   });
@@ -161,14 +169,12 @@ routineRoutes.route("/upd-routine/:id").post( (req, response) => {
     (err, result) => {
       if (err) {
         console.error("Failed to add exercises: ", err);
-        response.json({
-          result: "failure",
+        res.status(500).json({
           message: "Failed to add exercises",
         });
       } else {
-        response.json({
-          result: "success",
-          message: "Successfully add exercises",
+        res.status(200).json({
+          message: "Successfully added exercises",
           data: result,
         });
       }
@@ -177,7 +183,8 @@ routineRoutes.route("/upd-routine/:id").post( (req, response) => {
 });
 
 // Update routine exercise target sets and reps
-routineRoutes.route("/upd-targets/:id").post( (req, response) => {
+// USED
+routineRoutes.route("/upd-targets/:id").post( (req, res) => {
   Routine.findOneAndUpdate(
     { 
       _id: req.params.id, 
@@ -199,13 +206,11 @@ routineRoutes.route("/upd-targets/:id").post( (req, response) => {
     (err, result) => {
       if (err) {
         console.error("Failed to set targets: ", err);
-        response.json({
-          result: "failure",
+        res.status(500).json({
           message: "Failed to set targets",
         });
       } else {
-        response.json({
-          result: "success",
+        res.status(200).json({
           message: "Successfully set targets",
           data: result,
         });
@@ -215,17 +220,16 @@ routineRoutes.route("/upd-targets/:id").post( (req, response) => {
 });
 
 // DELETE
-routineRoutes.route("/delete/:id").delete( (req, response) => {
+// USED
+routineRoutes.route("/delete/:id").delete( (req, res) => {
   Routine.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) {
       console.error("Failed to delete routine: ", err);
-      response.json({
-        result: "failure",
+      res.status(500).json({
         message: "Failed to delete routine",
       });
     } else {
-      response.json({
-        result: "success",
+      res.status(200).json({
         message: "Successfully deleted routine",
         data: result,
       });

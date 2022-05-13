@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import Banner from "../components/Banner";
 
 import { useNotif } from "../context/NotificationContext";
 
 export default function AddRoutine() {
   const { handleNotif } = useNotif();
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
-
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ export default function AddRoutine() {
       };
 
       try {
-        const response = await fetch("/routine/add", {
+        const res = await fetch("/api/routine/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -30,15 +30,15 @@ export default function AddRoutine() {
           },
           body: JSON.stringify(routine),
         });
-        const data = await response.json();
-        if (data.result === "success") {
-          handleNotif(data.message, true, true);
-          navigate("/routine");
-        }
+        const data = await res.json();
         if (data.isLoggedIn === false) {
           navigate("/");
           let loginText = "Your session has expired";
           handleNotif(loginText, true, true);
+        }
+        if (res.status === 200) {
+          handleNotif(data.message, true, true);
+          navigate("/routine");
         }
       } catch (error) {
         console.error("Error creating routine: ", error);
