@@ -106,7 +106,7 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
       {
         loading
           ? <Loading text="Moving the weights around..." />
-          : <div className="p-8 h-full">
+          : <div className="p-6 h-full">
             <SearchField setSearchList={setSearchList} fetchList={fetchList} />
             <ul className="flex flex-col justify-start mb-20">
               {

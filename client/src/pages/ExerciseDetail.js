@@ -19,7 +19,7 @@ export default function ExerciseDetail() {
         addFunction={() => navigate("/chart", {state: {exercise: data}})}
         addText="Chart"
       />
-      <div className="p-8 text-center text-white">
+      <div className="p-6 text-center text-white">
         <h1 className="text-xl font-bold mb-2 first-letter:uppercase">{data.name}</h1>
         <div className="flex justify-center">
           <p className="first-letter:uppercase">{data.level}&nbsp;|</p>

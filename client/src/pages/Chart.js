@@ -181,7 +181,7 @@ export default function Chart() {
         loading
           ? <Loading text="Looking through your gains..." />
           : <div className="h-[90vh] p-6">
-            <div className="h-[50vh] mb-6">
+            <div className="h-[40vh] mb-6">
               <Line 
                 data={chartData}
                 options={chartOptions}

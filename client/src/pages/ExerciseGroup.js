@@ -9,7 +9,7 @@ export default function ExerciseGroup({ addMode }) {
       <Banner
         bannerText={addMode ? "Add Exercises" : "Muscle Group"}
       />
-      <div className="h-full p-8">
+      <div className="h-full p-6">
         <ul className="flex flex-col justify-start">
           <GroupItem text="All Exercises" group="/all" />
           <GroupItem text="Abdominals" group="/abs" />

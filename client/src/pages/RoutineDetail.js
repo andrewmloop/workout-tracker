@@ -110,7 +110,7 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
         }}
         addText={editMode ? "Done" : "Edit"}
       />
-      <div className="p-8 text-center text-white">
+      <div className="p-6 text-center text-white">
         <RoutineButtons
           addFunction={() => addExercise()}
           targetMode={targetMode}
@@ -222,7 +222,7 @@ function RoutineButtons({addFunction, targetMode, targetFunction}) {
   const targetText = targetMode ? "Done" : "Targets";
 
   return (
-    <div className="flex justify-between items-center gap-4 mb-6">
+    <div className="flex justify-between items-center gap-4 mb-2">
       <button onClick={targetFunction} className="w-full btn">{targetText}</button>
       <button onClick={addFunction}  className="w-full btn-confirm">Add</button>
     </div>
