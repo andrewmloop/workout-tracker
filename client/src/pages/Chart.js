@@ -19,20 +19,42 @@ export default function Chart() {
   const [loading, setLoading] = useState(false);
   const [fetchedLogs, setFetchedLogs] = useState([]);
   const [chartLogs, setChartLogs] = useState([]);
+  const [chartDates, setChartDates] = useState([]);
   const [showWeight, setShowWeight] = useState(true);
+  const [showMax, setShowMax] = useState(false);
+  const [refetch, setRefetch] = useState(false);
 
   const createChartLogs = list => {
+    // const logs = [...list];
+    // let newData = logs.slice(0).map( exercise => {
+    //   let date = new Date(exercise.date);
+    //   let formattedDate = date.toString().slice(4, 10);
+    //   if (showWeight) {
+    //     return {x: formattedDate, y: exercise.weight};
+    //   } else if (showMax) {
+    //     return {x: formattedDate, y: exercise.maxRep};
+    //   } else {
+    //     return {x: formattedDate, y: (exercise.weight * exercise.reps)};
+    //   }
+    // });
+    // setChartLogs(newData);
     const logs = [...list];
-    let newData = logs.slice(0).reverse().map( exercise => {
-      let date = new Date(exercise.date);
-      let formattedDate = date.toString().slice(4, 10);
+    let newLogs = logs.slice(0).map( exercise => {
       if (showWeight) {
-        return {x: formattedDate, y: exercise.weight};
+        return exercise.weight;
+      } else if (showMax) {
+        return exercise.maxRep;
       } else {
-        return {x: formattedDate, y: exercise.maxRep};
+        return exercise.weight * exercise.reps;
       }
     });
-    setChartLogs(newData);
+    let newDates = logs.slice(0).map( exercise => {
+      let date = new Date(exercise.date);
+      let formattedDate = date.toString().slice(4, 10);
+      return formattedDate;
+    });
+    setChartLogs(newLogs);
+    setChartDates(newDates);
   };
 
   const chartOptions = {
@@ -58,8 +80,9 @@ export default function Chart() {
             family: "'-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
             weight: "bold"
           },
-          padding: 6
-        }
+          padding: 6,
+          source: "auto"
+        },
       },
       y: {
         grid: {
@@ -74,10 +97,7 @@ export default function Chart() {
             family: "'-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'",
             weight: "bold"
           },
-          padding: 6,
-          generateTickLabels( ticks ) {
-            ticks[ticks.length - 1] = null;
-          }
+          padding: 6
         },
         grace: "10%",
         skip: 5,
@@ -89,6 +109,7 @@ export default function Chart() {
   };
 
   const chartData = {
+    labels: chartDates,
     datasets: [
       {
         data: chartLogs,
@@ -118,7 +139,7 @@ export default function Chart() {
         createChartLogs(data.data);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -126,10 +147,20 @@ export default function Chart() {
 
   const handleWeightClick = ()  => {
     setShowWeight(true);
+    setShowMax(false);
+    setRefetch(prev => !prev);
   };
 
   const handle1RMClick = ()  => {
     setShowWeight(false);
+    setShowMax(true);
+    setRefetch(prev => !prev);
+  };
+
+  const handleWorkloadClick = () => {
+    setShowWeight(false);
+    setShowMax(false);
+    setRefetch(prev => !prev);
   };
 
   useEffect(() => {
@@ -138,7 +169,7 @@ export default function Chart() {
 
   useEffect(() => {
     createChartLogs(fetchedLogs);
-  }, [showWeight]);
+  }, [refetch]);
 
   return (
     <>
@@ -159,12 +190,16 @@ export default function Chart() {
             <div className="flex flex-col justify-start items-center w-full">
               <button 
                 onClick={() => handleWeightClick()} 
-                className={`w-full btn-lg mb-4 ${showWeight ? "btn-lg" : "btn-inactive-lg"}`}
+                className={`w-full btn-lg mb-4 ${showWeight ? "btn-lg" : "btn-inverted-lg"}`}
               >Weight</button>
               <button  
                 onClick={() => handle1RMClick()}
-                className={`w-full btn-lg mb-4 ${!showWeight ? "btn-lg" : "btn-inverted-lg"}`}
+                className={`w-full btn-lg mb-4 ${showMax ? "btn-lg" : "btn-inverted-lg"}`}
               >1 Rep Max</button>
+              <button  
+                onClick={() => handleWorkloadClick()}
+                className={`w-full btn-lg mb-4 ${(!showWeight && !showMax) ? "btn-lg" : "btn-inverted-lg"}`}
+              >Workload</button>
             </div>
           </div>
       }

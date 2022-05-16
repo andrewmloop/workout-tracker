@@ -62,7 +62,7 @@ logRoutes.route("/exercise/:exercise").get( (req, res) => {
       message: "Successfully found logs",
       data: result,
     });
-  }).sort({ date: -1 });
+  });
 });
 
 // UPDATE
