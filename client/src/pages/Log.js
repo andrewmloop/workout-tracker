@@ -140,7 +140,7 @@ export default function Log() {
     for (let obj of arrOfObjs) {
       let date = new Date(obj.date).toDateString();
       if (dates.includes(date)) continue;
-      dates.push(date);
+      dates.unshift(date);
     }
     setDisplayDates(dates);
   };

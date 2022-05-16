@@ -62,7 +62,6 @@ export default function Login() {
           body: JSON.stringify(user)
         });
         const data = await res.json();
-        console.log(data);
         if (res.status === 200) {
           localStorage.setItem("token", data.token);
           handleUser(data.data);
