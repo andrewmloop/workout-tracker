@@ -11,9 +11,6 @@ export default function Notification() {
 
   const color = type ? "bg-green-400" : "bg-red-400";
 
-  // const notifText = props.notifText || "Notification";
-  // const color = props.notifType ? "bg-green-400" : "bg-red-400";
-
   useEffect(() => {
     if (notifStore.show) {
       setTimeout(() => {
@@ -24,7 +21,7 @@ export default function Notification() {
 
   return (
     <>
-      <div className={`fixed bottom-[5.5rem] left-[50%] translate-x-[-50%] text-center w-[85%] p-4 rounded-lg ${show ? "opacity-1" : "opacity-0 pointer-events-none"} ${color}`}>
+      <div className={`fixed bottom-[5.5rem] left-[50%] translate-x-[-50%] text-center w-[85%] p-4 rounded-lg ${show ? "bottom-[5.5rem]" : "bottom-[-110vh] pointer-events-none"} ${color} transition-all duration-300`}>
         <p>{text}</p>
       </div>
     </>
