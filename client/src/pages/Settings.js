@@ -62,7 +62,7 @@ export default function Settings() {
         bannerText={"Settings"}
         showBack={true}
       />
-      <div className="p-8 text-white">
+      <div className="p-6 text-white">
         <div className="flex flex-col mb-4">
           <div className="flex justify-between items-center mb-2">
             <h5 className="text-lg font-bold">Left Handed</h5>

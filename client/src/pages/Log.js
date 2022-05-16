@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Banner from "../components/Banner";
 import Loading from "../components/Loading";
 import Timer from "../components/Timer";
+import EditLogModal from "../components/EditLogModal";
 
 import { useUser } from "../context/UserContext";
 import { useNotif } from "../context/NotificationContext";
@@ -27,6 +28,11 @@ export default function Log() {
   const [form, setForm] = useState(0);
   const [logDate] = useState(Date.now());
   const [loading, setLoading] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [logToEdit, setLogToEdit] = useState({
+    weight: 0, reps: 0, form: "good"
+  });
 
   // State to hold exercise log history
   const [logHistory, setLogHistory] = useState([]);
@@ -154,13 +160,15 @@ export default function Log() {
       <Banner
         bannerText={exerciseObj.exercise.name}
         showBack={true}
-        showAdd={true}
         targSets={exerciseObj.targSets}
         targReps={exerciseObj.targReps}
-        addText="Chart"
-        addFunction={() => navigate("/chart", {state: {exercise: exerciseObj.exercise}})}
       />
-      <div className={`grid ${userStore.left_hand ? "grid-cols-[35%_65%]" : "grid-cols-[65%_35%]"} h-full justify-between gap-1 p-4`}>
+      <DualButtons 
+        exerciseObj={exerciseObj}
+        editMode={editMode}
+        setEditMode={setEditMode}
+      />
+      <div className={`grid ${userStore.left_hand ? "grid-cols-[35%_65%]" : "grid-cols-[65%_35%]"} h-full justify-between gap-1 p-6 pt-0`}>
         {/* Log Column */}
         {
           loading
@@ -179,17 +187,15 @@ export default function Log() {
                             logHistory.map( log => {
                               if (new Date(log.date).toDateString() === date) {
                                 return (
-                                  <li
-                                    key={log._id}
-                                    className="mb-2 px-2 py-1 mr-3 bg-slate-800 rounded-md"
-                                    onClick={() => setInputs(log.weight, log.reps)}
-                                  >
-                                    <p className="text-lg">{log.weight} {units} x {log.reps} reps.</p>
-                                    <div className="w-full flex justify-between items-center text-sm">
-                                      <p>1RM: {log.maxRep} {units}</p>
-                                      <p className="first-letter:uppercase">{log.form} form</p>
-                                    </div>
-                                  </li>
+                                  <LogItem 
+                                    key={log._id} 
+                                    log={log} 
+                                    units={units} 
+                                    setInputs={setInputs} 
+                                    editMode={editMode}
+                                    setShowModal={setShowModal}
+                                    setLogToEdit={setLogToEdit}
+                                  />
                                 );
                               }
                             })
@@ -203,7 +209,7 @@ export default function Log() {
               : <p className="flex justify-center items-center h-[75vh] text-white">No logs yet</p>
         }
         {/* Form Column */}
-        <div className="flex flex-col justify-center bg-slate-900">
+        <div className="flex flex-col justify-start bg-slate-900">
           <form onSubmit={ (e) => handleSubmit(e) }
             className="flex flex-col justify-center"
           >
@@ -248,6 +254,54 @@ export default function Log() {
           <Timer />
         </div>
       </div>
+      <EditLogModal 
+        show={showModal}
+        log={logToEdit}
+        setShow={setShowModal}
+        setRefetch={setRefetch}
+      />
     </>
+  );
+}
+
+function DualButtons({exerciseObj, editMode, setEditMode}) {
+  const navigate = useNavigate();
+  
+  return (
+    <div className="flex justify-between items-center gap-4 p-6">
+      <button className="w-full btn"
+        onClick={() => setEditMode(prev => !prev)}
+      >{editMode ? "Done" : "Edit"}</button>
+      <button className="w-full btn"
+        onClick={() => navigate("/chart", {state: {exercise: exerciseObj.exercise}})}
+      >Chart</button>
+    </div>
+  );
+}
+
+function LogItem({log, units, setInputs, editMode, setShowModal, setLogToEdit}) {
+  const handleEditClick = () => {
+    setShowModal(prev => !prev);
+    setLogToEdit(log);
+  };
+
+  return (
+    <li
+      className="mb-2 px-2 py-1 mr-3 bg-slate-800 rounded-md"
+      onClick={() => setInputs(log.weight, log.reps)}
+    >
+      <div className="flex justify-between">
+        <p className="text-lg">{log.weight} {units} x {log.reps} reps.</p>
+        { editMode && 
+          <button className="text-sm text-amber-400"
+            onClick={() => handleEditClick()}>Edit</button>
+        }
+      </div>
+      
+      <div className="w-full flex justify-between items-center text-sm">
+        <p>1RM: {log.maxRep} {units}</p>
+        <p className="first-letter:uppercase">{log.form} form</p>
+      </div>
+    </li>
   );
 }

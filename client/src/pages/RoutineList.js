@@ -50,7 +50,7 @@ export default function RoutineList() {
       {
         loading
           ? <Loading text="Turning the lights on..." />
-          : <div className="p-8">
+          : <div className="p-6">
             <EditButtons 
               editFunction={() => setEditMode(prev => !prev)} 
               editMode={editMode}

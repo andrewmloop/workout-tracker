@@ -66,15 +66,13 @@ logRoutes.route("/exercise/:exercise").get( (req, res) => {
 });
 
 // UPDATE
-logRoutes.route("/update/:id").post( (req, response) => {
+// USED
+logRoutes.route("/update/:id").post( (req, res) => {
   const newValues = {
     $set: {
-      date: req.body.date,
-      exercise: req.body.exercise,
       weight: req.body.weight,
       reps: req.body.reps,
       form: req.body.form,
-      user: req.body.user,
     }
   };
 
@@ -83,8 +81,16 @@ logRoutes.route("/update/:id").post( (req, response) => {
     newValues,
     { returnOriginal: false },
     (err, result) => {
-      if (err) throw err;
-      response.json(result);
+      if (err) {
+        console.error("Error updating log: ", err);
+        res.status(500).json({
+          message: "Failed to update log"
+        });
+      }
+      res.status(200).json({
+        message: "Successfully updated log",
+        data: result,
+      });
     });
 });
 
