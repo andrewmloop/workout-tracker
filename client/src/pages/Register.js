@@ -107,6 +107,7 @@ export default function Register() {
         <input 
           type="email" 
           name="email"
+          autoComplete="username"
           onChange={ (e) => setEmail(e.target.value) }
           className="mb-2 text-input"
         />
@@ -118,6 +119,7 @@ export default function Register() {
         <input 
           type="password" 
           name="password"
+          autoComplete="new-password"
           onChange={ (e) => setPassword(e.target.value) }
           className="mb-2 text-input"
         />
@@ -129,6 +131,7 @@ export default function Register() {
         <input 
           type="password" 
           name="password_match"
+          autoComplete="new-password"
           onChange={ (e) => setPasswordMatch(e.target.value) }
           className="mb-3 text-input"
         />

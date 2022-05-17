@@ -103,12 +103,12 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
           showBack={true}
         />
       }
-      {
-        loading
-          ? <Loading text="Moving the weights around..." />
-          : <div className="p-6 h-full">
-            <SearchField setSearchList={setSearchList} fetchList={fetchList} />
-            <ul className="flex flex-col justify-start mb-20">
+      <div className="p-6 h-full">
+        <SearchField setSearchList={setSearchList} fetchList={fetchList} />
+        {
+          loading
+            ? <Loading text="Moving the weights around..." />
+            : <ul className="flex flex-col justify-start mb-20">
               {
                 searchList.map( exercise => {
                   return (
@@ -123,8 +123,8 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
                 })
               }
             </ul>
-          </div>
-      }
+        }
+      </div>
     </>
   );
 }

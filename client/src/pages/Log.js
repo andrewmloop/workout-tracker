@@ -206,7 +206,7 @@ export default function Log() {
                   }
                 </ul>
               </div>
-              : <p className="flex justify-center items-center h-[75vh] text-white">No logs yet</p>
+              : <p className={`flex justify-center items-center h-[75vh] text-white ${userStore.left_hand ? "order-2 ml-2" : ""}`}>No logs yet</p>
         }
         {/* Form Column */}
         <div className="flex flex-col justify-start bg-slate-900">

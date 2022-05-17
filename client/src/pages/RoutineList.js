@@ -47,16 +47,16 @@ export default function RoutineList() {
   return (
     <>
       <Banner bannerText="Routines" />
-      {
-        loading
-          ? <Loading text="Turning the lights on..." />
-          : <div className="p-6">
-            <EditButtons 
-              editFunction={() => setEditMode(prev => !prev)} 
-              editMode={editMode}
-              addFunction={() => navigate("add")}
-            /> 
-            <ul className="flex flex-col justify-start">
+      <div className="p-6">
+        <EditButtons 
+          editFunction={() => setEditMode(prev => !prev)} 
+          editMode={editMode}
+          addFunction={() => navigate("add")}
+        /> 
+        {
+          loading
+            ? <Loading text="Turning the lights on..." />
+            : <ul className="flex flex-col justify-start">
               { 
                 routineList.map( routine => {
                   return <RoutineItem 
@@ -68,8 +68,8 @@ export default function RoutineList() {
                 })
               }
             </ul>
-          </div>
-      }
+        }
+      </div>
     </>
   );
 }
