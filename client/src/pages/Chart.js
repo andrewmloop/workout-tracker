@@ -45,7 +45,7 @@ export default function Chart() {
       } else if (showMax) {
         return exercise.maxRep;
       } else {
-        return exercise.weight * exercise.reps;
+        return exercise.reps;
       }
     });
     let newDates = logs.slice(0).map( exercise => {
@@ -157,7 +157,7 @@ export default function Chart() {
     setRefetch(prev => !prev);
   };
 
-  const handleWorkloadClick = () => {
+  const handleRepsClick = () => {
     setShowWeight(false);
     setShowMax(false);
     setRefetch(prev => !prev);
@@ -193,13 +193,13 @@ export default function Chart() {
                 className={`w-full btn-lg mb-4 ${showWeight ? "btn-lg" : "btn-inverted-lg"}`}
               >Weight</button>
               <button  
+                onClick={() => handleRepsClick()}
+                className={`w-full btn-lg mb-4 ${(!showWeight && !showMax) ? "btn-lg" : "btn-inverted-lg"}`}
+              >Reps</button>
+              <button  
                 onClick={() => handle1RMClick()}
                 className={`w-full btn-lg mb-4 ${showMax ? "btn-lg" : "btn-inverted-lg"}`}
               >1 Rep Max</button>
-              <button  
-                onClick={() => handleWorkloadClick()}
-                className={`w-full btn-lg mb-4 ${(!showWeight && !showMax) ? "btn-lg" : "btn-inverted-lg"}`}
-              >Workload</button>
             </div>
           </div>
       }
