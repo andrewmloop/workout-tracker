@@ -6,6 +6,7 @@ ChartJS.register(...registerables);
 
 import Banner from "../components/Banner";
 import Loading from "../components/Loading";
+import PageTransition from "../components/PageTransition";
 
 import { useNotif } from "../context/NotificationContext";
 
@@ -177,32 +178,34 @@ export default function Chart() {
         bannerText={exercise.name}
         showBack={true}
       />
-      {
-        loading
-          ? <Loading text="Looking through your gains..." />
-          : <div className="h-[90vh] p-6">
-            <div className="h-[40vh] mb-6">
-              <Line 
-                data={chartData}
-                options={chartOptions}
-              />
+      <PageTransition>
+        {
+          loading
+            ? <Loading text="Looking through your gains..." />
+            : <div className="h-[90vh] p-6">
+              <div className="h-[40vh] mb-6">
+                <Line 
+                  data={chartData}
+                  options={chartOptions}
+                />
+              </div>
+              <div className="flex flex-col justify-start items-center w-full">
+                <button 
+                  onClick={() => handleWeightClick()} 
+                  className={`w-full btn-lg mb-4 ${showWeight ? "btn-lg" : "btn-inverted-lg"}`}
+                >Weight</button>
+                <button  
+                  onClick={() => handleRepsClick()}
+                  className={`w-full btn-lg mb-4 ${(!showWeight && !showMax) ? "btn-lg" : "btn-inverted-lg"}`}
+                >Reps</button>
+                <button  
+                  onClick={() => handle1RMClick()}
+                  className={`w-full btn-lg mb-4 ${showMax ? "btn-lg" : "btn-inverted-lg"}`}
+                >1 Rep Max</button>
+              </div>
             </div>
-            <div className="flex flex-col justify-start items-center w-full">
-              <button 
-                onClick={() => handleWeightClick()} 
-                className={`w-full btn-lg mb-4 ${showWeight ? "btn-lg" : "btn-inverted-lg"}`}
-              >Weight</button>
-              <button  
-                onClick={() => handleRepsClick()}
-                className={`w-full btn-lg mb-4 ${(!showWeight && !showMax) ? "btn-lg" : "btn-inverted-lg"}`}
-              >Reps</button>
-              <button  
-                onClick={() => handle1RMClick()}
-                className={`w-full btn-lg mb-4 ${showMax ? "btn-lg" : "btn-inverted-lg"}`}
-              >1 Rep Max</button>
-            </div>
-          </div>
-      }
+        }
+      </PageTransition>
     </>
   );
 }

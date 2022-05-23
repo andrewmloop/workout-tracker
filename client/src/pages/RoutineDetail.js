@@ -3,6 +3,7 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import Banner from "../components/Banner";
+import PageTransition from "../components/PageTransition";
 
 import { useNotif } from "../context/NotificationContext";
 
@@ -110,45 +111,47 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
         }}
         addText={editMode ? "Done" : "Edit"}
       />
-      <div className="p-6 text-center text-white">
-        <RoutineButtons
-          addFunction={() => addExercise()}
-          targetMode={targetMode}
-          targetFunction={() => {
-            setTargetMode(prev => !prev);
-            setEditMode(false);
-          }}
-        /> 
-        <div>
-          <DragDropContext onDragEnd={result => handleOnDragEnd(result)}>
-            <Droppable droppableId="exercises">
-              {(provided) => {
-                return (
-                  <ul className="flex flex-col justify-start text-left" {...provided.droppableProps} ref={provided.innerRef}>
-                    {
-                      exerciseList.map( (exercise, index) => {
-                        return (
-                          <DetailItem
-                            key={exercise._id}
-                            index={index}
-                            routineId={routineData._id}
-                            exerciseObj={exercise}
-                            editMode={editMode}
-                            targetMode={targetMode}
-                            setExerciseList={setExerciseList}
-                            deleteFunction={() => deleteExercise(exercise.exercise._id)}
-                          />
-                        );
-                      })
-                    }
-                    {provided.placeholder}
-                  </ul>
-                );
-              }}
-            </Droppable>
-          </DragDropContext>
+      <PageTransition>
+        <div className="p-6 text-center text-white">
+          <RoutineButtons
+            addFunction={() => addExercise()}
+            targetMode={targetMode}
+            targetFunction={() => {
+              setTargetMode(prev => !prev);
+              setEditMode(false);
+            }}
+          /> 
+          <div>
+            <DragDropContext onDragEnd={result => handleOnDragEnd(result)}>
+              <Droppable droppableId="exercises">
+                {(provided) => {
+                  return (
+                    <ul className="flex flex-col justify-start text-left" {...provided.droppableProps} ref={provided.innerRef}>
+                      {
+                        exerciseList.map( (exercise, index) => {
+                          return (
+                            <DetailItem
+                              key={exercise._id}
+                              index={index}
+                              routineId={routineData._id}
+                              exerciseObj={exercise}
+                              editMode={editMode}
+                              targetMode={targetMode}
+                              setExerciseList={setExerciseList}
+                              deleteFunction={() => deleteExercise(exercise.exercise._id)}
+                            />
+                          );
+                        })
+                      }
+                      {provided.placeholder}
+                    </ul>
+                  );
+                }}
+              </Droppable>
+            </DragDropContext>
+          </div>
         </div>
-      </div>
+      </PageTransition>
     </>
   );
 }

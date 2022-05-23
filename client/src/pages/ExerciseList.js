@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Banner from "../components/Banner";
 import Loading from "../components/Loading";
 import RightArrowSVG from "../components/RightArrowSVG";
+import PageTransition from "../components/PageTransition";
 
 import { useNotif } from "../context/NotificationContext";
 
@@ -104,28 +105,30 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
           showBack={true}
         />
       }
-      <div className="p-6 h-full">
-        <SearchField setSearchList={setSearchList} fetchList={fetchList} />
-        {
-          loading
-            ? <Loading text="Moving the weights around..." />
-            : <ul className="flex flex-col justify-start mb-20">
-              {
-                searchList.map( exercise => {
-                  return (
-                    <ListItem 
-                      key={exercise._id} 
-                      exercise={exercise} 
-                      addMode={addMode}
-                      newExercises={newExercises}
-                      setNewExercises={setNewExercises}
-                    />
-                  );
-                })
-              }
-            </ul>
-        }
-      </div>
+      <PageTransition>
+        <div className="p-6 h-full">
+          <SearchField setSearchList={setSearchList} fetchList={fetchList} />
+          {
+            loading
+              ? <Loading text="Moving the weights around..." />
+              : <ul className="flex flex-col justify-start mb-20">
+                {
+                  searchList.map( exercise => {
+                    return (
+                      <ListItem 
+                        key={exercise._id} 
+                        exercise={exercise} 
+                        addMode={addMode}
+                        newExercises={newExercises}
+                        setNewExercises={setNewExercises}
+                      />
+                    );
+                  })
+                }
+              </ul>
+          }
+        </div>
+      </PageTransition>
     </>
   );
 }

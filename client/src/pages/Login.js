@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import Loading from "../components/Loading";
+import PageTransition from "../components/PageTransition";
+
 import { useUser } from "../context/UserContext";
 
-import Loading from "../components/Loading";
 
 export default function Login() {
 
@@ -104,48 +106,50 @@ export default function Login() {
 
   return (
     <>
-      {
-        loading
-          ? <Loading text="Logging in..." />
-          : <div className="flex flex-col p-8 text-white">
-            <form
-              className="flex flex-col"
-              onSubmit={handleSubmit}>
-              <label htmlFor="email">Email</label>
-              <input 
-                type="email" 
-                name="email"
-                autoComplete="email"
-                onChange={ (e) => setUserEmail(e.target.value) }
-                className="mb-2 text-input"
-              />
-              {valErrors?.userEmail && (
-                <p className="text-red-500">Please enter an email.</p>
+      <PageTransition>
+        {
+          loading
+            ? <Loading text="Logging in..." />
+            : <div className="flex flex-col p-8 text-white">
+              <form
+                className="flex flex-col"
+                onSubmit={handleSubmit}>
+                <label htmlFor="email">Email</label>
+                <input 
+                  type="email" 
+                  name="email"
+                  autoComplete="email"
+                  onChange={ (e) => setUserEmail(e.target.value) }
+                  className="mb-2 text-input"
+                />
+                {valErrors?.userEmail && (
+                  <p className="text-red-500">Please enter an email.</p>
+                )}
+                <label htmlFor="password">Password</label>
+                <input 
+                  type="password" 
+                  name="password"
+                  autoComplete="current-password"
+                  onChange={ (e) => setUserPassword(e.target.value) }
+                  className="mb-3 text-input"
+                />
+                {valErrors?.userPassword && (
+                  <p className="text-red-500">Please enter a password.</p>
+                )}
+                <RememberMe rememberLogin={rememberLogin} setRememberLogin={setRememberLogin} />
+                <button
+                  type="submit"
+                  className="w-full btn-lg mb-1"
+                >Submit</button>
+              </form>
+              {loginError && (
+                <p className="text-red-500">{loginError}.</p>
               )}
-              <label htmlFor="password">Password</label>
-              <input 
-                type="password" 
-                name="password"
-                autoComplete="current-password"
-                onChange={ (e) => setUserPassword(e.target.value) }
-                className="mb-3 text-input"
-              />
-              {valErrors?.userPassword && (
-                <p className="text-red-500">Please enter a password.</p>
-              )}
-              <RememberMe rememberLogin={rememberLogin} setRememberLogin={setRememberLogin} />
-              <button
-                type="submit"
-                className="w-full btn-lg mb-1"
-              >Submit</button>
-            </form>
-            {loginError && (
-              <p className="text-red-500">{loginError}.</p>
-            )}
-            <p className="mb-1">Don&apos;t have an account? <Link to="/register" className="text-amber-400">Sign Up</Link></p>
-            <p className="relative mt-auto leading-tight text-sm text-gray-400">Disclaimer: This is a hobby project, so please enjoy the app, but expect to encounter bugs and other broken functionality. For the best exeperience, view this app on a mobile device.</p>
-          </div>
-      }
+              <p className="mb-1">Don&apos;t have an account? <Link to="/register" className="text-amber-400">Sign Up</Link></p>
+              <p className="relative mt-auto leading-tight text-sm text-gray-400">Disclaimer: This is a hobby project, so please enjoy the app, but expect to encounter bugs and other broken functionality. For the best exeperience, view this app on a mobile device.</p>
+            </div>
+        }
+      </PageTransition>
     </>
   );
 }

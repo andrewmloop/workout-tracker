@@ -5,6 +5,7 @@ import Banner from "../components/Banner";
 import Loading from "../components/Loading";
 import Timer from "../components/Timer";
 import EditLogModal from "../components/EditLogModal";
+import PageTransition from "../components/PageTransition";
 
 import { useUser } from "../context/UserContext";
 import { useNotif } from "../context/NotificationContext";
@@ -163,103 +164,105 @@ export default function Log() {
         targSets={exerciseObj.targSets}
         targReps={exerciseObj.targReps}
       />
-      <DualButtons 
-        exerciseObj={exerciseObj}
-        editMode={editMode}
-        setEditMode={setEditMode}
-      />
-      <div className={`grid ${userStore.left_hand ? "grid-cols-[35%_65%]" : "grid-cols-[65%_35%]"} h-full justify-between gap-1 p-6 pt-0`}>
-        {/* Log Column */}
-        {
-          loading
-            ? <div className={`overflow-y-hidden ${userStore.left_hand ? "order-2 ml-2" : ""}`}>
-              <Loading text="" />
-            </div>
-            : logHistory.length > 0 
-              ? <div className={`h-[75vh] flex flex-col overflow-hidden ${userStore.left_hand ? "order-2 ml-2" : ""}`}>
-                <ul className="flex flex-col overflow-y-scroll text-white">
-                  {
-                    displayDates.map( (date, i) => {
-                      return (
-                        <div key={i} className="mb-2">
-                          <h3 className="mb-1">{date}</h3>
-                          {
-                            logHistory.map( log => {
-                              if (new Date(log.date).toDateString() === date) {
-                                return (
-                                  <LogItem 
-                                    key={log._id} 
-                                    log={log} 
-                                    units={units} 
-                                    setInputs={setInputs} 
-                                    editMode={editMode}
-                                    setShowModal={setShowModal}
-                                    setLogToEdit={setLogToEdit}
-                                  />
-                                );
-                              }
-                            })
-                          }
-                        </div>
-                      );
-                    })
-                  }
-                </ul>
+      <PageTransition>
+        <DualButtons 
+          exerciseObj={exerciseObj}
+          editMode={editMode}
+          setEditMode={setEditMode}
+        />
+        <div className={`grid ${userStore.left_hand ? "grid-cols-[35%_65%]" : "grid-cols-[65%_35%]"} h-full justify-between gap-1 p-6 pt-0`}>
+          {/* Log Column */}
+          {
+            loading
+              ? <div className={`overflow-y-hidden ${userStore.left_hand ? "order-2 ml-2" : ""}`}>
+                <Loading text="" />
               </div>
-              : <p className={`flex justify-center items-center h-[75vh] text-white ${userStore.left_hand ? "order-2 ml-2" : ""}`}>No logs yet</p>
-        }
-        {/* Form Column */}
-        <div className="flex flex-col justify-start bg-slate-900">
-          <form onSubmit={ (e) => handleSubmit(e) }
-            className="flex flex-col justify-center"
-          >
-            <label htmlFor="weight" className="text-sm font-bold text-gray-400">Weight</label>
-            <input
-              id="weight"
-              type="number"
-              name="weight"
-              placeholder={units}
-              value={weight}
-              onFocus={() => setWeight("")}
-              onChange={ (e) => setWeight(e.target.value) }
-              className="w-full p-3 rounded-lg text-center mb-1"
-            />
-            <label htmlFor="Reps" className="text-sm font-bold text-gray-400">Reps</label>
-            <input
-              id="reps"
-              type="number"
-              name="reps"
-              placeholder={"reps"}
-              value={reps}
-              onFocus={() => setReps("")}
-              onChange={ (e) => setReps(e.target.value) }
-              className="w-full p-3 rounded-lg text-center mb-1"
-            />
-            <label htmlFor="form" className="text-sm font-bold text-gray-400">Form</label>
-            <button 
-              id="form"
-              onClick={ (e) => handleToggle(e) }
-              className={`w-full p-3 rounded-lg mb-1 
-                ${form === 0 ? "bg-green-700" : form === 1 ? "bg-amber-400" : "bg-red-700"}`}
+              : logHistory.length > 0 
+                ? <div className={`h-[75vh] flex flex-col overflow-hidden ${userStore.left_hand ? "order-2 ml-2" : ""}`}>
+                  <ul className="flex flex-col overflow-y-scroll text-white">
+                    {
+                      displayDates.map( (date, i) => {
+                        return (
+                          <div key={i} className="mb-2">
+                            <h3 className="mb-1">{date}</h3>
+                            {
+                              logHistory.map( log => {
+                                if (new Date(log.date).toDateString() === date) {
+                                  return (
+                                    <LogItem 
+                                      key={log._id} 
+                                      log={log} 
+                                      units={units} 
+                                      setInputs={setInputs} 
+                                      editMode={editMode}
+                                      setShowModal={setShowModal}
+                                      setLogToEdit={setLogToEdit}
+                                    />
+                                  );
+                                }
+                              })
+                            }
+                          </div>
+                        );
+                      })
+                    }
+                  </ul>
+                </div>
+                : <p className={`flex justify-center items-center h-[75vh] text-white ${userStore.left_hand ? "order-2 ml-2" : ""}`}>No logs yet</p>
+          }
+          {/* Form Column */}
+          <div className="flex flex-col justify-start bg-slate-900">
+            <form onSubmit={ (e) => handleSubmit(e) }
+              className="flex flex-col justify-center"
             >
-              {values[form]}
-            </button>
-            <label htmlFor="log-submit" className="text-sm font-bold text-gray-400">Log</label>
-            <button
-              id="log-submit"
-              type="submit"
-              className="w-full log-submit mb-1"
-            >Submit</button>
-          </form>
-          <Timer />
+              <label htmlFor="weight" className="text-sm font-bold text-gray-400">Weight</label>
+              <input
+                id="weight"
+                type="number"
+                name="weight"
+                placeholder={units}
+                value={weight}
+                onFocus={() => setWeight("")}
+                onChange={ (e) => setWeight(e.target.value) }
+                className="w-full p-3 rounded-lg text-center mb-1"
+              />
+              <label htmlFor="Reps" className="text-sm font-bold text-gray-400">Reps</label>
+              <input
+                id="reps"
+                type="number"
+                name="reps"
+                placeholder={"reps"}
+                value={reps}
+                onFocus={() => setReps("")}
+                onChange={ (e) => setReps(e.target.value) }
+                className="w-full p-3 rounded-lg text-center mb-1"
+              />
+              <label htmlFor="form" className="text-sm font-bold text-gray-400">Form</label>
+              <button 
+                id="form"
+                onClick={ (e) => handleToggle(e) }
+                className={`w-full p-3 rounded-lg mb-1 
+                  ${form === 0 ? "bg-green-700" : form === 1 ? "bg-amber-400" : "bg-red-700"}`}
+              >
+                {values[form]}
+              </button>
+              <label htmlFor="log-submit" className="text-sm font-bold text-gray-400">Log</label>
+              <button
+                id="log-submit"
+                type="submit"
+                className="w-full log-submit mb-1"
+              >Submit</button>
+            </form>
+            <Timer />
+          </div>
         </div>
-      </div>
-      <EditLogModal 
-        show={showModal}
-        log={logToEdit}
-        setShow={setShowModal}
-        setRefetch={setRefetch}
-      />
+        <EditLogModal 
+          show={showModal}
+          log={logToEdit}
+          setShow={setShowModal}
+          setRefetch={setRefetch}
+        />
+      </PageTransition>
     </>
   );
 }

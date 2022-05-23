@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Banner from "../components/Banner";
+import PageTransition from "../components/PageTransition";
 
 import { useNotif } from "../context/NotificationContext";
 
@@ -57,25 +58,27 @@ export default function AddRoutine() {
         bannerText={"Create Routine"}
         showBack={true}
       />
-      <div className="p-8">
-        <form 
-          onSubmit={handleSubmit}
-          className="flex flex-col"
-        >
-          <label htmlFor="routine-name" className="text-white mb-1">Name</label>
-          <input
-            type="text"
-            name="routine-name"
-            placeholder="Routine name"
-            onChange={ (e) => setName(e.target.value)}
-            className="w-full mb-3 text-input"
-          />
-          <button
-            type="submit"
-            className="w-full bg-amber-400 py-1 font-semibold rounded-md text-gray-700"
-          >Submit</button>
-        </form>
-      </div>
+      <PageTransition>
+        <div className="p-8">
+          <form 
+            onSubmit={handleSubmit}
+            className="flex flex-col"
+          >
+            <label htmlFor="routine-name" className="text-white mb-1">Name</label>
+            <input
+              type="text"
+              name="routine-name"
+              placeholder="Routine name"
+              onChange={ (e) => setName(e.target.value)}
+              className="w-full mb-3 text-input"
+            />
+            <button
+              type="submit"
+              className="w-full bg-amber-400 py-1 font-semibold rounded-md text-gray-700"
+            >Submit</button>
+          </form>
+        </div>
+      </PageTransition>
     </>
   );
 }

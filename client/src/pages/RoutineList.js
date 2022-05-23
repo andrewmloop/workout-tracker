@@ -5,6 +5,7 @@ import Banner from "../components/Banner";
 import Loading from "../components/Loading";
 import EditButtons from "../components/EditButtons";
 import RightArrowSVG from "../components/RightArrowSVG";
+import PageTransition from "../components/PageTransition";
 
 import { useNotif } from "../context/NotificationContext";
 
@@ -48,29 +49,31 @@ export default function RoutineList() {
   return (
     <>
       <Banner bannerText="Routines" />
-      <div className="p-6">
-        <EditButtons 
-          editFunction={() => setEditMode(prev => !prev)} 
-          editMode={editMode}
-          addFunction={() => navigate("add")}
-        /> 
-        {
-          loading
-            ? <Loading text="Turning the lights on..." />
-            : <ul className="flex flex-col justify-start">
-              { 
-                routineList.map( routine => {
-                  return <RoutineItem 
-                    key={routine._id} 
-                    routine={routine} 
-                    setShouldRerender={setShouldRerender}
-                    editMode={editMode}
-                  />;
-                })
-              }
-            </ul>
-        }
-      </div>
+      <PageTransition>
+        <div className="p-6">
+          <EditButtons 
+            editFunction={() => setEditMode(prev => !prev)} 
+            editMode={editMode}
+            addFunction={() => navigate("add")}
+          /> 
+          {
+            loading
+              ? <Loading text="Turning the lights on..." />
+              : <ul className="flex flex-col justify-start">
+                { 
+                  routineList.map( routine => {
+                    return <RoutineItem 
+                      key={routine._id} 
+                      routine={routine} 
+                      setShouldRerender={setShouldRerender}
+                      editMode={editMode}
+                    />;
+                  })
+                }
+              </ul>
+          }
+        </div>
+      </PageTransition>
     </>
   );
 }

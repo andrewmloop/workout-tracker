@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import PageTransition from "../components/PageTransition";
+
 import { useNotif } from "../context/NotificationContext";
 
 export default function Register() {
@@ -87,77 +89,79 @@ export default function Register() {
   };
 
   return (
-    <div className="flex flex-col p-8 text-white"> 
-      <form
-        className="flex flex-col"
-        onSubmit={handleSubmit}>
-        {/* First Name Input */}
-        <label htmlFor="name">First Name</label>
-        <input 
-          type="text" 
-          name="name"
-          onChange={ (e) => setName(e.target.value) }
-          className="mb-2 text-input"
-        />
-        {valErrors?.name && (
-          <p className="text-red-500">Please enter a name.</p>
-        )}
-        {/* Email Input */}
-        <label htmlFor="email">Email</label>
-        <input 
-          type="email" 
-          name="email"
-          autoComplete="username"
-          onChange={ (e) => setEmail(e.target.value) }
-          className="mb-2 text-input"
-        />
-        {valErrors?.email && (
-          <p className="text-red-500">Please enter a valid email.</p>
-        )}
-        {/* Password Input */}
-        <label htmlFor="password">Password</label>
-        <input 
-          type="password" 
-          name="password"
-          autoComplete="new-password"
-          onChange={ (e) => setPassword(e.target.value) }
-          className="mb-2 text-input"
-        />
-        {valErrors?.password && (
-          <p className="text-red-500">Password does not match format.</p>
-        )}
-        {/* Password Match Input */}
-        <label htmlFor="password_match">Re-enter Password</label>
-        <input 
-          type="password" 
-          name="password_match"
-          autoComplete="new-password"
-          onChange={ (e) => setPasswordMatch(e.target.value) }
-          className="mb-3 text-input"
-        />
-        {valErrors?.passwordMatch && (
-          <p className="text-red-500">Passwords do not match.</p>
-        )}
-        {/* Submit */}
-        <button
-          type="submit"
-          className="w-full btn-lg mb-1"
-        >Submit</button>
-        <div className="text-left">
-          {successMessage && (
-            <p className="text-green-500 font-semibold text-sm my-2">
-              Your account has been created! Redirecting.
-            </p>
+    <PageTransition>
+      <div className="flex flex-col p-8 text-white"> 
+        <form
+          className="flex flex-col"
+          onSubmit={handleSubmit}>
+          {/* First Name Input */}
+          <label htmlFor="name">First Name</label>
+          <input 
+            type="text" 
+            name="name"
+            onChange={ (e) => setName(e.target.value) }
+            className="mb-2 text-input"
+          />
+          {valErrors?.name && (
+            <p className="text-red-500">Please enter a name.</p>
           )}
-          {failureMessage && (
-            <p className="text-red-500 font-semibold text-sm my-2">
-              {regError}
-            </p>
+          {/* Email Input */}
+          <label htmlFor="email">Email</label>
+          <input 
+            type="email" 
+            name="email"
+            autoComplete="username"
+            onChange={ (e) => setEmail(e.target.value) }
+            className="mb-2 text-input"
+          />
+          {valErrors?.email && (
+            <p className="text-red-500">Please enter a valid email.</p>
           )}
-        </div>
-      </form>
-      <p className="mb-1">Already have an account? <Link to="/login" className="text-amber-400">Log In</Link></p>
-      <p className="mt-auto leading-tight text-sm text-gray-400">Disclaimer: This is a hobby project, so please enjoy the app, but expect to encounter bugs and other broken functionality. For the best exeperience, view this app on a mobile device.</p>
-    </div>
+          {/* Password Input */}
+          <label htmlFor="password">Password</label>
+          <input 
+            type="password" 
+            name="password"
+            autoComplete="new-password"
+            onChange={ (e) => setPassword(e.target.value) }
+            className="mb-2 text-input"
+          />
+          {valErrors?.password && (
+            <p className="text-red-500">Password does not match format.</p>
+          )}
+          {/* Password Match Input */}
+          <label htmlFor="password_match">Re-enter Password</label>
+          <input 
+            type="password" 
+            name="password_match"
+            autoComplete="new-password"
+            onChange={ (e) => setPasswordMatch(e.target.value) }
+            className="mb-3 text-input"
+          />
+          {valErrors?.passwordMatch && (
+            <p className="text-red-500">Passwords do not match.</p>
+          )}
+          {/* Submit */}
+          <button
+            type="submit"
+            className="w-full btn-lg mb-1"
+          >Submit</button>
+          <div className="text-left">
+            {successMessage && (
+              <p className="text-green-500 font-semibold text-sm my-2">
+                Your account has been created! Redirecting.
+              </p>
+            )}
+            {failureMessage && (
+              <p className="text-red-500 font-semibold text-sm my-2">
+                {regError}
+              </p>
+            )}
+          </div>
+        </form>
+        <p className="mb-1">Already have an account? <Link to="/login" className="text-amber-400">Log In</Link></p>
+        <p className="mt-auto leading-tight text-sm text-gray-400">Disclaimer: This is a hobby project, so please enjoy the app, but expect to encounter bugs and other broken functionality. For the best exeperience, view this app on a mobile device.</p>
+      </div>
+    </PageTransition>
   );
 }

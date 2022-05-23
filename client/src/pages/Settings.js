@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Banner from "../components/Banner";
+import PageTransition from "../components/PageTransition";
 
 import { useUser } from "../context/UserContext";
 import { useNotif } from "../context/NotificationContext";
@@ -62,31 +63,33 @@ export default function Settings() {
         bannerText={"Settings"}
         showBack={true}
       />
-      <div className="p-6 text-white">
-        <div className="flex flex-col mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <h5 className="text-lg font-bold">Left Handed</h5>
-            <ToggleSwitch 
-              name="leftHanded" 
-              checked={isLeftHand}
-              onChange={() => setIsLeftHand(!isLeftHand)} 
-            />
+      <PageTransition>
+        <div className="p-6 text-white">
+          <div className="flex flex-col mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <h5 className="text-lg font-bold">Left Handed</h5>
+              <ToggleSwitch 
+                name="leftHanded" 
+                checked={isLeftHand}
+                onChange={() => setIsLeftHand(!isLeftHand)} 
+              />
+            </div>
+            <p>This will move the buttons to record exercise logs to the left side of the screen.</p>
           </div>
-          <p>This will move the buttons to record exercise logs to the left side of the screen.</p>
-        </div>
-        <div className="flex flex-col mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <h5 className="text-lg font-bold">Use Metric</h5>
-            <ToggleSwitch 
-              name="metric" 
-              checked={isMetric}
-              onChange={() => setIsMetric(!isMetric)}
-            />
+          <div className="flex flex-col mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <h5 className="text-lg font-bold">Use Metric</h5>
+              <ToggleSwitch 
+                name="metric" 
+                checked={isMetric}
+                onChange={() => setIsMetric(!isMetric)}
+              />
+            </div>
+            <p>This will show all measurements in kilograms and centimeters.</p>
           </div>
-          <p>This will show all measurements in kilograms and centimeters.</p>
+          <Logout />
         </div>
-        <Logout />
-      </div>
+      </PageTransition>
     </>
   );
 }

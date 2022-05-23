@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Banner from "../components/Banner";
 import RightArrowSVG from "../components/RightArrowSVG";
+import PageTransition from "../components/PageTransition";
 
 
 export default function ExerciseGroup({ addMode }) {
@@ -10,19 +11,21 @@ export default function ExerciseGroup({ addMode }) {
       <Banner
         bannerText={addMode ? "Add Exercises" : "Muscle Group"}
       />
-      <div className="h-full p-6">
-        <ul className="flex flex-col justify-start">
-          <GroupItem text="All Exercises" group="/all" />
-          <GroupItem text="Abdominals" group="/abs" />
-          <GroupItem text="Arms" group="/arms" />
-          <GroupItem text="Back" group="/back" />
-          <GroupItem text="Chest" group="/chest" />
-          <GroupItem text="Shoulders" group="/shoulders" />
-          <GroupItem text="Legs" group="/legs" />
-          <GroupItem text="Cardio" group="/cardio" />
-          <GroupItem text="Stretching" group="/stretch" />
-        </ul>
-      </div>
+      <PageTransition>
+        <div className="h-full p-6">
+          <ul className="flex flex-col justify-start">
+            <GroupItem text="All Exercises" group="/all" />
+            <GroupItem text="Abdominals" group="/abs" />
+            <GroupItem text="Arms" group="/arms" />
+            <GroupItem text="Back" group="/back" />
+            <GroupItem text="Chest" group="/chest" />
+            <GroupItem text="Shoulders" group="/shoulders" />
+            <GroupItem text="Legs" group="/legs" />
+            <GroupItem text="Cardio" group="/cardio" />
+            <GroupItem text="Stretching" group="/stretch" />
+          </ul>
+        </div>
+      </PageTransition>
     </>
   );
 }
