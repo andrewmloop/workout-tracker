@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Banner from "../components/Banner";
 import Loading from "../components/Loading";
 import EditButtons from "../components/EditButtons";
+import RightArrowSVG from "../components/RightArrowSVG";
 
 import { useNotif } from "../context/NotificationContext";
 
@@ -112,8 +113,9 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
           state={{ "routine": routine }}
           className="block w-full text-lg py-1"
         >{routine.name}</Link>
-        { editMode && 
-          <DeleteButton deleteFunction={() => deleteRoutine(routine._id)} /> 
+        { editMode 
+          ? <DeleteButton deleteFunction={() => deleteRoutine(routine._id)} />
+          : <RightArrowSVG />
         }
       </li>
     </>

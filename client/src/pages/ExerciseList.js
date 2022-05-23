@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import Banner from "../components/Banner";
 import Loading from "../components/Loading";
+import RightArrowSVG from "../components/RightArrowSVG";
 
 import { useNotif } from "../context/NotificationContext";
 
@@ -147,16 +148,18 @@ function ListItem({ exercise, addMode, newExercises, setNewExercises }) {
   };
 
   return (
-    <li className="flex justify-between py-3 border-b-[1px] border-gray-500 text-white">
+    <li className="flex justify-between items-center py-3 border-b-[1px] border-gray-500 text-white">
       <Link to="/exercise/detail"
         state={{ "exercise": exercise }}
         className="block py-1 whitespace-nowrap overflow-x-hidden text-ellipsis"
       >{exercise.name}</Link>
-      {addMode &&
-        <button 
+      {addMode 
+        ? <button 
           onClick={() => handleClick()}
           className={`${isClicked ? "btn-deny" : "btn-confirm"} ml-4`}
-        >{isClicked ? "Remove" : "Add"}</button>}
+        >{isClicked ? "Remove" : "Add"}</button>
+        : <RightArrowSVG />
+      }
     </li>
   );
 }
