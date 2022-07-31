@@ -39,7 +39,7 @@ routineRoutes.route("/list").get( (req, res) => {
       });
     } else {
       res.status(200).json({
-        message: "Successfully added exercises",
+        message: "Successfully fetched routines",
         data: result,
       });
     }
@@ -73,6 +73,31 @@ routineRoutes.route("/list").get( (req, res) => {
 //       response.json(result);
 //     });
 // });
+
+// Update routine name
+// USED
+routineRoutes.route("/upd-name/:id").post( (req, res) => {
+  Routine.findByIdAndUpdate(
+    req.params.id,
+    {
+      name: req.body.newName
+    },
+    { returnOriginal: false},
+    (err, result) => {
+      if (err) {
+        console.error("Failed to rename routine: ", err);
+        res.status(500).json({
+          message: "Failed to rename routine"
+        });
+      } else {
+        res.status(200).json({
+          message: "Successfully renamed routine",
+          data: result
+        });
+      }
+    }
+  );
+});
 
 // Update exercise_list order
 // Used
