@@ -12,6 +12,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AddRoutine from "./pages/AddRoutine";
+import EditRoutine from "./pages/EditRoutine";
 import Chart from "./pages/Chart";
 import Notification from "./components/Notification";
 
@@ -56,6 +57,7 @@ export default function App() {
             <Route path="/routine">
               <Route index path="/routine" element={<RoutineList />} />
               <Route path="add" element={<AddRoutine />} />
+              <Route path="update" element={<EditRoutine />} />
               <Route path="detail" element={
                 <RoutineDetail 
                   setAddMode={setAddMode} 

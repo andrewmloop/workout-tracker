@@ -108,6 +108,15 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
     }
   };
 
+  const renameRoutine = (id, name) => {
+    navigate("update", {
+      state: {
+        routineId: id,
+        routineName: name
+      }
+    });
+  };
+
   return (
     <>
       <li className="flex justify-between items-center py-3 border-b-[1px] border-gray-500 text-white">
@@ -117,7 +126,12 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
           className="block w-full text-lg py-1"
         >{routine.name}</Link>
         { editMode 
-          ? <DeleteButton deleteFunction={() => deleteRoutine(routine._id)} />
+          ? <div className="flex">
+            <RenameButton 
+              renameFunction={() => renameRoutine(routine._id, routine.name)} 
+            />
+            <DeleteButton deleteFunction={() => deleteRoutine(routine._id)} />
+          </div>
           : <RightArrowSVG />
         }
       </li>
@@ -128,5 +142,11 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
 function DeleteButton({ deleteFunction }) {
   return (
     <button onClick={deleteFunction} className="btn-deny ml-4">Delete</button>
+  );
+}
+
+function RenameButton( { renameFunction }) {
+  return (
+    <button onClick={ renameFunction } className="btn ml-4">Rename</button>
   );
 }
