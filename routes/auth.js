@@ -68,7 +68,7 @@ authRoutes.route("/login").post( async (req, res) => {
         jwt.sign(
           payload,
           jwtSecret,
-          {expiresIn: 86400},
+          {expiresIn: 604800},
           (jwtError, token) => {
             if (jwtError) {
               console.error("Error signing web token: ", jwtError);
