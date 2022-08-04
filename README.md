@@ -1,4 +1,9 @@
-# workout-tracker
-A web app to record your daily fitness routines.
+# Workout Tracker - [Link](https://iron-temple-app.herokuapp.com)
 
-In progress.
+A web app to build routines and record your progress at the gym.
+
+- ReactJS
+- JWT
+- ExpressJS
+- NodeJs
+- MongoDB
