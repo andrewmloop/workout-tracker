@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNotif } from "../context/NotificationContext";
 
@@ -22,17 +22,17 @@ export default function EditLogModal({ show, log, setShow, setRefetch }) {
     const newData = {
       weight: inputWeight,
       reps: inputReps,
-      form: inputForm
+      form: inputForm,
     };
 
     try {
-      const res =  await fetch(`/api/log/update/${log._id}`, {
+      const res = await fetch(`/api/log/update/${log._id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-access-token": localStorage.getItem("token")
+          "x-access-token": localStorage.getItem("token"),
         },
-        body: JSON.stringify(newData)
+        body: JSON.stringify(newData),
       });
       const data = await res.json();
       if (data.isLoggedIn === false) {
@@ -49,7 +49,7 @@ export default function EditLogModal({ show, log, setShow, setRefetch }) {
       const errorText = "The iron gods are upset at the moment";
       handleNotif(errorText, false, true);
     } finally {
-      setRefetch(prev => !prev);
+      setRefetch((prev) => !prev);
       setShow(false);
     }
   };
@@ -67,10 +67,40 @@ export default function EditLogModal({ show, log, setShow, setRefetch }) {
   const handleValidation = () => {
     let isValid = true;
 
-    if (inputWeight === "") isValid =  false;
-    if (inputReps === "") isValid =  false;
+    if (inputWeight === "") isValid = false;
+    if (inputReps === "") isValid = false;
 
     return isValid;
+  };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/log/delete/" + log._id, {
+        method: "DELETE",
+        headers: {
+          "x-access-token": localStorage.getItem("token"),
+        },
+      });
+      const data = await res.json();
+      if (data.isLoggedIn === false) {
+        navigate("/");
+        let loginText = "Your session has expired";
+        handleNotif(loginText, true, true);
+      } else if (res.status === 200) {
+        handleNotif(data.message, true, true);
+      } else {
+        handleNotif(data.message, false, true);
+      }
+    } catch (error) {
+      console.error("Error updating log:", error);
+      const errorText = "The iron gods are upset at the moment";
+      handleNotif(errorText, false, true);
+    } finally {
+      setRefetch((prev) => !prev);
+      setShow(false);
+    }
   };
 
   useEffect(() => {
@@ -80,14 +110,18 @@ export default function EditLogModal({ show, log, setShow, setRefetch }) {
   }, [show]);
 
   return (
-    <div className={`fixed ${show ? "top-[40vh] translate-y-[-40%]" : "top-[110vh]"} left-1/2 translate-x-[-50%] p-6 max-w-[500px] w-[75vw] rounded-md bg-black text-white transition-all duration-300 z-[100] shadow-2xl`}>
+    <div
+      className={`fixed ${
+        show ? "top-[40vh] translate-y-[-40%]" : "top-[110vh]"
+      } left-1/2 translate-x-[-50%] p-6 max-w-[500px] w-[75vw] rounded-md bg-black text-white transition-all duration-300 z-[100] shadow-2xl`}
+    >
       <form>
         <label htmlFor="weight-input" className="flex flex-col">
           Weight
-          <input 
+          <input
             id="weight-input"
-            type="number" 
-            value={inputWeight} 
+            type="number"
+            value={inputWeight}
             onFocus={() => setInputWeight("")}
             onChange={(e) => setInputWeight(e.target.value)}
             className="text-input mb-3"
@@ -95,10 +129,10 @@ export default function EditLogModal({ show, log, setShow, setRefetch }) {
         </label>
         <label htmlFor="reps-input" className="flex flex-col">
           Reps
-          <input 
+          <input
             id="reps-input"
-            type="number" 
-            value={inputReps} 
+            type="number"
+            value={inputReps}
             onFocus={() => setInputReps("")}
             onChange={(e) => setInputReps(e.target.value)}
             className="text-input mb-3"
@@ -107,30 +141,43 @@ export default function EditLogModal({ show, log, setShow, setRefetch }) {
         <label htmlFor="reps-input">
           Form
           <div>
-            <button 
+            <button
               onClick={(e) => handleForm(e, "good")}
-              className={`w-full ${inputForm === "good" ? "btn-good" : "btn-good-inverted"} mb-2`}
-            >Good</button>
-            <button 
+              className={`w-full ${
+                inputForm === "good" ? "btn-good" : "btn-good-inverted"
+              } mb-2`}
+            >
+              Good
+            </button>
+            <button
               onClick={(e) => handleForm(e, "okay")}
-              className={`w-full ${inputForm === "okay" ? "btn-okay" : "btn-okay-inverted"} mb-2`}
-            >Okay</button>
-            <button 
+              className={`w-full ${
+                inputForm === "okay" ? "btn-okay" : "btn-okay-inverted"
+              } mb-2`}
+            >
+              Okay
+            </button>
+            <button
               onClick={(e) => handleForm(e, "poor")}
-              className={`w-full ${inputForm === "poor" ? "btn-poor" : "btn-poor-inverted"} mb-4`}  
-            >Poor</button>
+              className={`w-full ${
+                inputForm === "poor" ? "btn-poor" : "btn-poor-inverted"
+              } mb-4`}
+            >
+              Poor
+            </button>
           </div>
         </label>
-        <div className="flex w-full gap-2">
-          <button
-            onClick={(e) => handleSave(e)}
-            className="btn w-full"
-          >Save</button>
-          <button
-            onClick={(e) => handleCancel(e)}
-            className="btn w-full"
-          >Cancel</button>
+        <div className="flex w-full gap-2 mb-2">
+          <button onClick={(e) => handleSave(e)} className="btn-confirm w-full">
+            Save
+          </button>
+          <button onClick={(e) => handleCancel(e)} className="btn w-full">
+            Cancel
+          </button>
         </div>
+        <button onClick={(e) => handleDelete(e)} className="btn-deny w-full">
+          Delete
+        </button>
       </form>
     </div>
   );

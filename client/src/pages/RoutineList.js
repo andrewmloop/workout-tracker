@@ -17,21 +17,21 @@ export default function RoutineList() {
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [shouldRerender, setShouldRerender] = useState(false);
- 
+
   const fetchRoutines = async () => {
     try {
       setLoading(true);
       const res = await fetch("/api/routine/list", {
         headers: {
           "x-access-token": localStorage.getItem("token"),
-        }
+        },
       });
       const data = await res.json();
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
         handleNotif(loginText, true, true);
-      } 
+      }
       if (res.status === 200) {
         setRoutineList(data.data);
       }
@@ -42,7 +42,7 @@ export default function RoutineList() {
     }
   };
 
-  useEffect( () => {
+  useEffect(() => {
     fetchRoutines();
   }, [shouldRerender]);
 
@@ -51,27 +51,27 @@ export default function RoutineList() {
       <Banner bannerText="Routines" />
       <PageTransition>
         <div className="p-6">
-          <EditButtons 
-            editFunction={() => setEditMode(prev => !prev)} 
+          <EditButtons
+            editFunction={() => setEditMode((prev) => !prev)}
             editMode={editMode}
             addFunction={() => navigate("add")}
-          /> 
-          {
-            loading
-              ? <Loading text="Turning the lights on..." />
-              : <ul className="flex flex-col justify-start">
-                { 
-                  routineList.map( routine => {
-                    return <RoutineItem 
-                      key={routine._id} 
-                      routine={routine} 
-                      setShouldRerender={setShouldRerender}
-                      editMode={editMode}
-                    />;
-                  })
-                }
-              </ul>
-          }
+          />
+          {loading ? (
+            <Loading text="Turning the lights on..." />
+          ) : (
+            <ul className="flex flex-col justify-start">
+              {routineList.map((routine) => {
+                return (
+                  <RoutineItem
+                    key={routine._id}
+                    routine={routine}
+                    setShouldRerender={setShouldRerender}
+                    editMode={editMode}
+                  />
+                );
+              })}
+            </ul>
+          )}
         </div>
       </PageTransition>
     </>
@@ -88,7 +88,7 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
         method: "DELETE",
         headers: {
           "x-access-token": localStorage.getItem("token"),
-        }
+        },
       });
       const data = await res.json();
       if (data.isLoggedIn === false) {
@@ -97,7 +97,7 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
         handleNotif(loginText, true, true);
       } else if (res.status === 200) {
         handleNotif(data.message, true, true);
-        setShouldRerender(prev => !prev);
+        setShouldRerender((prev) => !prev);
       } else {
         handleNotif(data.message, false, true);
       }
@@ -112,28 +112,31 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
     navigate("update", {
       state: {
         routineId: id,
-        routineName: name
-      }
+        routineName: name,
+      },
     });
   };
 
   return (
     <>
       <li className="flex justify-between items-center py-3 border-b-[1px] border-gray-500 text-white">
-        <Link 
+        <Link
           to="detail"
-          state={{ "routine": routine }}
+          state={{ routine: routine }}
           className="block w-full text-lg py-1"
-        >{routine.name}</Link>
-        { editMode 
-          ? <div className="flex">
-            <RenameButton 
-              renameFunction={() => renameRoutine(routine._id, routine.name)} 
+        >
+          {routine.name}
+        </Link>
+        {editMode ? (
+          <div className="flex">
+            <RenameButton
+              renameFunction={() => renameRoutine(routine._id, routine.name)}
             />
             <DeleteButton deleteFunction={() => deleteRoutine(routine._id)} />
           </div>
-          : <RightArrowSVG />
-        }
+        ) : (
+          <RightArrowSVG />
+        )}
       </li>
     </>
   );
@@ -141,12 +144,16 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
 
 function DeleteButton({ deleteFunction }) {
   return (
-    <button onClick={deleteFunction} className="btn-deny ml-4">Delete</button>
+    <button onClick={deleteFunction} className="btn-deny ml-4">
+      Delete
+    </button>
   );
 }
 
-function RenameButton( { renameFunction }) {
+function RenameButton({ renameFunction }) {
   return (
-    <button onClick={ renameFunction } className="btn ml-4">Rename</button>
+    <button onClick={renameFunction} className="btn ml-4">
+      Rename
+    </button>
   );
 }
