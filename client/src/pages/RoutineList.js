@@ -50,7 +50,7 @@ export default function RoutineList() {
     <>
       <Banner bannerText="Routines" />
       <PageTransition>
-        <div className="p-6">
+        <div className="p-6 h-[85vh] overflow-y-scroll">
           <EditButtons
             editFunction={() => setEditMode((prev) => !prev)}
             editMode={editMode}
