@@ -9,7 +9,7 @@
     "email": "andrewmloop@gmail.com"
   },
   "scripts": {
-    "start": "node ./index.js",
+    "start": "cd ./client && npm install && npm run build && cd .. && npm install && node ./index.js",
     "dev-start": "nodemon ./index.js",
     "heroku-postbuild": "npm install"
   },
