@@ -2,7 +2,7 @@
   "name": "workout-tracker",
   "version": "2.0.0",
   "description": "An app to build routines and track your progress in the gym.",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
