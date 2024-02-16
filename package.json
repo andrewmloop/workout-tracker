@@ -1,0 +1,30 @@
+{
+  "name": "workout-tracker",
+  "version": "2.0.0",
+  "description": "An app to build routines and track your progress in the gym.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewmloop/workout-tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andrewmloop/workout-tracker/issues"
+  },
+  "homepage": "https://github.com/andrewmloop/workout-tracker#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.4",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2"
+  }
+}
