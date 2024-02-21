@@ -1,0 +1,51 @@
+.register-page {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+
+  h1 {
+    margin: 0;
+    margin-bottom: 1em;
+  }
+
+  a {
+    color: var(--color-accent );
+  }
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    background-color: var(--color-primary);
+  }
+  
+  label {
+    font-size: 1.2em;
+  }
+
+  input {
+    font-size: 1.2em;
+
+    padding: 6px;
+    margin-bottom: 0px;
+  }
+  input:focus {
+    outline: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.register-error {
+  color: var(--color-error);
+}
+
+.disclaimer {
+  font-weight: bold;
+}
+

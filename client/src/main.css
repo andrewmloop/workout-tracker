@@ -1,11 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+  /* --color-bg: #261912;  
+  --color-primary: #4421a1;
+  --color-secondary: #0f172a;
+  --color-confirm: rgb(74 222 128);
+  --color-deny: rgb(239 68 68);
+  --color-gray: rgb(31 41 55);
+  --color-input-bg: rgb(71 85 105); */
+
+  --color-primary: #15133C;
+  --color-secondary: #73777B;
+  --color-accent: #EC994B;
+  --color-bg: #F1EEE9;
+  --color-text: #333333;
+  --color-highlight: #FFFFFF;
+
+  --color-error: #FF6347;
+
+  --button-radius: 0.375rem;
+  --input-radius: 0.15em;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--color-text);
+  background-color: var(--color-bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,46 +37,185 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+a {
+  font-weight: 500;
+  text-decoration: inherit;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
+  border-radius: var(--button-radius);
+  border: 2px solid transparent;
   padding: 0.6em 1.2em;
-  font-size: 1em;
+  color: var(--color-bg);
+  font-size: 1.2em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
+/* button:hover {
   border-color: #646cff;
-}
+} */
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  border-radius: var(--input-radius);
+  border-width: 3px;
+  border-color: transparent;
+  border-style: solid;
+  background-color: var(--color-secondary);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
+.btn {
+    background-color: var(--color-primary);
+    padding: .25rem 1rem;
+    color: var(--color-gray);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+}
+
+.btn-banner {
+    padding: 0 0.5rem;
+    background-color: black;
+    border-color: white;
+    border-width: .125rem;
+    color: white;
+    font-weight: 600;
+    border-radius: 0.25rem;
+    font-size: small;
+}
+
+.btn-lg {
+    background-color: var(--color-primary);
+    padding: .5rem 1.25rem;
+    color: var(--color-gray);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+}
+
+.log-submit {
+    background-color: var(--color-primary);
+    padding: .75rem 1.25rem;
+    color: var(--color-gray);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+}
+
+.btn-inverted-lg {
+    background-color: var(--color-secondary);
+    border-color: var(--color-primary);
+    border-width: .125rem;
+    padding: .5rem 1.25rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+}
+
+.btn-confirm {
+    background-color: var(--color-confirm);
+    padding: .25rem 1rem;
+    color: var(--color-gray);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+}
+
+.btn-deny {
+    background-color: var(--color-deny);
+    padding: .25rem 1rem;
+    color: var(--color-gray);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+}
+
+.btn-deny-lg {
+    background-color: var(--color-deny);
+    padding: .5rem 1.25rem;
+    color: var(--color-gray);
+    font-weight: 600;
+    border-radius: var(--button-radius);
+}
+
+.text-input-sm {
+    width: 3rem;
+    margin-left: .5rem;
+    padding: .1rem .2rem;
+    border-radius: var(--button-radius);
+    border-width: 2px;
+    border-color: transparent;
+    background-color: var(--color-input-bg);
+    color: white;
+    text-align: center;
+    appearance: none;
+    
+}
+
+.text-input-sm:focus {
+    border-color: var(--color-primary);
+}
+
+.date-input {
+    padding: .25rem .4rem;
+    border-radius: var(--input-radius);
+    border-width: 4px;
+    border-color: transparent;
+    background-color: var(--color-input-bg);
+    color: white;
+    appearance: none;
+}
+
+.checkbox {
+    appearance: none;
+    background-color: var(--color-input-bg);
+    margin: 0;
+    font: inherit;
+    color: currentColor;
+    width: 1.15rem;
+    height: 1.15rem;
+    border: 0.1rem solid currentColor;
+    border-radius: 0.15rem;
+    display: grid;
+    place-content: center;
+}
+.checkbox::before {
+    content: "";
+    width: 0.7rem;
+    height: 0.7rem;
+    transform: scale(0);
+    box-shadow: inset 1rem 1rem var(--color-primary);
+    border-radius: 0.1rem;
+}
+.checkbox:checked::before {
+    transform: scale(1);
+}
+
+.hidden {
+  color: transparent;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
