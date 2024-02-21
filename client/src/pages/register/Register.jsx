@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import PageTransition from "../../components/PageTransition";
+import PageTransition from "../../components/page-transition/PageTransition";
 import { useNotifStore } from "../../store/NotificationStore";
 
 import "./Register.css";
@@ -103,8 +103,10 @@ export default function Register() {
           {/* First Name Input */}
           <label htmlFor="name">First Name</label>
           <input
+            id="name"
             type="text"
             name="name"
+            autoComplete="given-name"
             onChange={(e) => setName(e.target.value)}
           />
           {valErrors?.name && (
@@ -114,6 +116,7 @@ export default function Register() {
           {/* Email Input */}
           <label htmlFor="email">Email</label>
           <input
+            id="email"
             type="email"
             name="email"
             autoComplete="username"
@@ -126,6 +129,7 @@ export default function Register() {
           {/* Password Input */}
           <label htmlFor="password">Password</label>
           <input
+            id="password"
             type="password"
             name="password"
             autoComplete="new-password"
@@ -138,6 +142,7 @@ export default function Register() {
           {/* Password Match Input */}
           <label htmlFor="password_match">Re-enter Password</label>
           <input
+            id="password_match"
             type="password"
             name="password_match"
             autoComplete="new-password"

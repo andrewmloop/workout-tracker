@@ -9,14 +9,14 @@ import { Route, Routes, Outlet } from "react-router-dom";
 // import RoutineDetail from "./pages/RoutineDetail";
 // import Log from "./pages/Log";
 // import Settings from "./pages/Settings";
-// import Login from "./pages/Login";
+import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 // import AddRoutine from "./pages/AddRoutine";
 // import EditRoutine from "./pages/EditRoutine";
 // import Chart from "./pages/Chart";
 // import Notification from "./components/Notification";
 
-// import { UserProvider } from "./context/UserContext";
+import { UserProvider } from "./store/UserStore";
 import { NotifProvider } from "./store/NotificationStore";
 // import { TimerContextProvider } from "./context/TimerContext";
 
@@ -30,17 +30,17 @@ export default function ClientUI() {
   const [newExercises, setNewExercises] = useState([]);
 
   return (
-    // <UserProvider>
-    <NotifProvider>
-      {/* <TimerContextProvider> */}
-      <div>
-        <Routes>
-          <Route element={<WithoutNav />}>
-            {/* <Route exact path="/" element={<Login />} />
-            <Route exact path="/login" element={<Login />} /> */}
-            <Route exact path="/register" element={<Register />} />
-          </Route>
-          {/* <Route element={<WithNav />}>
+    <UserProvider>
+      <NotifProvider>
+        {/* <TimerContextProvider> */}
+        <div>
+          <Routes>
+            <Route element={<WithoutNav />}>
+              <Route exact path="/" element={<Login />} />
+              <Route exact path="/login" element={<Login />} />
+              <Route exact path="/register" element={<Register />} />
+            </Route>
+            {/* <Route element={<WithNav />}>
             <Route path="/exercise">
               <Route
                 index
@@ -79,12 +79,12 @@ export default function ClientUI() {
             <Route exact path="/settings" element={<Settings />} />
             <Route exact path="/chart" element={<Chart />} />
           </Route> */}
-        </Routes>
-        {/* <Notification /> */}
-      </div>
-      {/* </TimerContextProvider> */}
-    </NotifProvider>
-    // </UserProvider>
+          </Routes>
+          {/* <Notification /> */}
+        </div>
+        {/* </TimerContextProvider> */}
+      </NotifProvider>
+    </UserProvider>
   );
 }
 
