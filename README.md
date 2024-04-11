@@ -1,9 +1,25 @@
-# Workout Tracker - [Link](https://iron-temple-app.herokuapp.com)
+# Workout Tracker Web App
 
-A web app to build routines and record your progress at the gym.
+## Introduction
+This is a web app designed to help users track their workouts. It's built with TypeScript, React for the front end, Node.js with Express.js for the backend, and MongoDB Atlas for database storage. Authentication is implemented using JSON Web Tokens (JWT).
 
-- ReactJS
-- JWT
-- ExpressJS
-- NodeJs
-- MongoDB
+## Features
+- User authentication and authorization with JWT
+- Ability to log workouts and track progress
+- View workout history and charts
+- Responsive design for seamless use on desktop and mobile devices
+
+## Try It Out
+A version of this app is hosted at: https://iron-temple-app.herokuapp.com. Please be patient if there is a delay when first connecting to the site. The app is hosted on an Eco Dyno which is put to sleep when no usage is detected for a period of time.
+> [!NOTE]
+> This app works best when viewed on a mobile device, preferrably downloaded as a PWA. See the following links for instructions on how to do this.
+> - iOS - https://web.dev/learn/pwa/installation#ios_and_ipados_installation
+> - Android - https://web.dev/learn/pwa/installation#android_installation
+
+## Technologies Used
+- TypeScript
+- React
+- Node.js
+- Express.js
+- MongoDB Atlas
+- JSON Web Tokens (JWT)
