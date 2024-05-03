@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "cd ./client && npm install && npm run build && cd .. && npm install && node ./index.js",
+    "production": "cd ./client && npm install && npm run build && cd .. && npm install",
     "dev-start": "nodemon ./index.js",
     "heroku-postbuild": "npm install"
   },
