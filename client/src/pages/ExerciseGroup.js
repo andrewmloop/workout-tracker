@@ -4,13 +4,10 @@ import Banner from "../components/Banner";
 import RightArrowSVG from "../components/RightArrowSVG";
 import PageTransition from "../components/PageTransition";
 
-
 export default function ExerciseGroup({ addMode }) {
   return (
     <>
-      <Banner
-        bannerText={addMode ? "Add Exercises" : "Muscle Group"}
-      />
+      <Banner bannerText={addMode ? "Add Exercises" : "Muscle Group"} />
       <PageTransition>
         <div className="h-full p-6">
           <ul className="flex flex-col justify-start">
@@ -32,13 +29,14 @@ export default function ExerciseGroup({ addMode }) {
 
 function GroupItem(props) {
   return (
-    <li className=" flex justify-between items-center py-3 border-b-[1px] border-gray-500 text-white">
+    <li className="flex justify-between items-center py-3 border-b-[1px] border-gray-500 text-white">
       <Link
         to="/exercise/list"
-        state={{"group": props.group,
-          "text": props.text}}
-        className="block py-1"
-      >{props.text}</Link>
+        state={{ group: props.group, text: props.text }}
+        className="block w-full py-1"
+      >
+        {props.text}
+      </Link>
       <RightArrowSVG />
     </li>
   );
