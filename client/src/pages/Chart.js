@@ -176,7 +176,7 @@ export default function Chart() {
               <button
                 onClick={() => handleRepsClick()}
                 className={`w-full btn-lg mb-4 ${
-                  !showWeight && !showMax ? "btn-lg" : "btn-inverted-lg"
+                  !showWeight ? "btn-lg" : "btn-inverted-lg"
                 }`}
               >
                 Reps
