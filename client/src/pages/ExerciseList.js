@@ -8,8 +8,13 @@ import PageTransition from "../components/PageTransition";
 
 import { useNotif } from "../context/NotificationContext";
 
-
-export default function ExerciseList({ addMode, setAddMode, activeRoutine, newExercises, setNewExercises }) {
+export default function ExerciseList({
+  addMode,
+  setAddMode,
+  activeRoutine,
+  newExercises,
+  setNewExercises,
+}) {
   const { handleNotif } = useNotif();
   const navigate = useNavigate();
 
@@ -25,13 +30,13 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
 
   // Fetch desired exercise list, store the full copy in fetchList and
   // store a copy in searchList which will be modified with the search function
-  const fetchExercises = async route => {
+  const fetchExercises = async (route) => {
     try {
       setLoading(true);
       const res = await fetch(`/api/exercise/list${route}`, {
         headers: {
-          "x-access-token": localStorage.getItem("token")
-        }
+          "x-access-token": localStorage.getItem("token"),
+        },
       });
       const data = await res.json();
       if (data.isLoggedIn === false) {
@@ -53,7 +58,7 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
     }
   };
 
-  const addRoutineExercises = async exercisesToAdd => {
+  const addRoutineExercises = async (exercisesToAdd) => {
     if (exercisesToAdd.length > 0) {
       try {
         const res = await fetch(`/api/routine/upd-routine/${activeRoutine}`, {
@@ -62,7 +67,7 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
             "x-access-token": localStorage.getItem("token"),
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ newExercises: exercisesToAdd })
+          body: JSON.stringify({ newExercises: exercisesToAdd }),
         });
         const data = await res.json();
         if (res.status === 200) {
@@ -86,47 +91,43 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
     }
   };
 
-  useEffect( () => {
+  useEffect(() => {
     fetchExercises(muscleGroup);
   }, []);
-  
+
   return (
     <>
-      {addMode
-        ? <Banner
+      {addMode ? (
+        <Banner
           bannerText="Add Exercises"
           showBack={true}
           showAdd={true}
           addText="Finish"
           addFunction={() => addRoutineExercises(newExercises)}
         />
-        : <Banner 
-          bannerText={muscleGroupLabel} 
-          showBack={true}
-        />
-      }
+      ) : (
+        <Banner bannerText={muscleGroupLabel} showBack={true} />
+      )}
       <PageTransition>
         <div className="p-6 h-full">
           <SearchField setSearchList={setSearchList} fetchList={fetchList} />
-          {
-            loading
-              ? <Loading text="Moving the weights around..." />
-              : <ul className="flex flex-col justify-start mb-20">
-                {
-                  searchList.map( exercise => {
-                    return (
-                      <ListItem 
-                        key={exercise._id} 
-                        exercise={exercise} 
-                        addMode={addMode}
-                        newExercises={newExercises}
-                        setNewExercises={setNewExercises}
-                      />
-                    );
-                  })
-                }
-              </ul>
-          }
+          {loading ? (
+            <Loading text="Moving the weights around..." />
+          ) : (
+            <ul className="flex flex-col justify-start mb-20">
+              {searchList.map((exercise) => {
+                return (
+                  <ListItem
+                    key={exercise._id}
+                    exercise={exercise}
+                    addMode={addMode}
+                    newExercises={newExercises}
+                    setNewExercises={setNewExercises}
+                  />
+                );
+              })}
+            </ul>
+          )}
         </div>
       </PageTransition>
     </>
@@ -134,11 +135,13 @@ export default function ExerciseList({ addMode, setAddMode, activeRoutine, newEx
 }
 
 function ListItem({ exercise, addMode, newExercises, setNewExercises }) {
-  const [isClicked, setIsClicked] = useState(newExercises.indexOf(exercise._id) > -1);
+  const [isClicked, setIsClicked] = useState(
+    newExercises.indexOf(exercise._id) > -1
+  );
 
   const handleClick = () => {
     let list = [...newExercises];
-    
+
     let index = list.indexOf(exercise._id);
     if (index > -1) {
       list.splice(index, 1);
@@ -152,23 +155,28 @@ function ListItem({ exercise, addMode, newExercises, setNewExercises }) {
 
   return (
     <li className="flex justify-between items-center py-3 border-b-[1px] border-gray-500 text-white">
-      <Link to="/exercise/detail"
-        state={{ "exercise": exercise }}
-        className="block py-1 whitespace-nowrap overflow-x-hidden text-ellipsis"
-      >{exercise.name}</Link>
-      {addMode 
-        ? <button 
+      <Link
+        to="/exercise/detail"
+        state={{ exercise: exercise }}
+        className="block w-full py-1 whitespace-nowrap overflow-x-hidden text-ellipsis"
+      >
+        {exercise.name}
+      </Link>
+      {addMode ? (
+        <button
           onClick={() => handleClick()}
           className={`${isClicked ? "btn-deny" : "btn-confirm"} ml-4`}
-        >{isClicked ? "Remove" : "Add"}</button>
-        : <RightArrowSVG />
-      }
+        >
+          {isClicked ? "Remove" : "Add"}
+        </button>
+      ) : (
+        <RightArrowSVG />
+      )}
     </li>
   );
 }
 
 function SearchField({ setSearchList, fetchList }) {
-
   const debounce = (fn, delay) => {
     let timer;
     return (...args) => {
@@ -184,7 +192,7 @@ function SearchField({ setSearchList, fetchList }) {
     if (input === "") {
       setSearchList([...list]);
     } else {
-      let filter = list.filter( item => {
+      let filter = list.filter((item) => {
         if (input === "") return true;
         return item.name.toLowerCase().indexOf(input.toLowerCase()) > -1;
       });
@@ -193,16 +201,20 @@ function SearchField({ setSearchList, fetchList }) {
   };
 
   const debounceSearch = useCallback(
-    debounce( (input, list) => handleSearch(input, list), 300), []
+    debounce((input, list) => handleSearch(input, list), 300),
+    []
   );
 
   return (
     <div className="w-full mb-4">
-      <input id="search" name="search" type="text"
+      <input
+        id="search"
+        name="search"
+        type="text"
         placeholder="Search exercises"
         onChange={(e) => debounceSearch(e.target.value, fetchList)}
         className="w-full text-input"
-      /> 
+      />
     </div>
   );
 }
