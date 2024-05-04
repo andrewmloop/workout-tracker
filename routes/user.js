@@ -8,7 +8,7 @@ const userRoutes = express.Router();
 
 // READ
 // Get one user
-userRoutes.route("/:id").get( (req, res) => {
+userRoutes.route("/:id").get((req, res) => {
   User.findById(req.params.id, (err, result) => {
     if (err) throw err;
     res.json(result);
@@ -16,22 +16,20 @@ userRoutes.route("/:id").get( (req, res) => {
 });
 
 // UPDATE
-// USED
-userRoutes.route("/update").post( (req, res) => {
+userRoutes.route("/update").post((req, res) => {
   const newValues = {
     $set: {
       email: req.body.email,
       password: req.body.password,
       first_name: req.body.first_name,
       birth_date: req.body.birth_date,
-      left_hand: req.body.left_hand,
-      use_metric: req.body.use_metric
-    }
+      use_metric: req.body.use_metric,
+    },
   };
 
   User.findByIdAndUpdate(
-    req.user.id, 
-    newValues, 
+    req.user.id,
+    newValues,
     { returnOriginal: false },
     (err, result) => {
       if (err) {
@@ -44,11 +42,12 @@ userRoutes.route("/update").post( (req, res) => {
         message: "Updated user",
         data: result,
       });
-    });
+    }
+  );
 });
 
 // DELETE
-userRoutes.route("/delete/:id").delete( (req, response) => {
+userRoutes.route("/delete/:id").delete((req, response) => {
   User.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) throw err;
     response.json(result);

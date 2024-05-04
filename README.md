@@ -1,7 +1,7 @@
 # Workout Tracker Web App
 
 ## Introduction
-This is a web app designed to help users track their workouts. It's built with TypeScript, React for the front end, Node.js with Express.js for the backend, and MongoDB Atlas for database storage. Authentication is implemented using JSON Web Tokens (JWT).
+This is a web app designed to help users track their workouts. It's built with React for the front end, Node.js with Express.js for the backend CRUD operations, and MongoDB Atlas for database storage. Authentication is implemented using JSON Web Tokens (JWT). Hosted as a Docker container.
 
 ## Features
 - User authentication and authorization with JWT
@@ -23,7 +23,7 @@ A version of this app is hosted at: https://iron-temple-app.herokuapp.com. Pleas
 
 2. Create a `.env` file with:
 
-```xml
+```
 MONGO_URI="MongoDB Atlas Cluster Connection String"
 JWT_SECRET="JWT Token"
 ```
@@ -39,9 +39,9 @@ docker run \
 
 
 ## Technologies Used
-- TypeScript
 - React
 - Node.js
 - Express.js
+- Docker
 - MongoDB Atlas
 - JSON Web Tokens (JWT)
