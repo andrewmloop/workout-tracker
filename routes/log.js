@@ -10,7 +10,6 @@ logRoutes.route("/add").post((req, res) => {
     exercise: req.body.exercise,
     weight: req.body.weight,
     reps: req.body.reps,
-    maxRep: req.body.maxRep,
     form: req.body.form,
     user: req.user.id,
   };

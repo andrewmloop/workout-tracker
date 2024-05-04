@@ -23,10 +23,6 @@ const LogSchema = new Schema({
     required: [true, "Please record your weight"],
     min: [1, "Please record your reps."],
   },
-  maxRep: {
-    type: Number,
-    default: 0,
-  },
   form: {
     type: String,
     enum: ["good", "okay", "poor"],
@@ -36,7 +32,7 @@ const LogSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
-  }
+  },
 });
 
 export default mongoose.model("Log", LogSchema);
