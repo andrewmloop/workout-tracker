@@ -12,13 +12,11 @@ export default function Settings() {
   const { handleNotif } = useNotif();
   const navigate = useNavigate();
 
-  const [isLeftHand, setIsLeftHand] = useState(userStore.left_hand);
   const [isMetric, setIsMetric] = useState(userStore.use_metric);
   const firstRender = useRef(true);
 
   const handleChange = async () => {
     const newData = {
-      left_hand: isLeftHand,
       use_metric: isMetric,
     };
 
@@ -27,9 +25,9 @@ export default function Settings() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-access-token": localStorage.getItem("token")
+          "x-access-token": localStorage.getItem("token"),
         },
-        body: JSON.stringify(newData)
+        body: JSON.stringify(newData),
       });
       const data = await res.json();
       if (data.isLoggedIn === false) {
@@ -55,32 +53,18 @@ export default function Settings() {
     } else {
       handleChange();
     }
-  }, [isLeftHand, isMetric]);
+  }, [isMetric]);
 
   return (
     <>
-      <Banner
-        bannerText={"Settings"}
-        showBack={true}
-      />
+      <Banner bannerText={"Settings"} showBack={true} />
       <PageTransition>
         <div className="p-6 text-white">
           <div className="flex flex-col mb-4">
             <div className="flex justify-between items-center mb-2">
-              <h5 className="text-lg font-bold">Left Handed</h5>
-              <ToggleSwitch 
-                name="leftHanded" 
-                checked={isLeftHand}
-                onChange={() => setIsLeftHand(!isLeftHand)} 
-              />
-            </div>
-            <p>This will move the buttons to record exercise logs to the left side of the screen.</p>
-          </div>
-          <div className="flex flex-col mb-4">
-            <div className="flex justify-between items-center mb-2">
               <h5 className="text-lg font-bold">Use Metric</h5>
-              <ToggleSwitch 
-                name="metric" 
+              <ToggleSwitch
+                name="metric"
                 checked={isMetric}
                 onChange={() => setIsMetric(!isMetric)}
               />
@@ -104,8 +88,17 @@ function ToggleSwitch({ name, checked, onChange }) {
         className="hidden"
         onClick={onChange}
       />
-      <label htmlFor={name} className="flex justify-between align-middle cursor-pointer w-[70px] h-[35px] border-2 rounded-full" >
-        <span className={`${checked ? "bg-amber-400 translate-x-[100%]" : "bg-slate-300 translate-x-0"} w-1/2 rounded-full transition-transform duration-200`} />
+      <label
+        htmlFor={name}
+        className="flex justify-between align-middle cursor-pointer w-[70px] h-[35px] border-2 rounded-full"
+      >
+        <span
+          className={`${
+            checked
+              ? "bg-amber-400 translate-x-[100%]"
+              : "bg-slate-300 translate-x-0"
+          } w-1/2 rounded-full transition-transform duration-200`}
+        />
       </label>
     </div>
   );
@@ -121,10 +114,12 @@ function Logout() {
   };
 
   return (
-    <button 
-      type="button" 
+    <button
+      type="button"
       onClick={() => handleClick()}
       className="btn-deny-lg w-full"
-    >Logout</button>
+    >
+      Logout
+    </button>
   );
 }
