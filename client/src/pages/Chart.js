@@ -22,38 +22,25 @@ export default function Chart() {
   const [chartLogs, setChartLogs] = useState([]);
   const [chartDates, setChartDates] = useState([]);
   const [showWeight, setShowWeight] = useState(true);
-  const [showMax, setShowMax] = useState(false);
   const [refetch, setRefetch] = useState(false);
 
-  const createChartLogs = list => {
-    // const logs = [...list];
-    // let newData = logs.slice(0).map( exercise => {
-    //   let date = new Date(exercise.date);
-    //   let formattedDate = date.toString().slice(4, 10);
-    //   if (showWeight) {
-    //     return {x: formattedDate, y: exercise.weight};
-    //   } else if (showMax) {
-    //     return {x: formattedDate, y: exercise.maxRep};
-    //   } else {
-    //     return {x: formattedDate, y: (exercise.weight * exercise.reps)};
-    //   }
-    // });
-    // setChartLogs(newData);
+  const createChartLogs = (list) => {
     const logs = [...list];
-    let newLogs = logs.slice(0).map( exercise => {
+
+    let newLogs = logs.slice(0).map((exercise) => {
       if (showWeight) {
         return exercise.weight;
-      } else if (showMax) {
-        return exercise.maxRep;
       } else {
         return exercise.reps;
       }
     });
-    let newDates = logs.slice(0).map( exercise => {
+
+    let newDates = logs.slice(0).map((exercise) => {
       let date = new Date(exercise.date);
       let formattedDate = date.toString().slice(4, 10);
       return formattedDate;
     });
+
     setChartLogs(newLogs);
     setChartDates(newDates);
   };
@@ -62,9 +49,9 @@ export default function Chart() {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { 
-        display: false
-      }
+      legend: {
+        display: false,
+      },
     },
     scales: {
       x: {
@@ -78,11 +65,12 @@ export default function Chart() {
           minRotation: 60,
           font: {
             size: 16,
-            family: "'-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
-            weight: "bold"
+            family:
+              "'-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
+            weight: "bold",
           },
           padding: 6,
-          source: "auto"
+          source: "auto",
         },
       },
       y: {
@@ -95,18 +83,19 @@ export default function Chart() {
           stepSize: 5,
           font: {
             size: 16,
-            family: "'-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'",
-            weight: "bold"
+            family:
+              "'-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'",
+            weight: "bold",
           },
-          padding: 6
+          padding: 6,
         },
         grace: "10%",
         skip: 5,
       },
     },
     layout: {
-      padding: 0
-    }
+      padding: 0,
+    },
   };
 
   const chartData = {
@@ -119,8 +108,8 @@ export default function Chart() {
         backgroundColor: "rgba(251, 191, 36, 0.2)",
         fill: true,
         pointHitRadius: 10,
-      }
-    ]
+      },
+    ],
   };
 
   const fetchLogs = async () => {
@@ -146,22 +135,14 @@ export default function Chart() {
     }
   };
 
-  const handleWeightClick = ()  => {
+  const handleWeightClick = () => {
     setShowWeight(true);
-    setShowMax(false);
-    setRefetch(prev => !prev);
-  };
-
-  const handle1RMClick = ()  => {
-    setShowWeight(false);
-    setShowMax(true);
-    setRefetch(prev => !prev);
+    setRefetch((prev) => !prev);
   };
 
   const handleRepsClick = () => {
     setShowWeight(false);
-    setShowMax(false);
-    setRefetch(prev => !prev);
+    setRefetch((prev) => !prev);
   };
 
   useEffect(() => {
@@ -174,37 +155,35 @@ export default function Chart() {
 
   return (
     <>
-      <Banner
-        bannerText={exercise.name}
-        showBack={true}
-      />
+      <Banner bannerText={exercise.name} showBack={true} />
       <PageTransition>
-        {
-          loading
-            ? <Loading text="Looking through your gains..." />
-            : <div className="h-[90vh] p-6">
-              <div className="h-[40vh] mb-6">
-                <Line 
-                  data={chartData}
-                  options={chartOptions}
-                />
-              </div>
-              <div className="flex flex-col justify-start items-center w-full">
-                <button 
-                  onClick={() => handleWeightClick()} 
-                  className={`w-full btn-lg mb-4 ${showWeight ? "btn-lg" : "btn-inverted-lg"}`}
-                >Weight</button>
-                <button  
-                  onClick={() => handleRepsClick()}
-                  className={`w-full btn-lg mb-4 ${(!showWeight && !showMax) ? "btn-lg" : "btn-inverted-lg"}`}
-                >Reps</button>
-                <button  
-                  onClick={() => handle1RMClick()}
-                  className={`w-full btn-lg mb-4 ${showMax ? "btn-lg" : "btn-inverted-lg"}`}
-                >1 Rep Max</button>
-              </div>
+        {loading ? (
+          <Loading text="Looking through your gains..." />
+        ) : (
+          <div className="h-[90vh] p-6">
+            <div className="h-[40vh] mb-6">
+              <Line data={chartData} options={chartOptions} />
             </div>
-        }
+            <div className="flex flex-col justify-start items-center w-full">
+              <button
+                onClick={() => handleWeightClick()}
+                className={`w-full btn-lg mb-4 ${
+                  showWeight ? "btn-lg" : "btn-inverted-lg"
+                }`}
+              >
+                Weight
+              </button>
+              <button
+                onClick={() => handleRepsClick()}
+                className={`w-full btn-lg mb-4 ${
+                  !showWeight ? "btn-lg" : "btn-inverted-lg"
+                }`}
+              >
+                Reps
+              </button>
+            </div>
+          </div>
+        )}
       </PageTransition>
     </>
   );

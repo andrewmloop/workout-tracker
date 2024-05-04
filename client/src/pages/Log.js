@@ -73,7 +73,6 @@ export default function Log() {
       exercise: exerciseObj.exercise._id,
       weight: weight,
       reps: reps,
-      maxRep: getOneRepMax(weight, reps),
       form: values[form],
       date: logDate,
     };
@@ -126,14 +125,6 @@ export default function Log() {
       console.error("Error fetching log history: ", error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const getOneRepMax = (weight, reps) => {
-    if (reps == 1) {
-      return weight;
-    } else {
-      return Math.round(weight * (36 / (37 - reps)));
     }
   };
 
@@ -349,9 +340,6 @@ function LogItem({
       </div>
 
       <div className="w-full flex justify-between items-center text-sm">
-        <p>
-          1RM: {log.maxRep} {units}
-        </p>
         <p className="first-letter:uppercase">{log.form} form</p>
       </div>
     </li>
