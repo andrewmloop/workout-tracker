@@ -2,8 +2,12 @@ import React from "react";
 
 const NotifContext = React.createContext({});
 
-const NotifProvider = ({children}) => {
-  const [notifStore, setNotifStore] = React.useState({});
+const NotifProvider = ({ children }) => {
+  const [notifStore, setNotifStore] = React.useState({
+    text: "",
+    isSuccess: true,
+    show: false,
+  });
 
   return (
     <NotifContext.Provider value={[notifStore, setNotifStore]}>
@@ -15,16 +19,23 @@ const NotifProvider = ({children}) => {
 const useNotif = () => {
   const [notifStore, setNotifStore] = React.useContext(NotifContext);
 
-  const handleNotif = (newNotifText, newNotifType, showNotif) => {
+  const handleNotif = (newNotifText, isSuccess, showNotif) => {
     setNotifStore({
       text: newNotifText,
-      // true == successful action, false == failed action
-      type: newNotifType,
+      isSuccess: isSuccess,
       show: showNotif,
     });
   };
 
-  return { notifStore: notifStore, handleNotif: handleNotif };
+  const clearNotif = () => {
+    setNotifStore({
+      text: "",
+      isSuccess: true,
+      show: false,
+    });
+  };
+
+  return { notifStore, handleNotif, clearNotif };
 };
 
 export { NotifProvider, useNotif };

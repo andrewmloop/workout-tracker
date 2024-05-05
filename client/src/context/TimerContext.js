@@ -1,19 +1,68 @@
 import React, { createContext, useContext, useState } from "react";
+import { useNotif } from "./NotificationContext";
+import { useInterval } from "../hooks/UseInterval";
 
 const TimerContext = createContext({
   restTime: 30,
   startTime: 0,
   timeLeft: 0,
-  start: false
+  isTicking: false,
 });
 
-export const TimerContextProvider = ({children}) => {
+export const TimerContextProvider = ({ children }) => {
+  const { handleNotif, clearNotif } = useNotif();
   const [timerStore, setTimerStore] = useState({
     restTime: 30,
     startTime: 0,
     timeLeft: 0,
-    start: false
+    isTicking: false,
   });
+
+  const endTimer = () => {
+    setTimerStore((prev) => ({
+      ...prev,
+      isTicking: false,
+    }));
+  };
+
+  const setTimeLeft = (time) => {
+    setTimerStore((prev) => ({
+      ...prev,
+      timeLeft: time,
+    }));
+  };
+
+  const calcTimeLeft = () => {
+    let now = new Date();
+    let remainingTime =
+      timerStore.restTime - Math.floor((now - timerStore.startTime) / 1000);
+    if (remainingTime <= 0) remainingTime = 0;
+    if (timerStore.timeLeft > 0) setTimeLeft(remainingTime);
+  };
+
+  const dispatchNotif = () => {
+    // Update notif store to trigger notif
+    handleNotif("Rest timer done", true, true);
+
+    // Reset TimerStore
+    endTimer();
+
+    // Reset notif store after 3 seconds to remove notif
+    setTimeout(() => {
+      clearNotif();
+    }, 3000);
+  };
+
+  // Updates timeLeft every second if the timer is ticking
+  useInterval(() => {
+    if (timerStore.isTicking) {
+      calcTimeLeft();
+    }
+
+    if (timerStore.isTicking && timerStore.timeLeft <= 0) {
+      dispatchNotif();
+    }
+  }, 1000);
 
   return (
     <TimerContext.Provider value={[timerStore, setTimerStore]}>
@@ -26,43 +75,40 @@ export const useTimer = () => {
   const [timerStore, setTimerStore] = useContext(TimerContext);
 
   const setRestTime = (time) => {
-    setTimerStore(prev => ({
+    setTimerStore((prev) => ({
       ...prev,
-      restTime: time
-    }));
-  };
-
-  const setStartTime = () => {
-    let now = new Date();
-    setTimerStore(prev => ({
-      ...prev,
-      startTime: now
+      restTime: time,
     }));
   };
 
   const setTimeLeft = (time) => {
-    setTimerStore(prev => ({
+    setTimerStore((prev) => ({
       ...prev,
-      timeLeft: time
+      timeLeft: time,
     }));
   };
 
-  const toggleTimer = () => setTimerStore(prev => ({
-    ...prev,
-    start: !prev.start
-  }));
+  const toggleTimer = () => {
+    let now = new Date();
+    setTimerStore((prev) => ({
+      ...prev,
+      startTime: now,
+      isTicking: !prev.isTicking,
+    }));
+  };
 
-  const endTimer = () => setTimerStore(prev => ({
-    ...prev,
-    start: false
-  }));
+  const endTimer = () => {
+    setTimerStore((prev) => ({
+      ...prev,
+      isTicking: false,
+    }));
+  };
 
-  return ({
+  return {
     timerStore,
     setRestTime,
-    setStartTime,
     setTimeLeft,
     toggleTimer,
-    endTimer
-  });
+    endTimer,
+  };
 };
