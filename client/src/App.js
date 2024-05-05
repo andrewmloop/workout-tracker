@@ -30,51 +30,61 @@ export default function App() {
   const [newExercises, setNewExercises] = useState([]);
 
   return (
-    <UserProvider><NotifProvider><TimerContextProvider>
-      <div>
-        <Routes>
-          <Route element={<WithoutNav  />}>
-            <Route exact path="/" element={<Login />}/>
-            <Route exact path="/login" element={<Login />}/>
-            <Route exact path="/register" element={<Register />}/>
-          </Route>
-          <Route element={<WithNav />}>
-            <Route path="/exercise">
-              <Route index path="/exercise" element={
-                <ExerciseGroup addMode={addMode} />} 
-              />
-              <Route path="list" element={
-                <ExerciseList 
-                  addMode={addMode} 
-                  setAddMode={setAddMode}
-                  activeRoutine={activeRoutine} 
-                  newExercises={newExercises}
-                  setNewExercises={setNewExercises}
-                />} 
-              />
-              <Route path="detail" element={<ExerciseDetail />} />
-            </Route>
-            <Route path="/routine">
-              <Route index path="/routine" element={<RoutineList />} />
-              <Route path="add" element={<AddRoutine />} />
-              <Route path="update" element={<EditRoutine />} />
-              <Route path="detail" element={
-                <RoutineDetail 
-                  setAddMode={setAddMode} 
-                  setActiveRoutine={setActiveRoutine} 
-                />} 
-              />
-              <Route path="log" element={<Log />} />
-            </Route>
-            <Route exact path="/settings" element={
-              <Settings />
-            }/>
-            <Route exact path="/chart" element={<Chart />} />
-          </Route>
-        </Routes>
-        <Notification />
-      </div>
-    </TimerContextProvider></NotifProvider></UserProvider>
+    <UserProvider>
+      <NotifProvider>
+        <TimerContextProvider>
+          <div>
+            <Routes>
+              <Route element={<WithoutNav />}>
+                <Route exact path="/" element={<Login />} />
+                <Route exact path="/login" element={<Login />} />
+                <Route exact path="/register" element={<Register />} />
+              </Route>
+              <Route element={<WithNav />}>
+                <Route path="/exercise">
+                  <Route
+                    index
+                    path="/exercise"
+                    element={<ExerciseGroup addMode={addMode} />}
+                  />
+                  <Route
+                    path="list"
+                    element={
+                      <ExerciseList
+                        addMode={addMode}
+                        setAddMode={setAddMode}
+                        activeRoutine={activeRoutine}
+                        newExercises={newExercises}
+                        setNewExercises={setNewExercises}
+                      />
+                    }
+                  />
+                  <Route path="detail" element={<ExerciseDetail />} />
+                </Route>
+                <Route path="/routine">
+                  <Route index path="/routine" element={<RoutineList />} />
+                  <Route path="add" element={<AddRoutine />} />
+                  <Route path="update" element={<EditRoutine />} />
+                  <Route
+                    path="detail"
+                    element={
+                      <RoutineDetail
+                        setAddMode={setAddMode}
+                        setActiveRoutine={setActiveRoutine}
+                      />
+                    }
+                  />
+                  <Route path="log" element={<Log />} />
+                </Route>
+                <Route exact path="/settings" element={<Settings />} />
+                <Route exact path="/chart" element={<Chart />} />
+              </Route>
+            </Routes>
+            <Notification />
+          </div>
+        </TimerContextProvider>
+      </NotifProvider>
+    </UserProvider>
   );
 }
 

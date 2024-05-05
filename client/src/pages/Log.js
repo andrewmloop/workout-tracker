@@ -20,8 +20,8 @@ export default function Log() {
   const { handleNotif } = useNotif();
 
   // Values for form button toggle
-  const values = ["Good", "Okay", "Poor"];
-  const units = userStore.use_metric ? "kg" : "lbs";
+  const formValues = ["Good", "Okay", "Poor"];
+  const units = userStore.use_metric ? "kg" : "lb";
 
   // State to hold weight, reps, form, date for submit
   const [weight, setWeight] = useState("");
@@ -73,7 +73,7 @@ export default function Log() {
       exercise: exerciseObj.exercise._id,
       weight: weight,
       reps: reps,
-      form: values[form],
+      form: formValues[form],
       date: logDate,
     };
 
@@ -179,11 +179,16 @@ export default function Log() {
                   return (
                     <div key={i} className="mb-2">
                       <h3 className="mb-1">{date}</h3>
-                      {logHistory.map((log) => {
-                        if (new Date(log.date).toDateString() === date) {
+                      {logHistory
+                        .filter(
+                          (log) => new Date(log.date).toDateString() === date
+                        )
+                        .sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+                        .map((log, index) => {
                           return (
                             <LogItem
                               key={log._id}
+                              index={index}
                               log={log}
                               units={units}
                               setInputs={setInputs}
@@ -192,8 +197,7 @@ export default function Log() {
                               setLogToEdit={setLogToEdit}
                             />
                           );
-                        }
-                      })}
+                        })}
                     </div>
                   );
                 })}
@@ -254,7 +258,7 @@ export default function Log() {
                       : "bg-red-700"
                   }`}
               >
-                {values[form]}
+                {formValues[form]}
               </button>
               <label
                 htmlFor="log-submit"
@@ -309,6 +313,7 @@ function DualButtons({ exerciseObj, editMode, setEditMode }) {
 
 function LogItem({
   log,
+  index,
   units,
   setInputs,
   editMode,
@@ -322,12 +327,12 @@ function LogItem({
 
   return (
     <li
-      className="mb-2 px-2 py-1 mr-3 bg-slate-800 rounded-md"
+      className="flex justify-between mb-2 mr-3 bg-slate-800 rounded-md overflow-hidden"
       onClick={() => setInputs(log.weight, log.reps)}
     >
-      <div className="flex justify-between">
+      <div className="flex flex-col justify-between pl-2 py-1">
         <p className="text-lg">
-          {log.weight} {units} x {log.reps} reps.
+          {index + 1}: {log.weight} {units} x {log.reps} rep
         </p>
         {editMode && (
           <button
@@ -339,8 +344,16 @@ function LogItem({
         )}
       </div>
 
-      <div className="w-full flex justify-between items-center text-sm">
-        <p className="first-letter:uppercase">{log.form} form</p>
+      <div
+        className={`flex w-8 justify-center items-center text-sm px-2 py-1 ${
+          log.form === "good"
+            ? "bg-green-700"
+            : log.form === "okay"
+            ? "bg-amber-400"
+            : "bg-red-700"
+        }`}
+      >
+        <p>{log.form === "good" ? "G" : log.form === "okay" ? "O" : "P"}</p>
       </div>
     </li>
   );
