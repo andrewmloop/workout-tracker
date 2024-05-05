@@ -5,11 +5,11 @@ const routineRoutes = express.Router();
 
 // CREATE
 // USED
-routineRoutes.route("/add").post( (req, res) => {
+routineRoutes.route("/add").post((req, res) => {
   const routeObj = {
     exercise_list: [],
     user: req.user.id,
-    name: req.body.name
+    name: req.body.name,
   };
 
   Routine.create(routeObj, (err, result) => {
@@ -30,7 +30,7 @@ routineRoutes.route("/add").post( (req, res) => {
 // READ
 // Get all routines for a user
 // USED
-routineRoutes.route("/list").get( (req, res) => {
+routineRoutes.route("/list").get((req, res) => {
   Routine.find({ user: req.user.id }, (err, result) => {
     if (err) {
       console.error("Failed to fetch routines: ", err);
@@ -43,7 +43,10 @@ routineRoutes.route("/list").get( (req, res) => {
         data: result,
       });
     }
-  }).sort({ name: 1 }).collation({ locale: "en", caseLevel: true}).populate("exercise_list.exercise");
+  })
+    .sort({ name: 1 })
+    .collation({ locale: "en", caseLevel: true })
+    .populate("exercise_list.exercise");
 });
 
 // Get one routine
@@ -65,8 +68,8 @@ routineRoutes.route("/list").get( (req, res) => {
 //   };
 
 //   Routine.findByIdAndUpdate(
-//     req.params.id, 
-//     newValues, 
+//     req.params.id,
+//     newValues,
 //     { returnOriginal: false },
 //     (err, result) => {
 //       if (err) throw err;
@@ -76,23 +79,23 @@ routineRoutes.route("/list").get( (req, res) => {
 
 // Update routine name
 // USED
-routineRoutes.route("/upd-name/:id").post( (req, res) => {
+routineRoutes.route("/upd-name/:id").post((req, res) => {
   Routine.findByIdAndUpdate(
     req.params.id,
     {
-      name: req.body.newName
+      name: req.body.newName,
     },
-    { returnOriginal: false},
+    { returnOriginal: false },
     (err, result) => {
       if (err) {
         console.error("Failed to rename routine: ", err);
         res.status(500).json({
-          message: "Failed to rename routine"
+          message: "Failed to rename routine",
         });
       } else {
         res.status(200).json({
           message: "Successfully renamed routine",
-          data: result
+          data: result,
         });
       }
     }
@@ -101,11 +104,11 @@ routineRoutes.route("/upd-name/:id").post( (req, res) => {
 
 // Update exercise_list order
 // Used
-routineRoutes.route("/upd-list/:id").post( (req, res) => {
+routineRoutes.route("/upd-list/:id").post((req, res) => {
   Routine.findByIdAndUpdate(
     req.params.id,
     {
-      exercise_list: req.body.newList
+      exercise_list: req.body.newList,
     },
     { returnOriginal: false },
     (err, result) => {
@@ -144,17 +147,17 @@ routineRoutes.route("/upd-list/:id").post( (req, res) => {
 
 // Delete exercise from list
 // USED
-routineRoutes.route("/del-exercise/:id").post( (req, res) => {
+routineRoutes.route("/del-exercise/:id").post((req, res) => {
   Routine.findByIdAndUpdate(
-    req.params.id, 
+    req.params.id,
     {
       $pull: {
         exercise_list: {
-          exercise: req.body.exercise_list_id
-        }
-      }
+          exercise: req.body.exercise_list_id,
+        },
+      },
     },
-    { 
+    {
       returnOriginal: false,
       safe: true,
       multi: true,
@@ -171,13 +174,14 @@ routineRoutes.route("/del-exercise/:id").post( (req, res) => {
           data: result,
         });
       }
-    });
+    }
+  );
 });
 
 // Update exercise in list
 // USED
-routineRoutes.route("/upd-routine/:id").post( (req, res) => {
-  const newExercises = req.body.newExercises.map( id => {
+routineRoutes.route("/upd-routine/:id").post((req, res) => {
+  const newExercises = req.body.newExercises.map((id) => {
     return { exercise: id };
   });
 
@@ -186,9 +190,9 @@ routineRoutes.route("/upd-routine/:id").post( (req, res) => {
     {
       $addToSet: {
         exercise_list: {
-          $each: newExercises
-        }
-      }
+          $each: newExercises,
+        },
+      },
     },
     { returnOriginal: false },
     (err, result) => {
@@ -209,24 +213,24 @@ routineRoutes.route("/upd-routine/:id").post( (req, res) => {
 
 // Update routine exercise target sets and reps
 // USED
-routineRoutes.route("/upd-targets/:id").post( (req, res) => {
+routineRoutes.route("/upd-targets/:id").post((req, res) => {
   Routine.findOneAndUpdate(
-    { 
-      _id: req.params.id, 
+    {
+      _id: req.params.id,
       exercise_list: {
-        $elemMatch: {exercise: req.body.exerciseId}
-      }
+        $elemMatch: { exercise: req.body.exerciseId },
+      },
     },
     {
       $set: {
         "exercise_list.$.targSets": req.body.targSets,
         "exercise_list.$.targReps": req.body.targReps,
-      }
+      },
     },
     {
       new: true,
       safe: true,
-      upsert: true
+      upsert: true,
     },
     (err, result) => {
       if (err) {
@@ -246,7 +250,7 @@ routineRoutes.route("/upd-targets/:id").post( (req, res) => {
 
 // DELETE
 // USED
-routineRoutes.route("/delete/:id").delete( (req, res) => {
+routineRoutes.route("/delete/:id").delete((req, res) => {
   Routine.findByIdAndDelete(req.params.id, (err, result) => {
     if (err) {
       console.error("Failed to delete routine: ", err);
@@ -261,6 +265,5 @@ routineRoutes.route("/delete/:id").delete( (req, res) => {
     }
   });
 });
-
 
 export default routineRoutes;

@@ -318,22 +318,24 @@ function TargetInputs({ routineId, exercise, setExerciseList }) {
       <input
         id="target-sets"
         name="target-sets"
-        type="number"
+        type="text"
         value={targetSets}
         placeholder="Sets"
+        onFocus={() => setTargetSets("")}
         onChange={(e) => setTargetSets(e.target.value)}
         onBlur={() => updateTargets()}
-        className="text-input-sm"
+        className="text-input-sm w-14"
       />
       <input
         id="target-reps"
         name="target-reps"
-        type="number"
+        type="text"
         value={targetReps}
         placeholder="Reps"
+        onFocus={() => setTargetReps("")}
         onChange={(e) => setTargetReps(e.target.value)}
         onBlur={() => updateTargets()}
-        className="text-input-sm"
+        className="text-input-sm w-14"
       />
     </div>
   );
