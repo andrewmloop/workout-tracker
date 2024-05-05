@@ -324,7 +324,7 @@ function TargetInputs({ routineId, exercise, setExerciseList }) {
         onFocus={() => setTargetSets("")}
         onChange={(e) => setTargetSets(e.target.value)}
         onBlur={() => updateTargets()}
-        className="text-input-sm"
+        className="text-input-sm w-14"
       />
       <input
         id="target-reps"
@@ -335,7 +335,7 @@ function TargetInputs({ routineId, exercise, setExerciseList }) {
         onFocus={() => setTargetReps("")}
         onChange={(e) => setTargetReps(e.target.value)}
         onBlur={() => updateTargets()}
-        className="text-input-sm"
+        className="text-input-sm w-14"
       />
     </div>
   );
