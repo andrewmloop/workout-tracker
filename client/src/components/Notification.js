@@ -20,9 +20,10 @@ export default function Notification() {
 
   return (
     <div
-      className={`fixed bottom-[5.5rem] left-[50%] translate-x-[-50%] text-center w-[85%] p-4 rounded-lg ${
-        show ? "bottom-[5.5rem]" : "bottom-[-110vh] pointer-events-none"
-      } ${color} transition-all duration-300`}
+      className={`fixed bottom-[-110vh] left-[50%] translate-x-[-50%] text-center w-[85%] p-4 rounded-lg pointer-events-none ${
+        show ? "bottom-[5.5rem]" : "bottom-[-110vh]"
+      }
+       ${color} transition-all duration-300`}
     >
       <p>{text}</p>
     </div>
