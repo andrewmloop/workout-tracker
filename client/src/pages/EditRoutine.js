@@ -6,7 +6,6 @@ import PageTransition from "../components/PageTransition";
 
 import { useNotif } from "../context/NotificationContext";
 
-
 export default function EditRoutine() {
   const { handleNotif } = useNotif();
   const navigate = useNavigate();
@@ -22,7 +21,7 @@ export default function EditRoutine() {
 
     if (newName.length > 0) {
       const routine = {
-        newName: newName
+        newName: newName,
       };
 
       try {
@@ -32,7 +31,7 @@ export default function EditRoutine() {
             "Content-Type": "application/json",
             "x-access-token": localStorage.getItem("token"),
           },
-          body: JSON.stringify(routine)
+          body: JSON.stringify(routine),
         });
         const data = await res.json();
         if (data.isLoggedIn === false) {
@@ -55,34 +54,32 @@ export default function EditRoutine() {
     }
   };
 
-  useEffect( () => {
+  useEffect(() => {
     setNewName(routineName);
   }, []);
 
   return (
     <>
-      <Banner
-        bannerText="Rename Routine"
-        showBack={true}
-      />
+      <Banner bannerText="Rename Routine" showBack={true} />
       <PageTransition>
         <div className="p-8">
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col"
-          >
-            <label htmlFor="routine-name" className="text-white mb-1">Name</label>
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            <label htmlFor="routine-name" className="text-white mb-1">
+              Name
+            </label>
             <input
               type="text"
               name="routine-name"
-              onChange={ (e) => setNewName(e.target.value)}
+              onChange={(e) => setNewName(e.target.value)}
               value={newName}
               className="w-full mb-3 text-input"
             />
             <button
               type="submit"
               className="w-full bg-amber-400 py-1 font-semibold rounded-md text-gray-700"
-            >Submit</button>
+            >
+              Submit
+            </button>
           </form>
         </div>
       </PageTransition>

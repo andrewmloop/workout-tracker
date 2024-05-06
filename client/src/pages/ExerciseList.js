@@ -136,7 +136,7 @@ export default function ExerciseList({
 
 function ListItem({ exercise, addMode, newExercises, setNewExercises }) {
   const [isClicked, setIsClicked] = useState(
-    newExercises.indexOf(exercise._id) > -1
+    newExercises.indexOf(exercise._id) > -1,
   );
 
   const handleClick = () => {
@@ -202,7 +202,7 @@ function SearchField({ setSearchList, fetchList }) {
 
   const debounceSearch = useCallback(
     debounce((input, list) => handleSearch(input, list), 300),
-    []
+    [],
   );
 
   return (

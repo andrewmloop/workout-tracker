@@ -54,28 +54,26 @@ export default function AddRoutine() {
 
   return (
     <>
-      <Banner
-        bannerText={"Create Routine"}
-        showBack={true}
-      />
+      <Banner bannerText={"Create Routine"} showBack={true} />
       <PageTransition>
         <div className="p-8">
-          <form 
-            onSubmit={handleSubmit}
-            className="flex flex-col"
-          >
-            <label htmlFor="routine-name" className="text-white mb-1">Name</label>
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            <label htmlFor="routine-name" className="text-white mb-1">
+              Name
+            </label>
             <input
               type="text"
               name="routine-name"
               placeholder="Routine name"
-              onChange={ (e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               className="w-full mb-3 text-input"
             />
             <button
               type="submit"
               className="w-full bg-amber-400 py-1 font-semibold rounded-md text-gray-700"
-            >Submit</button>
+            >
+              Submit
+            </button>
           </form>
         </div>
       </PageTransition>

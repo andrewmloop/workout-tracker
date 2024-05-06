@@ -17,7 +17,7 @@ export default function Login() {
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [rememberLogin, setRememberLogin] = useState(
-    JSON.parse(localStorage.getItem("rememberLogin"))
+    JSON.parse(localStorage.getItem("rememberLogin")),
   );
   const [loading, setLoading] = useState(false);
   const [valErrors, setValErrors] = useState({});
@@ -99,8 +99,11 @@ export default function Login() {
     return isValid;
   };
 
-  useEffect(async () => {
-    if (rememberLogin) await checkExpire();
+  useEffect(() => {
+    async function onLoad() {
+      if (rememberLogin) await checkExpire();
+    }
+    onLoad();
   }, []);
 
   return (

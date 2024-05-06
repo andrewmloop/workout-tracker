@@ -181,7 +181,7 @@ export default function Log() {
                       <h3 className="mb-1">{date}</h3>
                       {logHistory
                         .filter(
-                          (log) => new Date(log.date).toDateString() === date
+                          (log) => new Date(log.date).toDateString() === date,
                         )
                         .sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
                         .map((log, index) => {
@@ -249,14 +249,13 @@ export default function Log() {
               <button
                 id="form"
                 onClick={(e) => handleToggle(e)}
-                className={`w-full p-3 rounded-lg mb-1 
-                  ${
-                    form === 0
-                      ? "bg-green-700"
-                      : form === 1
+                className={`w-full p-3 rounded-lg mb-1 ${
+                  form === 0
+                    ? "bg-green-700"
+                    : form === 1
                       ? "bg-amber-400"
                       : "bg-red-700"
-                  }`}
+                }`}
               >
                 {formValues[form]}
               </button>
@@ -349,8 +348,8 @@ function LogItem({
           log.form === "good"
             ? "bg-green-700"
             : log.form === "okay"
-            ? "bg-amber-400"
-            : "bg-red-700"
+              ? "bg-amber-400"
+              : "bg-red-700"
         }`}
       >
         <p>{log.form === "good" ? "G" : log.form === "okay" ? "O" : "P"}</p>

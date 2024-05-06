@@ -9,9 +9,9 @@ const variants = {
     opacity: 1,
     transition: {
       duration: 0.2,
-      ease: [0.61, 1, 0.88, 1], 
-    }
-  }
+      ease: [0.61, 1, 0.88, 1],
+    },
+  },
 };
 
 export default function PageTransition({ children }) {

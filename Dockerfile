@@ -4,13 +4,12 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-ARG NODE_VERSION=16.14.2
+ARG NODE_VERSION=20.12.2
 
 FROM node:${NODE_VERSION}-alpine
 
 # Use production node environment by default.
 ENV NODE_ENV production
-
 
 WORKDIR /usr/src/app
 
