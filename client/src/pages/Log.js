@@ -12,12 +12,13 @@ import { useNotif } from "../context/NotificationContext";
 
 export default function Log() {
   const navigate = useNavigate();
+
   // Location data that gets passed to log from routine
   const location = useLocation();
   const exerciseObj = location.state.exercise;
 
   const { userStore } = useUser();
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
 
   // Values for form button toggle
   const formValues = ["Good", "Okay", "Poor"];
@@ -27,8 +28,8 @@ export default function Log() {
   const [weight, setWeight] = useState("");
   const [reps, setReps] = useState("");
   const [form, setForm] = useState(0);
-  const [logDate] = useState(Date.now());
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [logToEdit, setLogToEdit] = useState({
@@ -44,7 +45,8 @@ export default function Log() {
   // Ref toggle to refetch logs when a new one is submitted
   const [refetch, setRefetch] = useState(false);
 
-  // Handle form button toggle, toggle through values array
+  // Handle form button toggle, step through formValues array, returning
+  // to index 0 if clicked when index is 2
   const handleToggle = (e) => {
     e.preventDefault();
     form === 2 ? setForm(0) : setForm(form + 1);
@@ -65,16 +67,18 @@ export default function Log() {
 
     if (!handleValidation()) {
       let errorText = "Add a weight and rep";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
       return;
     }
+
+    setSubmitting(true);
 
     const newLog = {
       exercise: exerciseObj.exercise._id,
       weight: weight,
       reps: reps,
       form: formValues[form],
-      date: logDate,
+      date: Date.now(),
     };
 
     try {
@@ -90,18 +94,20 @@ export default function Log() {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       } else if (res.status === 200) {
         setLogHistory([data.data, ...logHistory]);
-        handleNotif(data.message, true, true);
+        dispatchNotif(data.message, true);
         setRefetch((prev) => !prev);
       } else {
-        handleNotif(data.message, false, true);
+        dispatchNotif(data.message, false);
       }
     } catch (error) {
       console.error("Error submiting log: ", error);
       const errorText = "The iron gods are upset at the moment";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -115,7 +121,7 @@ export default function Log() {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       }
       if (res.status === 200) {
         setLogHistory(data.data);
@@ -208,73 +214,25 @@ export default function Log() {
               No logs yet
             </p>
           )}
+          {/* End Log Column */}
           {/* Form Column */}
           <div className="flex flex-col justify-start bg-slate-900">
             <form
               onSubmit={(e) => handleSubmit(e)}
               className="flex flex-col justify-center"
             >
-              <label
-                htmlFor="weight"
-                className="text-sm font-bold text-gray-400"
-              >
-                Weight
-              </label>
-              <input
-                id="weight"
-                type="number"
-                name="weight"
-                placeholder={units}
-                value={weight}
-                onFocus={() => setWeight("")}
-                onChange={(e) => setWeight(e.target.value)}
-                className="w-full p-3 rounded-lg text-center mb-1"
+              <WeightInput handler={setWeight} value={weight} units={units} />
+              <RepInput handler={setReps} value={reps} />
+              <FormButton
+                handler={handleToggle}
+                formValues={formValues}
+                form={form}
               />
-              <label htmlFor="Reps" className="text-sm font-bold text-gray-400">
-                Reps
-              </label>
-              <input
-                id="reps"
-                type="number"
-                name="reps"
-                placeholder={"reps"}
-                value={reps}
-                onFocus={() => setReps("")}
-                onChange={(e) => setReps(e.target.value)}
-                className="w-full p-3 rounded-lg text-center mb-1"
-              />
-              <label htmlFor="form" className="text-sm font-bold text-gray-400">
-                Form
-              </label>
-              <button
-                id="form"
-                onClick={(e) => handleToggle(e)}
-                className={`w-full p-3 rounded-lg mb-1 ${
-                  form === 0
-                    ? "bg-green-700"
-                    : form === 1
-                      ? "bg-amber-400"
-                      : "bg-red-700"
-                }`}
-              >
-                {formValues[form]}
-              </button>
-              <label
-                htmlFor="log-submit"
-                className="text-sm font-bold text-gray-400"
-              >
-                Log
-              </label>
-              <button
-                id="log-submit"
-                type="submit"
-                className="w-full log-submit mb-1"
-              >
-                Submit
-              </button>
+              <SubmitButton submitting={submitting} />
             </form>
             <Timer />
           </div>
+          {/* End Form Column */}
         </div>
         <EditLogModal
           show={showModal}
@@ -307,6 +265,82 @@ function DualButtons({ exerciseObj, editMode, setEditMode }) {
         Chart
       </button>
     </div>
+  );
+}
+
+function WeightInput({ handler, value, units }) {
+  return (
+    <>
+      <label htmlFor="weight" className="text-sm font-bold text-gray-400">
+        Weight
+      </label>
+      <input
+        id="weight"
+        type="number"
+        name="weight"
+        placeholder={units}
+        value={value}
+        onFocus={() => handler("")}
+        onChange={(e) => handler(e.target.value)}
+        className="w-full p-3 rounded-lg text-center mb-1"
+      />
+    </>
+  );
+}
+
+function RepInput({ handler, value }) {
+  return (
+    <>
+      <label htmlFor="Reps" className="text-sm font-bold text-gray-400">
+        Reps
+      </label>
+      <input
+        id="reps"
+        type="number"
+        name="reps"
+        placeholder={"reps"}
+        value={value}
+        onFocus={() => handler("")}
+        onChange={(e) => handler(e.target.value)}
+        className="w-full p-3 rounded-lg text-center mb-1"
+      />
+    </>
+  );
+}
+
+function FormButton({ handler, formValues, form }) {
+  return (
+    <>
+      <label htmlFor="form" className="text-sm font-bold text-gray-400">
+        Form
+      </label>
+      <button
+        id="form"
+        onClick={(e) => handler(e)}
+        className={`w-full p-3 rounded-lg mb-1 ${
+          form === 0
+            ? "bg-green-700"
+            : form === 1
+            ? "bg-amber-400"
+            : "bg-red-700"
+        }`}
+      >
+        {formValues[form]}
+      </button>
+    </>
+  );
+}
+
+function SubmitButton({ submitting }) {
+  return (
+    <>
+      <label htmlFor="log-submit" className="text-sm font-bold text-gray-400">
+        Log
+      </label>
+      <button id="log-submit" type="submit" className="w-full log-submit mb-1">
+        {submitting ? "Logging..." : "Submit"}
+      </button>
+    </>
   );
 }
 
@@ -348,8 +382,8 @@ function LogItem({
           log.form === "good"
             ? "bg-green-700"
             : log.form === "okay"
-              ? "bg-amber-400"
-              : "bg-red-700"
+            ? "bg-amber-400"
+            : "bg-red-700"
         }`}
       >
         <p>{log.form === "good" ? "G" : log.form === "okay" ? "O" : "P"}</p>

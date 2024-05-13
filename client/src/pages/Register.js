@@ -7,7 +7,7 @@ import { useNotif } from "../context/NotificationContext";
 
 export default function Register() {
   const navigate = useNavigate();
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
 
   // State for form inputs
   const [name, setName] = useState("");
@@ -77,17 +77,17 @@ export default function Register() {
         const data = await res.json();
         if (res.status === 200) {
           setSuccessMessage(true);
-          handleNotif(data.message, true, true);
+          dispatchNotif(data.message, true);
           navigate("/login");
         } else {
           setFailureMessage(true);
-          handleNotif(data.message, false, true);
+          dispatchNotif(data.message, false);
           setRegError(data.message);
         }
       } catch (error) {
         if (error) console.error("Error registering new user: ", error);
         let errorText = "The iron gods are displeased at the moment";
-        handleNotif(errorText, false, true);
+        dispatchNotif(errorText, false);
       }
     }
   };

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNotif } from "../context/NotificationContext";
 
 export default function Notification() {
-  const { notifStore, handleNotif } = useNotif();
+  const { notifStore, clearNotif } = useNotif();
 
   const text = notifStore.text;
   const isSuccess = notifStore.isSuccess;
@@ -13,7 +13,7 @@ export default function Notification() {
   useEffect(() => {
     if (notifStore.show) {
       setTimeout(() => {
-        handleNotif(text, isSuccess, false);
+        clearNotif();
       }, 3000);
     }
   }, [notifStore]);

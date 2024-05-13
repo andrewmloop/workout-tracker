@@ -8,7 +8,7 @@ import PageTransition from "../components/PageTransition";
 import { useNotif } from "../context/NotificationContext";
 
 export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
   const navigate = useNavigate();
 
   // Routine data from route history
@@ -33,20 +33,20 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       } else if (res.status === 200) {
-        handleNotif(data.message, true, true);
+        dispatchNotif(data.message, true);
         let list = [...exerciseList];
         let index = list.findIndex((obj) => obj.exercise._id === exerciseId);
         if (index > -1) list.splice(index, 1);
         setExerciseList(list);
       } else {
-        handleNotif(data.message, false, true);
+        dispatchNotif(data.message, false);
       }
     } catch (error) {
       console.error("Error deleting routine exercise: ", error);
       let errorText = "The iron gods are upset at the moment";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
     }
   };
 
@@ -86,16 +86,16 @@ export default function RoutineDetail({ setAddMode, setActiveRoutine }) {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       } else if (res.status === 200) {
         return;
       } else {
-        handleNotif(data.message, false, true);
+        dispatchNotif(data.message, false);
       }
     } catch (error) {
       console.error("Error deleting routine exercise: ", error);
       let errorText = "The iron gods are upset at the moment";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
     }
   };
 
@@ -262,7 +262,7 @@ function RoutineButtons({ addFunction, targetMode, targetFunction }) {
 
 function TargetInputs({ routineId, exercise, setExerciseList }) {
   const navigate = useNavigate();
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
 
   const [targetSets, setTargetSets] = useState(exercise.targSets || "");
   const [targetReps, setTargetReps] = useState(exercise.targReps || "");
@@ -287,7 +287,7 @@ function TargetInputs({ routineId, exercise, setExerciseList }) {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       } else if (res.status === 200) {
         // If the changes are updated in DB
         // update them in the component
@@ -304,12 +304,12 @@ function TargetInputs({ routineId, exercise, setExerciseList }) {
           }),
         ]);
       } else {
-        handleNotif(data.message, false, true);
+        dispatchNotif(data.message, false);
       }
     } catch (error) {
       console.error("Error setting targets: ", error);
       let errorText = "The iron gods are upset at the moment";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
     }
   };
 

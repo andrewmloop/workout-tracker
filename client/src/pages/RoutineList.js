@@ -11,7 +11,7 @@ import { useNotif } from "../context/NotificationContext";
 
 export default function RoutineList() {
   const navigate = useNavigate();
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
 
   const [routineList, setRoutineList] = useState([]);
   const [editMode, setEditMode] = useState(false);
@@ -30,7 +30,7 @@ export default function RoutineList() {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       }
       if (res.status === 200) {
         setRoutineList(data.data);
@@ -80,7 +80,7 @@ export default function RoutineList() {
 
 function RoutineItem({ routine, setShouldRerender, editMode }) {
   const navigate = useNavigate();
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
 
   const deleteRoutine = async (id) => {
     try {
@@ -94,17 +94,17 @@ function RoutineItem({ routine, setShouldRerender, editMode }) {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       } else if (res.status === 200) {
-        handleNotif(data.message, true, true);
+        dispatchNotif(data.message, true);
         setShouldRerender((prev) => !prev);
       } else {
-        handleNotif(data.message, false, true);
+        dispatchNotif(data.message, false);
       }
     } catch (error) {
       console.error("Error fetching routine list: ", error);
       let errorText = "The iron gods are upset at the moment";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
     }
   };
 
