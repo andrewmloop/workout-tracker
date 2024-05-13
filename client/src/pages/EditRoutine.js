@@ -7,7 +7,7 @@ import PageTransition from "../components/PageTransition";
 import { useNotif } from "../context/NotificationContext";
 
 export default function EditRoutine() {
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -37,20 +37,20 @@ export default function EditRoutine() {
         if (data.isLoggedIn === false) {
           navigate("/");
           let loginText = "Your session has expired";
-          handleNotif(loginText, true, true);
+          dispatchNotif(loginText, true);
         }
         if (res.status === 200) {
-          handleNotif(data.message, true, true);
+          dispatchNotif(data.message, true);
           navigate("/routine");
         }
       } catch (error) {
         console.error("Error renaming routine: ", error);
         let errorText = "The iron gods are upset at the moment";
-        handleNotif(errorText, false, true);
+        dispatchNotif(errorText, false);
       }
     } else {
       let emptyFieldText = "Your routine needs a name";
-      handleNotif(emptyFieldText, false, true);
+      dispatchNotif(emptyFieldText, false);
     }
   };
 

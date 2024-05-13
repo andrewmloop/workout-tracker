@@ -19,7 +19,7 @@
         "prettier"
     ],
     "rules": {
-        "prettier/prettier": ["error"],
+        "prettier/prettier": ["warn"],
         "indent": [
             "warn",
             2

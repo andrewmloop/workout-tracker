@@ -15,7 +15,7 @@ export default function ExerciseList({
   newExercises,
   setNewExercises,
 }) {
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
   const navigate = useNavigate();
 
   const [fetchList, setFetchList] = useState([]);
@@ -42,7 +42,7 @@ export default function ExerciseList({
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       } else if (res.status === 200) {
         setFetchList(data.data);
         setSearchList(data.data);
@@ -71,14 +71,14 @@ export default function ExerciseList({
         });
         const data = await res.json();
         if (res.status === 200) {
-          handleNotif(data.message, true, true);
+          dispatchNotif(data.message, true);
         } else {
-          handleNotif(data.message, false, true);
+          dispatchNotif(data.message, false);
         }
       } catch (error) {
         console.error("Error fetching exercise list: ", error);
         let errorText = "The iron gods are displeased at the moment";
-        handleNotif(errorText, false, true);
+        dispatchNotif(errorText, false);
       } finally {
         setAddMode(false);
         setNewExercises([]);

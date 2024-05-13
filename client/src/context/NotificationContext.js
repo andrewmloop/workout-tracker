@@ -19,11 +19,11 @@ const NotifProvider = ({ children }) => {
 const useNotif = () => {
   const [notifStore, setNotifStore] = React.useContext(NotifContext);
 
-  const handleNotif = (newNotifText, isSuccess, showNotif) => {
+  const dispatchNotif = (notifText, isSuccess) => {
     setNotifStore({
-      text: newNotifText,
+      text: notifText,
       isSuccess: isSuccess,
-      show: showNotif,
+      show: true,
     });
   };
 
@@ -35,7 +35,7 @@ const useNotif = () => {
     });
   };
 
-  return { notifStore, handleNotif, clearNotif };
+  return { notifStore, dispatchNotif, clearNotif };
 };
 
 export { NotifProvider, useNotif };

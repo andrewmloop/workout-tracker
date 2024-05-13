@@ -11,7 +11,7 @@ import PageTransition from "../components/PageTransition";
 import { useNotif } from "../context/NotificationContext";
 
 export default function Chart() {
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -122,7 +122,7 @@ export default function Chart() {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       }
       if (res.status === 200) {
         setFetchedLogs(data.data);

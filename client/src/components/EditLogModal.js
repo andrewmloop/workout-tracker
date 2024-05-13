@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useNotif } from "../context/NotificationContext";
 
 export default function EditLogModal({ show, log, setShow, setRefetch }) {
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
   const navigate = useNavigate();
 
   const [inputWeight, setInputWeight] = useState(log.weight || 0);
@@ -15,7 +15,7 @@ export default function EditLogModal({ show, log, setShow, setRefetch }) {
 
     if (!handleValidation()) {
       let errorText = "Add a weight and rep";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
       return;
     }
 
@@ -38,16 +38,16 @@ export default function EditLogModal({ show, log, setShow, setRefetch }) {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       } else if (res.status === 200) {
-        handleNotif(data.message, true, true);
+        dispatchNotif(data.message, true);
       } else {
-        handleNotif(data.message, false, true);
+        dispatchNotif(data.message, false);
       }
     } catch (error) {
       console.error("Error updating log:", error);
       const errorText = "The iron gods are upset at the moment";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
     } finally {
       setRefetch((prev) => !prev);
       setShow(false);
@@ -87,16 +87,16 @@ export default function EditLogModal({ show, log, setShow, setRefetch }) {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       } else if (res.status === 200) {
-        handleNotif(data.message, true, true);
+        dispatchNotif(data.message, true);
       } else {
-        handleNotif(data.message, false, true);
+        dispatchNotif(data.message, false);
       }
     } catch (error) {
       console.error("Error updating log:", error);
       const errorText = "The iron gods are upset at the moment";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
     } finally {
       setRefetch((prev) => !prev);
       setShow(false);

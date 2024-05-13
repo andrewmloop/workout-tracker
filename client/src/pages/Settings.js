@@ -9,7 +9,7 @@ import { useNotif } from "../context/NotificationContext";
 
 export default function Settings() {
   const { userStore, handleUser } = useUser();
-  const { handleNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
   const navigate = useNavigate();
 
   const [isMetric, setIsMetric] = useState(userStore.use_metric);
@@ -33,17 +33,17 @@ export default function Settings() {
       if (data.isLoggedIn === false) {
         navigate("/");
         let loginText = "Your session has expired";
-        handleNotif(loginText, true, true);
+        dispatchNotif(loginText, true);
       } else if (res.status === 200) {
-        handleNotif(data.message, true, true);
+        dispatchNotif(data.message, true);
         handleUser(data.data);
       } else {
-        handleNotif(data.message, false, true);
+        dispatchNotif(data.message, false);
       }
     } catch (error) {
       console.error("Error updating user: ", error);
       let errorText = "The iron gods are upset at the moment";
-      handleNotif(errorText, false, true);
+      dispatchNotif(errorText, false);
     }
   };
 

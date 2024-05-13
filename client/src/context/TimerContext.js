@@ -10,7 +10,7 @@ const TimerContext = createContext({
 });
 
 export const TimerContextProvider = ({ children }) => {
-  const { handleNotif, clearNotif } = useNotif();
+  const { dispatchNotif } = useNotif();
   const [timerStore, setTimerStore] = useState({
     restTime: 30,
     startTime: 0,
@@ -40,17 +40,12 @@ export const TimerContextProvider = ({ children }) => {
     if (timerStore.timeLeft > 0) setTimeLeft(remainingTime);
   };
 
-  const dispatchNotif = () => {
+  const dispatchTimerNotif = () => {
     // Update notif store to trigger notif
-    handleNotif("Rest timer done", true, true);
+    dispatchNotif("Rest timer done", true);
 
     // Reset TimerStore
     endTimer();
-
-    // Reset notif store after 3 seconds to remove notif
-    setTimeout(() => {
-      clearNotif();
-    }, 3000);
   };
 
   // Updates timeLeft every second if the timer is ticking
@@ -60,7 +55,7 @@ export const TimerContextProvider = ({ children }) => {
     }
 
     if (timerStore.isTicking && timerStore.timeLeft <= 0) {
-      dispatchNotif();
+      dispatchTimerNotif();
     }
   }, 1000);
 
