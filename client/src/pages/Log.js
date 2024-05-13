@@ -29,6 +29,7 @@ export default function Log() {
   const [reps, setReps] = useState("");
   const [form, setForm] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [logToEdit, setLogToEdit] = useState({
@@ -70,6 +71,8 @@ export default function Log() {
       return;
     }
 
+    setSubmitting(true);
+
     const newLog = {
       exercise: exerciseObj.exercise._id,
       weight: weight,
@@ -103,6 +106,8 @@ export default function Log() {
       console.error("Error submiting log: ", error);
       const errorText = "The iron gods are upset at the moment";
       dispatchNotif(errorText, false);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -209,73 +214,25 @@ export default function Log() {
               No logs yet
             </p>
           )}
+          {/* End Log Column */}
           {/* Form Column */}
           <div className="flex flex-col justify-start bg-slate-900">
             <form
               onSubmit={(e) => handleSubmit(e)}
               className="flex flex-col justify-center"
             >
-              <label
-                htmlFor="weight"
-                className="text-sm font-bold text-gray-400"
-              >
-                Weight
-              </label>
-              <input
-                id="weight"
-                type="number"
-                name="weight"
-                placeholder={units}
-                value={weight}
-                onFocus={() => setWeight("")}
-                onChange={(e) => setWeight(e.target.value)}
-                className="w-full p-3 rounded-lg text-center mb-1"
+              <WeightInput handler={setWeight} value={weight} units={units} />
+              <RepInput handler={setReps} value={reps} />
+              <FormButton
+                handler={handleToggle}
+                formValues={formValues}
+                form={form}
               />
-              <label htmlFor="Reps" className="text-sm font-bold text-gray-400">
-                Reps
-              </label>
-              <input
-                id="reps"
-                type="number"
-                name="reps"
-                placeholder={"reps"}
-                value={reps}
-                onFocus={() => setReps("")}
-                onChange={(e) => setReps(e.target.value)}
-                className="w-full p-3 rounded-lg text-center mb-1"
-              />
-              <label htmlFor="form" className="text-sm font-bold text-gray-400">
-                Form
-              </label>
-              <button
-                id="form"
-                onClick={(e) => handleToggle(e)}
-                className={`w-full p-3 rounded-lg mb-1 ${
-                  form === 0
-                    ? "bg-green-700"
-                    : form === 1
-                    ? "bg-amber-400"
-                    : "bg-red-700"
-                }`}
-              >
-                {formValues[form]}
-              </button>
-              <label
-                htmlFor="log-submit"
-                className="text-sm font-bold text-gray-400"
-              >
-                Log
-              </label>
-              <button
-                id="log-submit"
-                type="submit"
-                className="w-full log-submit mb-1"
-              >
-                Submit
-              </button>
+              <SubmitButton submitting={submitting} />
             </form>
             <Timer />
           </div>
+          {/* End Form Column */}
         </div>
         <EditLogModal
           show={showModal}
@@ -308,6 +265,82 @@ function DualButtons({ exerciseObj, editMode, setEditMode }) {
         Chart
       </button>
     </div>
+  );
+}
+
+function WeightInput({ handler, value, units }) {
+  return (
+    <>
+      <label htmlFor="weight" className="text-sm font-bold text-gray-400">
+        Weight
+      </label>
+      <input
+        id="weight"
+        type="number"
+        name="weight"
+        placeholder={units}
+        value={value}
+        onFocus={() => handler("")}
+        onChange={(e) => handler(e.target.value)}
+        className="w-full p-3 rounded-lg text-center mb-1"
+      />
+    </>
+  );
+}
+
+function RepInput({ handler, value }) {
+  return (
+    <>
+      <label htmlFor="Reps" className="text-sm font-bold text-gray-400">
+        Reps
+      </label>
+      <input
+        id="reps"
+        type="number"
+        name="reps"
+        placeholder={"reps"}
+        value={value}
+        onFocus={() => handler("")}
+        onChange={(e) => handler(e.target.value)}
+        className="w-full p-3 rounded-lg text-center mb-1"
+      />
+    </>
+  );
+}
+
+function FormButton({ handler, formValues, form }) {
+  return (
+    <>
+      <label htmlFor="form" className="text-sm font-bold text-gray-400">
+        Form
+      </label>
+      <button
+        id="form"
+        onClick={(e) => handler(e)}
+        className={`w-full p-3 rounded-lg mb-1 ${
+          form === 0
+            ? "bg-green-700"
+            : form === 1
+            ? "bg-amber-400"
+            : "bg-red-700"
+        }`}
+      >
+        {formValues[form]}
+      </button>
+    </>
+  );
+}
+
+function SubmitButton({ submitting }) {
+  return (
+    <>
+      <label htmlFor="log-submit" className="text-sm font-bold text-gray-400">
+        Log
+      </label>
+      <button id="log-submit" type="submit" className="w-full log-submit mb-1">
+        {submitting ? "Logging..." : "Submit"}
+      </button>
+    </>
   );
 }
 
