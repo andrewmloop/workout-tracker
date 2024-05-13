@@ -363,18 +363,20 @@ function LogItem({
       className="flex justify-between mb-2 mr-3 bg-slate-800 rounded-md overflow-hidden"
       onClick={() => setInputs(log.weight, log.reps)}
     >
-      <div className="flex flex-col justify-between pl-2 py-1">
-        <p className="text-lg">
-          {index + 1}: {log.weight} {units} x {log.reps} rep
-        </p>
+      <div className="flex flex-row justify-between pl-2 py-1">
         {editMode && (
+          // If in edit mode, show the edit button on the very left
+          // side of the LogItem element
           <button
-            className="text-sm text-amber-400"
+            className="mr-2 text-sm text-amber-400"
             onClick={() => handleEditClick()}
           >
             Edit
           </button>
         )}
+        <p className="text-lg">
+          {index + 1}: {log.weight} {units} x {log.reps} rep
+        </p>
       </div>
 
       <div
